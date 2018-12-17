@@ -123,8 +123,8 @@
                           app:layout_constraintEnd_toEndOf="parent"
                           app:layout_constraintTop_toTopOf="parent"/>
 
-                <EditText android:id="@+id/etAuthDialogEmailSignIn"
-                          android:labelFor="@id/etAuthDialogEmailSignIn"
+                <EditText android:id="@+id/etAuthDialogUsernameSignIn"
+                          android:labelFor="@id/etAuthDialogUsernameSignIn"
                           android:layout_width="0dp"
                           android:layout_height="wrap_content"
                           android:inputType="textEmailAddress"
@@ -150,7 +150,7 @@
                           android:maxLines="1"
                           tools:ignore="Autofill"
                           app:layout_constraintHorizontal_bias="0.5"
-                          app:layout_constraintTop_toBottomOf="@+id/etAuthDialogEmailSignIn"
+                          app:layout_constraintTop_toBottomOf="@+id/etAuthDialogUsernameSignIn"
                           app:layout_constraintEnd_toEndOf="parent"
                           app:layout_constraintStart_toStartOf="parent"
                           app:layout_constraintBottom_toTopOf="@+id/btnAuthDialogSignIn"/>
