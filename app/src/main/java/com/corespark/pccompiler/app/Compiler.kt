@@ -20,12 +20,6 @@ class Compiler : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Parse().init
-    }
-
-    inner class Parse {
-        val init by lazy {
-            initialize(applicationContext)
-        }
+        initialize(applicationContext)
     }
 }

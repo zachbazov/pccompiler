@@ -1,7 +1,21 @@
 <resources>
+    <!-- Application -->
     <string name="app_name">pccompiler</string>
 
+    <!-- Parse -->
     <string name="parse_server_url">https://parseapi.back4app.com/</string>
     <string name="parse_app_id">CesjzNCCOiHJIYpfprefwjRKl3HcLLZkcpk9cK3R</string>
     <string name="parse_client_key">IMWLzy3DnB7OKYHYEmyDCxilobEmcnDabedJc6z9</string>
+
+    <!-- AuthActivity -->
+    <string name="auth_hint_email">Email…</string>
+    <string name="auth_hint_username">Username…</string>
+    <string name="auth_hint_password">Password…</string>
+
+    <string name="auth_sign_in">SIGN IN</string>
+    <string name="auth_sign_up">SIGN UP</string>
+
+    <!-- ContentDescription -->
+    <string name="cd_app_logo">App Logo</string>
+    <string name="cd_app_title">App Title</string>
 </resources>
