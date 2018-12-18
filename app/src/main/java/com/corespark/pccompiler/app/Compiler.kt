@@ -15,7 +15,7 @@ import com.parse.Parse.initialize
 class Compiler : Application() {
 
     companion object {
-        lateinit var sharedPreferences: SharedPreferences
+        lateinit var preferences: SharedPreferences
     }
 
     override fun onCreate() {
@@ -23,6 +23,6 @@ class Compiler : Application() {
 
         initialize(applicationContext)
 
-        sharedPreferences = SharedPreferences(applicationContext)
+        preferences = SharedPreferences(applicationContext)
     }
 }

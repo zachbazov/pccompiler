@@ -1,11 +1,11 @@
 package com.corespark.pccompiler.service
 
 import android.content.Context
+import android.content.res.Configuration
 import android.util.DisplayMetrics
-import android.view.Display
 import android.view.View
 import android.view.WindowManager
-import com.corespark.pccompiler.app.Compiler
+import com.corespark.pccompiler.impl.Tab
 
 
 /**
@@ -15,9 +15,9 @@ import com.corespark.pccompiler.app.Compiler
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
-object WindowService {
+object Window : Tab {
 
-    val dm = DisplayMetrics()
+    val metrics = DisplayMetrics()
 
     var orientation: Int? = null
 
@@ -28,7 +28,7 @@ object WindowService {
     var widthDp = 0f
     var heightDp = 0f
 
-    fun measureValues(manager: WindowManager, metrics: DisplayMetrics) {
+    fun measure(manager: WindowManager, metrics: DisplayMetrics) {
         manager.defaultDisplay.getMetrics(metrics)
         density = metrics.density
         dpi = metrics.densityDpi
@@ -45,5 +45,22 @@ object WindowService {
     fun determineLayoutMode(context: Context) : Int {
         orientation = context.resources.configuration.orientation
         return orientation as Int
+    }
+
+    override fun determineTabSize(
+        context: Context, view: View, manager: WindowManager, orientation: Int?, complete: (Boolean) -> Unit
+    ) {
+        Window.determineLayoutMode(context)
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Window.measure(manager, Window.metrics)
+            val params = view.layoutParams
+            params.width = Window.pxToDp(Window.widthPx, Window.density)
+            complete(true)
+        } else {
+            Window.measure(manager, Window.metrics)
+            val params = view.layoutParams
+            params.width = Window.pxToDp(Window.widthPx, Window.density)
+            complete(false)
+        }
     }
 }

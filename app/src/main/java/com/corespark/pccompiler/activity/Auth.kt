@@ -1,50 +1,51 @@
 package com.corespark.pccompiler.activity
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.constraint.ConstraintSet
-import android.support.v4.content.LocalBroadcastManager
 import android.transition.TransitionManager
-import android.util.DisplayMetrics
 import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
-import com.corespark.pccompiler.service.AuthService
-import com.corespark.pccompiler.service.WindowService
-import com.corespark.pccompiler.utility.BROADCAST_USER_UPDATE
-import com.corespark.pccompiler.utility.Intent
+import com.corespark.pccompiler.service.Auth
+import com.corespark.pccompiler.service.Window
+import com.corespark.pccompiler.service.Intent
+import com.corespark.pccompiler.utility.ACTIVITY_WORKSPACE
 import kotlinx.android.synthetic.main.activity_auth.*
-import kotlinx.android.synthetic.main.activity_workspace.*
 
+/**
+ * @author Zachy Bazov.
+ * @since 18/12/2018.
+ * CoreSpark Ltd.
+ * PCCompiler.
+ * All Rights Reserved. Copyright (c) 2018.
+ */
+class Auth : AppCompatActivity() {
 
-class AuthActivity : AppCompatActivity() {
-
-    private lateinit var mIntents: Intent
-
-    private val mSet = ConstraintSet()
+    private val set = ConstraintSet()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
-        WindowService.measureValues(windowManager, WindowService.dm)
+        Window.measure(windowManager, Window.metrics)
 
-        mIntents = Intent(this)
+        Auth.auth(this) { if (it) finish() }
 
-        if (Compiler.sharedPreferences.isLoggedIn && Compiler.sharedPreferences.username != "") {
-            println(Compiler.sharedPreferences.username)
-            println(Compiler.sharedPreferences.isLoggedIn)
-            startActivity(mIntents.ACTIVITY_WORKSPACE)
-        }
+        customizeView()
 
+        activateView()
+    }
+
+    private fun customizeView() {
         ivAuthLogo.setImageResource(R.drawable.img_logo)
         ivAuthLogoTitle.setImageResource(R.drawable.img_logo_title)
 
         btnAuthSignIn.text = resources.getText(R.string.auth_sign_in)
         btnAuthSignUp.text = resources.getText(R.string.auth_sign_up)
+    }
 
+    private fun activateView() {
         onClick(btnAuthSignIn)
         onClick(btnAuthSignUp)
         onClick(btnAuthDialogSignIn)
@@ -55,13 +56,18 @@ class AuthActivity : AppCompatActivity() {
         when (view.id) {
             btnAuthSignIn.id -> {
                 view.setOnClickListener {
-                    setConstraints(it)
-                    setValue(it)
+                    if (Compiler.preferences.isLoggedIn) {
+                        startActivity(Intent.launch(this, ACTIVITY_WORKSPACE))
+                        finish()
+                    } else {
+                        setConstraint(it)
+                        setValue(it)
+                    }
                 }
             }
             btnAuthSignUp.id -> {
                 view.setOnClickListener {
-                    setConstraints(it)
+                    setConstraint(it)
                     setValue(it)
                 }
             }
@@ -69,13 +75,12 @@ class AuthActivity : AppCompatActivity() {
                 view.setOnClickListener {
                     val username = etAuthDialogUsernameSignIn.text.toString()
                     val password = etAuthDialogPasswordSignIn.text.toString()
-                    AuthService.signIn(clAuthParent, username, password) {
+                    Auth.signIn(clAuthParent, username, password) {
                         if (it) {
-                            val userUpdate = android.content.Intent(BROADCAST_USER_UPDATE)
-                            LocalBroadcastManager.getInstance(this).sendBroadcast(userUpdate)
-                            startActivity(mIntents.ACTIVITY_WORKSPACE)
+                            startActivity(Intent.launch(this, ACTIVITY_WORKSPACE))
+                            finish()
                         } else {
-                            clearInputs(view)
+                            clearInput(view)
                         }
                     }
                 }
@@ -85,13 +90,13 @@ class AuthActivity : AppCompatActivity() {
                     val username = etAuthDialogUsernameSignUp.text.toString()
                     val email = etAuthDialogEmailSignUp.text.toString()
                     val password = etAuthDialogPasswordSignUp.text.toString()
-                    AuthService.signUp(clAuthParent, username, email, password) {
+                    Auth.signUp(clAuthParent, username, email, password) {
                         if (it) {
-                            clearInputs(view)
-                            setConstraints(btnAuthSignIn)
+                            clearInput(view)
+                            setConstraint(btnAuthSignIn)
                             setValue(btnAuthSignIn)
                         } else {
-                            clearInputs(view)
+                            clearInput(view)
                         }
                     }
                 }
@@ -115,28 +120,28 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    private fun setConstraints(view: View) {
+    private fun setConstraint(view: View) {
         when (view.id) {
             btnAuthSignIn.id -> {
-                mSet.clone(clAuthParent)
-                mSet.connect(clAuthDialogSignUp.id, ConstraintSet.TOP, clAuthParent.id, ConstraintSet.BOTTOM)
-                mSet.connect(clAuthDialogSignUp.id, ConstraintSet.LEFT, clAuthParent.id, ConstraintSet.RIGHT)
-                mSet.connect(clAuthDialogSignIn.id, ConstraintSet.TOP, clAuthDialog.id, ConstraintSet.BOTTOM)
-                mSet.applyTo(clAuthParent)
+                set.clone(clAuthParent)
+                set.connect(clAuthDialogSignUp.id, ConstraintSet.TOP, clAuthParent.id, ConstraintSet.BOTTOM)
+                set.connect(clAuthDialogSignUp.id, ConstraintSet.LEFT, clAuthParent.id, ConstraintSet.RIGHT)
+                set.connect(clAuthDialogSignIn.id, ConstraintSet.TOP, clAuthDialog.id, ConstraintSet.BOTTOM)
+                set.applyTo(clAuthParent)
 
             }
             btnAuthSignUp.id -> {
-                mSet.clone(clAuthParent)
-                mSet.connect(clAuthDialogSignIn.id, ConstraintSet.TOP, clAuthParent.id, ConstraintSet.BOTTOM)
-                mSet.connect(clAuthDialogSignIn.id, ConstraintSet.LEFT, clAuthParent.id, ConstraintSet.RIGHT)
-                mSet.connect(clAuthDialogSignUp.id, ConstraintSet.TOP, clAuthDialog.id, ConstraintSet.BOTTOM)
-                mSet.applyTo(clAuthParent)
+                set.clone(clAuthParent)
+                set.connect(clAuthDialogSignIn.id, ConstraintSet.TOP, clAuthParent.id, ConstraintSet.BOTTOM)
+                set.connect(clAuthDialogSignIn.id, ConstraintSet.LEFT, clAuthParent.id, ConstraintSet.RIGHT)
+                set.connect(clAuthDialogSignUp.id, ConstraintSet.TOP, clAuthDialog.id, ConstraintSet.BOTTOM)
+                set.applyTo(clAuthParent)
             }
         }
         TransitionManager.beginDelayedTransition(clAuthParent)
     }
 
-    private fun clearInputs(view: View) {
+    private fun clearInput(view: View) {
         when (view.id) {
             btnAuthDialogSignIn.id -> {
                 etAuthDialogUsernameSignIn.text.clear()
@@ -149,6 +154,4 @@ class AuthActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }

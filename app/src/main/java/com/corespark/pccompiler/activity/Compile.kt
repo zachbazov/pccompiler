@@ -5,10 +5,10 @@ import android.os.Bundle
 import com.corespark.pccompiler.R
 
 
-class MenuActivity : AppCompatActivity() {
+class Compile : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_menu)
+        setContentView(R.layout.activity_compile)
     }
 }

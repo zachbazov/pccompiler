@@ -1,5 +1,6 @@
 package com.corespark.pccompiler.impl
 
+import android.content.Context
 import android.view.View
 import android.view.WindowManager
 
@@ -11,7 +12,7 @@ import android.view.WindowManager
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
-interface TrackController {
+interface Tab {
 
-    fun determineTabSize(view: View, manager: WindowManager, orientation: Int?, complete: (Boolean) -> Unit)
+    fun determineTabSize(context: Context, view: View, manager: WindowManager, orientation: Int?, complete: (Boolean) -> Unit)
 }

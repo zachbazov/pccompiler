@@ -12,19 +12,16 @@ import android.content.Context
  */
 class SharedPreferences(context: Context) {
 
-    val SHARED_PREFS_FILENAME = "sharedPreferences"
-    val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_FILENAME, 0)
-
-    var IS_LOGGED_IN = "isLoggedIn"
-    var USERNAME = "username"
+    val fileName = SHARED_PREFERENCES_FILE_NAME
+    val sharedPreferences = context.getSharedPreferences(fileName, 0)
 
     var isLoggedIn: Boolean
-        get() = sharedPreferences.getBoolean(IS_LOGGED_IN, false)
-        set(value) = sharedPreferences.edit().putBoolean(IS_LOGGED_IN, value)
+        get() = sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)
+        set(value) = sharedPreferences.edit().putBoolean(KEY_IS_LOGGED_IN, value)
             .apply()
 
     var username: String
-        get() = sharedPreferences.getString(USERNAME, "")!!
-        set(value) = sharedPreferences.edit().putString(USERNAME, value)
+        get() = sharedPreferences.getString(KEY_USERNAME, "")!!
+        set(value) = sharedPreferences.edit().putString(KEY_USERNAME, value)
             .apply()
 }

@@ -17,18 +17,18 @@
             tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
         <activity
-                android:name=".activity.AuthActivity"
+                android:name=".activity.Auth"
                 android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.WorkspaceActivity">
+        <activity android:name=".activity.Workspace">
         </activity>
-        <activity android:name=".activity.MenuActivity">
+        <activity android:name=".activity.Menu">
         </activity>
-        <activity android:name=".activity.CompileActivity">
+        <activity android:name=".activity.Compile">
         </activity>
 
         <meta-data
