@@ -6,6 +6,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
 import com.corespark.pccompiler.impl.Tab
+import com.corespark.pccompiler.utility.*
 
 
 /**
@@ -22,15 +23,19 @@ object Window : Tab {
     var orientation: Int? = null
 
     var density = 0f
+    var densityDpi = 0
     var dpi = 0
     var widthPx = 0
     var heightPx = 0
     var widthDp = 0f
     var heightDp = 0f
 
+    var splitWidthPx = 0
+
     fun measure(manager: WindowManager, metrics: DisplayMetrics) {
         manager.defaultDisplay.getMetrics(metrics)
         density = metrics.density
+        densityDpi = metrics.densityDpi
         dpi = metrics.densityDpi
         widthPx = metrics.widthPixels
         heightPx = metrics.heightPixels
@@ -38,8 +43,33 @@ object Window : Tab {
         heightDp = metrics.ydpi
     }
 
-    fun pxToDp(width: Int, density: Float) : Int {
-        return (width / density).toInt()
+    fun computeSplitWindowPx(width: Int) : Int {
+        println(Window.density)
+        when (Window.metrics.density) {
+            DENSITY_0_75 -> {
+                splitWidthPx = (width / VALUE_2)
+            }
+            DENSITY_1 -> {
+                splitWidthPx = (width / VALUE_2)
+            }
+            DENSITY_1_5 -> {
+                splitWidthPx = (width / VALUE_2)
+            }
+            DENSITY_2 -> {
+                splitWidthPx = (width / VALUE_2)
+            }
+            DENSITY_2_625 -> {
+                splitWidthPx = (width / VALUE_2)
+            }
+            DENSITY_3 -> {
+                splitWidthPx = (width / VALUE_2)
+            }
+            DENSITY_3_5 -> {
+                splitWidthPx = (width / VALUE_2)
+            }
+        }
+        println(splitWidthPx)
+        return splitWidthPx
     }
 
     fun determineLayoutMode(context: Context) : Int {
@@ -54,12 +84,12 @@ object Window : Tab {
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Window.measure(manager, Window.metrics)
             val params = view.layoutParams
-            params.width = Window.pxToDp(Window.widthPx, Window.density)
+            params.width = Window.computeSplitWindowPx(Window.widthPx)
             complete(true)
         } else {
             Window.measure(manager, Window.metrics)
             val params = view.layoutParams
-            params.width = Window.pxToDp(Window.widthPx, Window.density)
+            params.width = Window.computeSplitWindowPx(Window.widthPx)
             complete(false)
         }
     }
