@@ -1,6 +1,5 @@
-package com.corespark.pccompiler.service
+package com.corespark.pccompiler.utility
 
-import android.provider.Settings.Global.getString
 import com.corespark.pccompiler.R
 
 
@@ -11,3 +10,4 @@ import com.corespark.pccompiler.R
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
+const val BROADCAST_USER_UPDATE = "BROADCAST_USER_UPDATE"

@@ -2,11 +2,11 @@ package com.corespark.pccompiler.service
 
 import android.content.Intent
 import android.support.design.widget.Snackbar
+import android.support.v4.content.LocalBroadcastManager
 import android.view.View
-import com.corespark.pccompiler.activity.AuthActivity
+import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.model.User
-import com.parse.LogInCallback
-import com.parse.ParseException
+import com.corespark.pccompiler.utility.BROADCAST_USER_UPDATE
 import com.parse.ParseUser
 
 
@@ -19,22 +19,24 @@ import com.parse.ParseUser
  */
 object AuthService {
 
-    lateinit var mUser: User
     lateinit var mAuthUser: ParseUser
 
     fun signIn(view: View, username: String, password: String, complete: (Boolean) -> Unit) {
         ParseUser.logInInBackground(username, password) { parseUser, e ->
             if (parseUser != null) {
                 mAuthUser = parseUser
-                //fetchUserCompilationById()
-                mUser = User
+                val mUser = User
                 mUser.id = parseUser.getObjectId()
+                mUser.username = parseUser.username
                 mUser.email = parseUser.getEmail()
+                mUser.password = password
                 mUser.createdAt = parseUser.getCreatedAt()
                 mUser.updatedAt = parseUser.getUpdatedAt()
                 mUser.isEmailVerified = parseUser.isNew()
                 mUser.isAuthenticated = parseUser.isAuthenticated()
                 mUser.isAuthenticated = true
+                Compiler.sharedPreferences.isLoggedIn = true
+                Compiler.sharedPreferences.username = mUser.username
                 complete(true)
             } else {
                 ParseUser.logOut()

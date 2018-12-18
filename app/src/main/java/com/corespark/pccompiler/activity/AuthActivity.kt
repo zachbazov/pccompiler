@@ -1,18 +1,27 @@
 package com.corespark.pccompiler.activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.constraint.ConstraintSet
+import android.support.v4.content.LocalBroadcastManager
 import android.transition.TransitionManager
+import android.util.DisplayMetrics
 import android.view.View
 import com.corespark.pccompiler.R
+import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.service.AuthService
-import com.corespark.pccompiler.service.IntentService
+import com.corespark.pccompiler.service.WindowService
+import com.corespark.pccompiler.utility.BROADCAST_USER_UPDATE
+import com.corespark.pccompiler.utility.Intent
 import kotlinx.android.synthetic.main.activity_auth.*
+import kotlinx.android.synthetic.main.activity_workspace.*
+
 
 class AuthActivity : AppCompatActivity() {
 
-    private lateinit var mIntents: IntentService
+    private lateinit var mIntents: Intent
 
     private val mSet = ConstraintSet()
 
@@ -20,7 +29,15 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
-        mIntents = IntentService(this)
+        WindowService.measureValues(windowManager, WindowService.dm)
+
+        mIntents = Intent(this)
+
+        if (Compiler.sharedPreferences.isLoggedIn && Compiler.sharedPreferences.username != "") {
+            println(Compiler.sharedPreferences.username)
+            println(Compiler.sharedPreferences.isLoggedIn)
+            startActivity(mIntents.ACTIVITY_WORKSPACE)
+        }
 
         ivAuthLogo.setImageResource(R.drawable.img_logo)
         ivAuthLogoTitle.setImageResource(R.drawable.img_logo_title)
@@ -54,6 +71,8 @@ class AuthActivity : AppCompatActivity() {
                     val password = etAuthDialogPasswordSignIn.text.toString()
                     AuthService.signIn(clAuthParent, username, password) {
                         if (it) {
+                            val userUpdate = android.content.Intent(BROADCAST_USER_UPDATE)
+                            LocalBroadcastManager.getInstance(this).sendBroadcast(userUpdate)
                             startActivity(mIntents.ACTIVITY_WORKSPACE)
                         } else {
                             clearInputs(view)
@@ -71,6 +90,8 @@ class AuthActivity : AppCompatActivity() {
                             clearInputs(view)
                             setConstraints(btnAuthSignIn)
                             setValue(btnAuthSignIn)
+                        } else {
+                            clearInputs(view)
                         }
                     }
                 }
@@ -128,4 +149,6 @@ class AuthActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }

@@ -1,10 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".activity.WorkspaceActivity">
+        android:layout_height="wrap_content"
+        tools:context=".activity.WorkspaceActivity" android:id="@+id/clWorkspaceTrackParent">
+
+    <android.support.v7.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_60dp"
+            card_view:cardElevation="@dimen/_6dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" android:id="@+id/cvWorkspaceTrack">
+
+        <ImageView
+                android:id="@+id/ivWorkspaceTrackTracker"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_3dp"
+                android:src="@color/colorPrimary"
+                android:layout_gravity="bottom"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/div_primary"
+                android:orientation="horizontal"
+                android:showDividers="middle"
+                android:weightSum="2" android:id="@+id/llWorkspaceTrack">
+
+            <android.support.constraint.ConstraintLayout
+                    android:id="@+id/clWorkspaceTrackWorkspace"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_60dp">
+
+                <ImageView
+                        android:id="@+id/ivWorkspaceTrackWorkspace"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_32dp"
+                        card_view:layout_constraintBottom_toBottomOf="parent"
+                        card_view:layout_constraintEnd_toEndOf="parent"
+                        card_view:layout_constraintStart_toStartOf="parent"
+                        card_view:layout_constraintTop_toTopOf="parent"/>
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                    android:id="@+id/clWorkspaceTrackTrolley"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_60dp">
+
+                <ImageView
+                        android:id="@+id/ivWorkspaceTrackTrolley"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_32dp"
+                        card_view:layout_constraintBottom_toBottomOf="parent"
+                        card_view:layout_constraintEnd_toEndOf="parent"
+                        card_view:layout_constraintStart_toStartOf="parent"
+                        card_view:layout_constraintTop_toTopOf="parent"/>
+
+            </android.support.constraint.ConstraintLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/tvUser"
+            card_view:layout_constraintEnd_toEndOf="@+id/cvWorkspaceTrack" android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp" card_view:layout_constraintTop_toBottomOf="@+id/cvWorkspaceTrack"
+            card_view:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"/>
+    <Button
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/btnWorkspaceLogout"
+            card_view:layout_constraintTop_toBottomOf="@+id/tvUser" card_view:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" card_view:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:layout_marginTop="16dp"/>
 
 </android.support.constraint.ConstraintLayout>

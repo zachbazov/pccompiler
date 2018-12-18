@@ -1,11 +1,8 @@
 package com.corespark.pccompiler.app;
 
 import android.app.Application
+import com.corespark.pccompiler.utility.SharedPreferences
 import com.parse.Parse.initialize
-import com.parse.ParseInstallation
-import com.parse.ParseUser
-import com.parse.LogInCallback
-import com.parse.ParseException
 
 
 /**
@@ -17,9 +14,15 @@ import com.parse.ParseException
  */
 class Compiler : Application() {
 
+    companion object {
+        lateinit var sharedPreferences: SharedPreferences
+    }
+
     override fun onCreate() {
         super.onCreate()
 
         initialize(applicationContext)
+
+        sharedPreferences = SharedPreferences(applicationContext)
     }
 }
