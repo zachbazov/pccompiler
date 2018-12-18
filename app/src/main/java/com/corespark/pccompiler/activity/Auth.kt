@@ -2,12 +2,11 @@ package com.corespark.pccompiler.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.constraint.ConstraintSet
-import android.transition.TransitionManager
 import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.service.Auth
+import com.corespark.pccompiler.service.Constraint
 import com.corespark.pccompiler.service.Window
 import com.corespark.pccompiler.service.Intent
 import com.corespark.pccompiler.utility.ACTIVITY_WORKSPACE
@@ -21,8 +20,6 @@ import kotlinx.android.synthetic.main.activity_auth.*
  * All Rights Reserved. Copyright (c) 2018.
  */
 class Auth : AppCompatActivity() {
-
-    private val set = ConstraintSet()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,14 +57,14 @@ class Auth : AppCompatActivity() {
                         startActivity(Intent.launch(this, ACTIVITY_WORKSPACE))
                         finish()
                     } else {
-                        setConstraint(it)
+                        Constraint.set(view, clAuthParent, clAuthDialog, clAuthDialogSignUp, clAuthDialogSignIn)
                         setValue(it)
                     }
                 }
             }
             btnAuthSignUp.id -> {
                 view.setOnClickListener {
-                    setConstraint(it)
+                    Constraint.set(view, clAuthParent, clAuthDialog, clAuthDialogSignIn, clAuthDialogSignUp)
                     setValue(it)
                 }
             }
@@ -93,7 +90,7 @@ class Auth : AppCompatActivity() {
                     Auth.signUp(clAuthParent, username, email, password) {
                         if (it) {
                             clearInput(view)
-                            setConstraint(btnAuthSignIn)
+                            Constraint.set(btnAuthSignIn, clAuthParent, clAuthDialog, clAuthDialogSignUp, clAuthDialogSignIn)
                             setValue(btnAuthSignIn)
                         } else {
                             clearInput(view)
@@ -118,27 +115,6 @@ class Auth : AppCompatActivity() {
                 btnAuthDialogSignUp.text = getString(R.string.auth_sign_up)
             }
         }
-    }
-
-    private fun setConstraint(view: View) {
-        when (view.id) {
-            btnAuthSignIn.id -> {
-                set.clone(clAuthParent)
-                set.connect(clAuthDialogSignUp.id, ConstraintSet.TOP, clAuthParent.id, ConstraintSet.BOTTOM)
-                set.connect(clAuthDialogSignUp.id, ConstraintSet.LEFT, clAuthParent.id, ConstraintSet.RIGHT)
-                set.connect(clAuthDialogSignIn.id, ConstraintSet.TOP, clAuthDialog.id, ConstraintSet.BOTTOM)
-                set.applyTo(clAuthParent)
-
-            }
-            btnAuthSignUp.id -> {
-                set.clone(clAuthParent)
-                set.connect(clAuthDialogSignIn.id, ConstraintSet.TOP, clAuthParent.id, ConstraintSet.BOTTOM)
-                set.connect(clAuthDialogSignIn.id, ConstraintSet.LEFT, clAuthParent.id, ConstraintSet.RIGHT)
-                set.connect(clAuthDialogSignUp.id, ConstraintSet.TOP, clAuthDialog.id, ConstraintSet.BOTTOM)
-                set.applyTo(clAuthParent)
-            }
-        }
-        TransitionManager.beginDelayedTransition(clAuthParent)
     }
 
     private fun clearInput(view: View) {

@@ -3,12 +3,10 @@ package com.corespark.pccompiler.service
 import android.content.Context
 import android.support.design.widget.Snackbar
 import android.view.View
+import android.widget.TextView
 import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.model.User
-import com.corespark.pccompiler.utility.ACTIVITY_WORKSPACE
-import com.corespark.pccompiler.utility.MESSAGE_INCORRECT_CREDENTIALS
-import com.corespark.pccompiler.utility.MESSAGE_USER_CREATION_FAILURE
-import com.corespark.pccompiler.utility.MESSAGE_USER_CREATION_SUCCESS
+import com.corespark.pccompiler.utility.*
 import com.parse.ParseUser
 
 
@@ -21,7 +19,7 @@ import com.parse.ParseUser
  */
 object Auth {
 
-    val user = User
+    var user = User
 
     fun signIn(view: View, username: String, password: String, complete: (Boolean) -> Unit) {
         ParseUser.logInInBackground(username, password) { parseUser, e ->
@@ -66,6 +64,18 @@ object Auth {
         if (Compiler.preferences.isLoggedIn) {
             context.startActivity(Intent.launch(context, ACTIVITY_WORKSPACE))
             complete(true)
+        }
+    }
+
+    fun logOut(user: TextView, complete: (Boolean) -> Unit) {
+        ParseUser.logOutInBackground {
+            if (it == null) {
+                user.text = BLANK
+                Compiler.preferences.username = BLANK
+                Compiler.preferences.isLoggedIn = false
+                Auth.user = User()
+                complete(true)
+            }
         }
     }
 }

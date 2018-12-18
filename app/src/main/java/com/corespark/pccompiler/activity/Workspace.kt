@@ -8,12 +8,11 @@ import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.service.Animation
+import com.corespark.pccompiler.service.Auth
 import com.corespark.pccompiler.service.Broadcast
 import com.corespark.pccompiler.service.Intent
 import com.corespark.pccompiler.service.Window
 import com.corespark.pccompiler.utility.ACTIVITY_AUTH
-import com.corespark.pccompiler.utility.BLANK
-import com.parse.ParseUser
 import kotlinx.android.synthetic.main.activity_workspace.*
 
 /**
@@ -68,11 +67,8 @@ class Workspace : AppCompatActivity() {
             }
             btnWorkspaceLogout.id -> {
                 view.setOnClickListener {
-                    ParseUser.logOutInBackground {
-                        if (it == null) {
-                            tvWorkspaceUser.text = BLANK
-                            Compiler.preferences.username = BLANK
-                            Compiler.preferences.isLoggedIn = false
+                    Auth.logOut(tvWorkspaceUser) {
+                        if (it) {
                             startActivity(Intent.launch(this, ACTIVITY_AUTH))
                         }
                     }
