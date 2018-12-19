@@ -44,31 +44,15 @@ object Window : Tab {
     }
 
     fun computeSplitWindowPx(width: Int) : Int {
-        println(Window.density)
         when (Window.metrics.density) {
-            DENSITY_0_75 -> {
-                splitWidthPx = (width / VALUE_2)
-            }
-            DENSITY_1 -> {
-                splitWidthPx = (width / VALUE_2)
-            }
-            DENSITY_1_5 -> {
-                splitWidthPx = (width / VALUE_2)
-            }
-            DENSITY_2 -> {
-                splitWidthPx = (width / VALUE_2)
-            }
-            DENSITY_2_625 -> {
-                splitWidthPx = (width / VALUE_2)
-            }
-            DENSITY_3 -> {
-                splitWidthPx = (width / VALUE_2)
-            }
-            DENSITY_3_5 -> {
-                splitWidthPx = (width / VALUE_2)
-            }
+            DENSITY_0_75 -> { splitWidthPx = (width / VALUE_2) }
+            DENSITY_1 -> { splitWidthPx = (width / VALUE_2) }
+            DENSITY_1_5 -> { splitWidthPx = (width / VALUE_2) }
+            DENSITY_2 -> { splitWidthPx = (width / VALUE_2) }
+            DENSITY_2_625 -> { splitWidthPx = (width / VALUE_2) }
+            DENSITY_3 -> { splitWidthPx = (width / VALUE_2) }
+            DENSITY_3_5 -> { splitWidthPx = (width / VALUE_2) }
         }
-        println(splitWidthPx)
         return splitWidthPx
     }
 

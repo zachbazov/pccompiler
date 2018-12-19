@@ -35,23 +35,23 @@ class Auth : AppCompatActivity() {
     }
 
     private fun customizeView() {
-        ivAuthLogo.setImageResource(R.drawable.img_logo)
-        ivAuthLogoTitle.setImageResource(R.drawable.img_logo_title)
+        ivAuthLogo.setImageResource(R.mipmap.ic_pccompiler)
+        ivAuthLogoTitle.setImageResource(R.drawable.ic_pccompiler_title)
 
-        btnAuthSignIn.text = resources.getText(R.string.auth_sign_in)
-        btnAuthSignUp.text = resources.getText(R.string.auth_sign_up)
+        btnSignIn.text = resources.getText(R.string.auth_sign_in)
+        btnSignUp.text = resources.getText(R.string.auth_sign_up)
     }
 
     private fun activateView() {
-        onClick(btnAuthSignIn)
-        onClick(btnAuthSignUp)
+        onClick(btnSignIn)
+        onClick(btnSignUp)
         onClick(btnAuthDialogSignIn)
         onClick(btnAuthDialogSignUp)
     }
 
     private fun onClick(view: View) {
         when (view.id) {
-            btnAuthSignIn.id -> {
+            btnSignIn.id -> {
                 view.setOnClickListener {
                     if (Compiler.preferences.isLoggedIn) {
                         startActivity(Intent.launch(this, ACTIVITY_WORKSPACE))
@@ -62,7 +62,7 @@ class Auth : AppCompatActivity() {
                     }
                 }
             }
-            btnAuthSignUp.id -> {
+            btnSignUp.id -> {
                 view.setOnClickListener {
                     Constraint.set(view, clAuthParent, clAuthDialog, clAuthDialogSignIn, clAuthDialogSignUp)
                     setValue(it)
@@ -72,8 +72,8 @@ class Auth : AppCompatActivity() {
                 view.setOnClickListener {
                     val username = etAuthDialogUsernameSignIn.text.toString()
                     val password = etAuthDialogPasswordSignIn.text.toString()
-                    Auth.signIn(clAuthParent, username, password) {
-                        if (it) {
+                    Auth.signIn(clAuthParent, username, password) { complete ->
+                        if (complete) {
                             startActivity(Intent.launch(this, ACTIVITY_WORKSPACE))
                             finish()
                         } else {
@@ -87,11 +87,11 @@ class Auth : AppCompatActivity() {
                     val username = etAuthDialogUsernameSignUp.text.toString()
                     val email = etAuthDialogEmailSignUp.text.toString()
                     val password = etAuthDialogPasswordSignUp.text.toString()
-                    Auth.signUp(clAuthParent, username, email, password) {
-                        if (it) {
+                    Auth.signUp(clAuthParent, username, email, password) { complete ->
+                        if (complete) {
                             clearInput(view)
-                            Constraint.set(btnAuthSignIn, clAuthParent, clAuthDialog, clAuthDialogSignUp, clAuthDialogSignIn)
-                            setValue(btnAuthSignIn)
+                            Constraint.set(btnSignIn, clAuthParent, clAuthDialog, clAuthDialogSignUp, clAuthDialogSignIn)
+                            setValue(btnSignIn)
                         } else {
                             clearInput(view)
                         }
@@ -103,12 +103,12 @@ class Auth : AppCompatActivity() {
 
     private fun setValue(view: View) {
         when (view.id) {
-            btnAuthSignIn.id -> {
+            btnSignIn.id -> {
                 etAuthDialogUsernameSignIn.hint = getString(R.string.auth_hint_username)
                 etAuthDialogPasswordSignIn.hint = getString(R.string.auth_hint_password)
                 btnAuthDialogSignIn.text = getString(R.string.auth_sign_in)
             }
-            btnAuthSignUp.id -> {
+            btnSignUp.id -> {
                 etAuthDialogUsernameSignUp.hint = getString(R.string.auth_hint_username)
                 etAuthDialogEmailSignUp.hint = getString(R.string.auth_hint_email)
                 etAuthDialogPasswordSignUp.hint = getString(R.string.auth_hint_password)

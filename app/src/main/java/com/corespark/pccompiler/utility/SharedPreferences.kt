@@ -12,8 +12,8 @@ import android.content.Context
  */
 class SharedPreferences(context: Context) {
 
-    val fileName = SHARED_PREFERENCES_FILE_NAME
-    val sharedPreferences = context.getSharedPreferences(fileName, 0)
+    private val fileName = SHARED_PREFERENCES_FILE_NAME
+    private val sharedPreferences = context.getSharedPreferences(fileName, 0)!!
 
     var isLoggedIn: Boolean
         get() = sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)

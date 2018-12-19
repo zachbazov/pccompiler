@@ -1,4 +1,4 @@
-package com.corespark.pccompiler.app;
+package com.corespark.pccompiler.app
 
 import android.app.Application
 import com.corespark.pccompiler.utility.SharedPreferences

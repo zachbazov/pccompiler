@@ -22,16 +22,16 @@ object Auth {
     var user = User
 
     fun signIn(view: View, username: String, password: String, complete: (Boolean) -> Unit) {
-        ParseUser.logInInBackground(username, password) { parseUser, e ->
+        ParseUser.logInInBackground(username, password) { parseUser, _ ->
             if (parseUser != null) {
-                user.id = parseUser.getObjectId()
+                user.id = parseUser.objectId
                 user.username = parseUser.username
-                user.email = parseUser.getEmail()
+                user.email = parseUser.email
                 user.password = password
-                user.createdAt = parseUser.getCreatedAt()
-                user.updatedAt = parseUser.getUpdatedAt()
-                user.isEmailVerified = parseUser.isNew()
-                user.isAuthenticated = parseUser.isAuthenticated()
+                user.createdAt = parseUser.createdAt
+                user.updatedAt = parseUser.updatedAt
+                user.isEmailVerified = parseUser.isNew
+                user.isAuthenticated = parseUser.isAuthenticated
                 user.isAuthenticated = true
                 Compiler.preferences.username = user.username
                 Compiler.preferences.isLoggedIn = true
@@ -73,7 +73,7 @@ object Auth {
                 user.text = BLANK
                 Compiler.preferences.username = BLANK
                 Compiler.preferences.isLoggedIn = false
-                Auth.user = User()
+                Auth.user = User
                 complete(true)
             }
         }

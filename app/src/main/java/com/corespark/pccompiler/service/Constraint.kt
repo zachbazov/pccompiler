@@ -4,8 +4,7 @@ import android.support.constraint.ConstraintLayout
 import android.support.constraint.ConstraintSet
 import android.transition.TransitionManager
 import android.view.View
-import com.corespark.pccompiler.R.id.btnAuthSignIn
-import com.corespark.pccompiler.R.id.btnAuthSignUp
+import com.corespark.pccompiler.R.id.*
 
 
 /**
@@ -19,9 +18,28 @@ object Constraint {
 
     val set = ConstraintSet()
 
+    fun set(applyTo: View, parentLayout: ConstraintLayout, view: View) {
+        when (applyTo.id) {
+            clTabWorkspace -> {
+                set.clone(parentLayout)
+                set.clear(view.id, ConstraintSet.END)
+                set.connect(view.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
+                set.applyTo(parentLayout)
+
+            }
+            clTabTrolley -> {
+                set.clone(parentLayout)
+                set.clear(view.id, ConstraintSet.START)
+                set.connect(view.id, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
+                set.applyTo(parentLayout)
+            }
+        }
+        TransitionManager.beginDelayedTransition(parentLayout)
+    }
+
     fun set(applyTo: View, parentLayout: ConstraintLayout, subLayout: ConstraintLayout, start: View, end: View) {
         when (applyTo.id) {
-            btnAuthSignIn -> {
+            btnSignIn -> {
                 set.clone(parentLayout)
                 set.connect(start.id, ConstraintSet.TOP, parentLayout.id, ConstraintSet.BOTTOM)
                 set.connect(start.id, ConstraintSet.LEFT, parentLayout.id, ConstraintSet.RIGHT)
@@ -29,7 +47,7 @@ object Constraint {
                 set.applyTo(parentLayout)
 
             }
-            btnAuthSignUp -> {
+            btnSignUp -> {
                 set.clone(parentLayout)
                 set.connect(start.id, ConstraintSet.TOP, parentLayout.id, ConstraintSet.BOTTOM)
                 set.connect(start.id, ConstraintSet.LEFT, parentLayout.id, ConstraintSet.RIGHT)
@@ -39,4 +57,6 @@ object Constraint {
         }
         TransitionManager.beginDelayedTransition(parentLayout)
     }
+
+
 }
