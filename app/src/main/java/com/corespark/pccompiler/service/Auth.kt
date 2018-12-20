@@ -17,7 +17,7 @@ import com.parse.ParseUser
  */
 object Auth {
 
-    var user = User
+    private var user = User
 
     fun signIn(username: String, password: String, complete: (Boolean) -> Unit) {
         ParseUser.logInInBackground(username, password) { parseUser, _ ->

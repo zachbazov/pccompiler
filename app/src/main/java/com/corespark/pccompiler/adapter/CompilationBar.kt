@@ -20,7 +20,8 @@ import com.corespark.pccompiler.service.Window
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
-class CompilationBar(val context: Context, val list: List<Compilation>) : RecyclerView.Adapter<CompilationBar.ViewHolder>() {
+class CompilationBar(
+    val context: Context, private val list: List<Compilation>) : RecyclerView.Adapter<CompilationBar.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return list.count()
