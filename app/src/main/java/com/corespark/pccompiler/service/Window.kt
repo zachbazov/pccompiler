@@ -25,12 +25,12 @@ object Window : Tab {
     var density = 0f
     private var densityDpi = 0
     private var dpi = 0
-    private var widthPx = 0
-    private var heightPx = 0
+    var widthPx = 0
+    var heightPx = 0
     private var widthDp = 0f
     private var heightDp = 0f
 
-    private var splitWidthPx = 0
+    var splitWidthPx = 0
 
     fun measure(manager: WindowManager, metrics: DisplayMetrics) {
         manager.defaultDisplay.getMetrics(metrics)
@@ -43,15 +43,15 @@ object Window : Tab {
         heightDp = metrics.ydpi
     }
 
-    private fun computeSplitWindowPx(width: Int) : Int {
+    fun measureSplitWidthPx(parentWidth: Int) : Int {
         when (Window.metrics.density) {
-            DENSITY_0_75 -> { splitWidthPx = (width / VALUE_2) }
-            DENSITY_1 -> { splitWidthPx = (width / VALUE_2) }
-            DENSITY_1_5 -> { splitWidthPx = (width / VALUE_2) }
-            DENSITY_2 -> { splitWidthPx = (width / VALUE_2) }
-            DENSITY_2_625 -> { splitWidthPx = (width / VALUE_2) }
-            DENSITY_3 -> { splitWidthPx = (width / VALUE_2) }
-            DENSITY_3_5 -> { splitWidthPx = (width / VALUE_2) }
+            DENSITY_0_75 -> { splitWidthPx = (parentWidth / VALUE_2) }
+            DENSITY_1 -> { splitWidthPx = (parentWidth / VALUE_2) }
+            DENSITY_1_5 -> { splitWidthPx = (parentWidth / VALUE_2) }
+            DENSITY_2 -> { splitWidthPx = (parentWidth / VALUE_2) }
+            DENSITY_2_625 -> { splitWidthPx = (parentWidth / VALUE_2) }
+            DENSITY_3 -> { splitWidthPx = (parentWidth / VALUE_2) }
+            DENSITY_3_5 -> { splitWidthPx = (parentWidth / VALUE_2) }
         }
         return splitWidthPx
     }
@@ -68,12 +68,12 @@ object Window : Tab {
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Window.measure(manager, Window.metrics)
             val params = view.layoutParams
-            params.width = Window.computeSplitWindowPx(Window.widthPx)
+            params.width = Window.measureSplitWidthPx(Window.widthPx)
             complete(true)
         } else {
             Window.measure(manager, Window.metrics)
             val params = view.layoutParams
-            params.width = Window.computeSplitWindowPx(Window.widthPx)
+            params.width = Window.measureSplitWidthPx(Window.widthPx)
             complete(false)
         }
     }

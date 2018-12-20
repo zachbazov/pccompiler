@@ -11,6 +11,8 @@ import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.service.*
 import com.corespark.pccompiler.service.Auth
 import com.corespark.pccompiler.utility.*
+import com.corespark.pccompiler.adapter.CompilationBar
+import com.corespark.pccompiler.model.Compilation
 import kotlinx.android.synthetic.main.activity_workspace.*
 
 
@@ -34,6 +36,8 @@ class Workspace : AppCompatActivity() {
         customizeView()
 
         activateView()
+
+        setAdapter(rvCompilation)
     }
 
     override fun onDestroy() {
@@ -61,7 +65,7 @@ class Workspace : AppCompatActivity() {
         Parameter.set(ivTabWorkspace, VALUE_72)
         Parameter.set(ivTabCart, VALUE_48)
 
-        Parameter.set(ivUser, VALUE_94)
+        Parameter.set(ivUser, VALUE_96)
         Parameter.set(ivSettings, VALUE_64)
         Parameter.set(ivLogout, VALUE_64)
         Parameter.set(ivRemove, VALUE_64)
@@ -142,6 +146,15 @@ class Workspace : AppCompatActivity() {
             tvMenu.id -> { tvMenu.text = getString(R.string.text_menu) }
             tvSettings.id -> { tvSettings.text = getString(R.string.text_settings) }
             tvLogout.id -> { tvLogout.text = getString(R.string.text_logout) }
+        }
+    }
+
+    private fun setAdapter(view: View) {
+        when (view.id) {
+            rvCompilation.id -> {
+                Compilation.add()
+                rvCompilation.adapter = CompilationBar(this, Compilation.list)
+            }
         }
     }
 

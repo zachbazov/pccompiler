@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout android:id="@+id/clCompilationParent"
+                                             android:layout_width="wrap_content"
+                                             android:layout_height="wrap_content"
+                                             tools:context=".activity.Workspace"
+                                             xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView android:id="@+id/cvCompilation"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        card_view:cardBackgroundColor="@color/colorWhite"
+                                        card_view:cardUseCompatPadding="true"
+                                        card_view:cardCornerRadius="@dimen/_8dp"
+                                        card_view:cardElevation="@dimen/_6dp"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout android:id="@+id/clCompilation"
+                                                     android:layout_width="match_parent"
+                                                     android:layout_height="match_parent">
+
+            <ImageView android:id="@+id/ivCompilation"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginTop="@dimen/_16dp"
+                       app:layout_constraintBottom_toTopOf="@+id/tvCompilation"
+                       app:layout_constraintEnd_toEndOf="parent"
+                       app:layout_constraintStart_toStartOf="parent"
+                       app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView android:id="@+id/tvCompilation"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="@dimen/_16dp"
+                      android:textSize="@dimen/_18sp"
+                      app:layout_constraintBottom_toBottomOf="parent"
+                      app:layout_constraintEnd_toEndOf="@+id/ivCompilation"
+                      app:layout_constraintStart_toStartOf="@+id/ivCompilation"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+</android.support.constraint.ConstraintLayout>

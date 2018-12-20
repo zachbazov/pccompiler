@@ -34,8 +34,9 @@ const val DENSITY_3 = 3f
 const val DENSITY_3_5 = 3.5f
 
 const val VALUE_2 = 2
+const val VALUE_4 = 4
 const val VALUE_32 = 32
 const val VALUE_48 = 48
 const val VALUE_64 = 64
 const val VALUE_72 = 72
-const val VALUE_94 = 94
+const val VALUE_96 = 96
