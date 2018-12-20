@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.support.v4.content.LocalBroadcastManager
-import com.corespark.pccompiler.utility.BROADCAST_USER_UPDATE
+import com.corespark.pccompiler.R
 
 
 /**
@@ -19,9 +19,9 @@ object Broadcast {
 
     fun emit(context: Context, channel: BroadcastReceiver) {
         LocalBroadcastManager.getInstance(context)
-            .registerReceiver(channel, IntentFilter(BROADCAST_USER_UPDATE))
+            .registerReceiver(channel, IntentFilter(context.getString(R.string.broadcast_channel_auth)))
 
-        val broadcast = Intent(BROADCAST_USER_UPDATE)
+        val broadcast = Intent(context.getString(R.string.broadcast_channel_auth))
         LocalBroadcastManager.getInstance(context).sendBroadcast(broadcast)
     }
 

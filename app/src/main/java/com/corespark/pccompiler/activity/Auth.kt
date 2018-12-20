@@ -2,14 +2,15 @@ package com.corespark.pccompiler.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
+import com.corespark.pccompiler.model.User
 import com.corespark.pccompiler.service.Auth
 import com.corespark.pccompiler.service.Constraint
 import com.corespark.pccompiler.service.Window
 import com.corespark.pccompiler.service.Intent
-import com.corespark.pccompiler.utility.ACTIVITY_WORKSPACE
 import kotlinx.android.synthetic.main.activity_auth.*
 
 
@@ -54,7 +55,7 @@ class Auth : AppCompatActivity() {
             btnSignIn.id -> {
                 view.setOnClickListener {
                     if (Compiler.preferences.isLoggedIn) {
-                        startActivity(Intent.launch(this, ACTIVITY_WORKSPACE))
+                        startActivity(Intent.launch(this, R.layout.activity_auth))
                         finish()
                     } else {
                         Constraint.set(view, clAuthParent, clAuthDialog, clAuthDialogSignUp, clAuthDialogSignIn)
@@ -70,13 +71,14 @@ class Auth : AppCompatActivity() {
             }
             btnAuthDialogSignIn.id -> {
                 view.setOnClickListener {
-                    val username = etAuthDialogUsernameSignIn.text.toString()
-                    val password = etAuthDialogPasswordSignIn.text.toString()
-                    Auth.signIn(clAuthParent, username, password) { complete ->
+                    User.username = etAuthDialogUsernameSignIn.text.toString()
+                    User.password = etAuthDialogPasswordSignIn.text.toString()
+                    Auth.signIn(User.username, User.password) { complete ->
                         if (complete) {
-                            startActivity(Intent.launch(this, ACTIVITY_WORKSPACE))
+                            startActivity(Intent.launch(this, R.layout.activity_workspace))
                             finish()
                         } else {
+                            Snackbar.make(view, getString(R.string.auth_incorrect_credentials), Snackbar.LENGTH_SHORT).show()
                             clearInput(view)
                         }
                     }
@@ -84,15 +86,17 @@ class Auth : AppCompatActivity() {
             }
             btnAuthDialogSignUp.id -> {
                 view.setOnClickListener {
-                    val username = etAuthDialogUsernameSignUp.text.toString()
-                    val email = etAuthDialogEmailSignUp.text.toString()
-                    val password = etAuthDialogPasswordSignUp.text.toString()
-                    Auth.signUp(clAuthParent, username, email, password) { complete ->
+                    User.username = etAuthDialogUsernameSignUp.text.toString()
+                    User.email = etAuthDialogEmailSignUp.text.toString()
+                    User.password = etAuthDialogPasswordSignUp.text.toString()
+                    Auth.signUp(User.username, User.email, User.password) { complete ->
                         if (complete) {
+                            Snackbar.make(view, getString(R.string.auth_sign_up_success), Snackbar.LENGTH_LONG).show()
                             clearInput(view)
                             Constraint.set(btnSignIn, clAuthParent, clAuthDialog, clAuthDialogSignUp, clAuthDialogSignIn)
                             setValue(btnSignIn)
                         } else {
+                            Snackbar.make(view, getString(R.string.auth_sign_up_failure), Snackbar.LENGTH_LONG).show()
                             clearInput(view)
                         }
                     }

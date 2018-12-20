@@ -27,7 +27,7 @@ class CompilationBar(val context: Context, val list: List<Compilation>) : Recycl
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = list.get(position)
+        val item = list[position]
         holder.bind(item.image, item.title)
     }
 
@@ -38,14 +38,14 @@ class CompilationBar(val context: Context, val list: List<Compilation>) : Recycl
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val card = itemView.findViewById<CardView>(R.id.cvCompilation)
-        val image = itemView.findViewById<ImageView>(R.id.ivCompilation)
-        val title = itemView.findViewById<TextView>(R.id.tvCompilation)
+        val card = itemView.findViewById<CardView>(R.id.cvCompilation)!!
+        val image = itemView.findViewById<ImageView>(R.id.ivCompilation)!!
+        val title = itemView.findViewById<TextView>(R.id.tvCompilation)!!
 
         fun bind(resId: Int, text: String) {
             image.setImageResource(resId)
             title.text = text
-            card.layoutParams.width = Window.measureSplitWidthPx(Window.widthPx)
+            card.layoutParams.width = Window.measureDividedWidthPx(Window.widthPx, 2)
         }
     }
 }

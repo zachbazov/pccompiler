@@ -5,7 +5,6 @@ import android.support.constraint.ConstraintSet
 import android.transition.TransitionManager
 import android.view.View
 import com.corespark.pccompiler.R.id.*
-import com.corespark.pccompiler.utility.VALUE_32
 
 
 /**
@@ -32,6 +31,14 @@ object Constraint {
                 set.clear(view.id, ConstraintSet.START)
                 set.connect(view.id, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
                 set.applyTo(parentLayout)
+            }
+            clActionBar -> {
+                Constraint.set.clone(parentLayout)
+                Constraint.set.clear(applyTo.id, ConstraintSet.START)
+                Constraint.set.clear(applyTo.id, ConstraintSet.END)
+                Constraint.set.connect(applyTo.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
+                Constraint.set.connect(applyTo.id, ConstraintSet.END, view.id, ConstraintSet.START)
+                Constraint.set.applyTo(parentLayout)
             }
         }
         TransitionManager.beginDelayedTransition(parentLayout)
@@ -67,9 +74,9 @@ object Constraint {
             Constraint.set.clear(actionPane.id, ConstraintSet.START)
             Constraint.set.clear(actionPane.id, ConstraintSet.END)
             Constraint.set.clear(controlPane.id, ConstraintSet.START)
-            Constraint.set.connect(middlePane.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START, VALUE_32)
+            Constraint.set.connect(middlePane.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START, 32)
             Constraint.set.connect(actionPane.id, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
-            Constraint.set.connect(controlPane.id, ConstraintSet.START, middlePane.id, ConstraintSet.END, VALUE_32)
+            Constraint.set.connect(controlPane.id, ConstraintSet.START, middlePane.id, ConstraintSet.END, 32)
             Constraint.set.applyTo(parentLayout)
             complete(true)
         } else {
@@ -79,7 +86,7 @@ object Constraint {
             Constraint.set.clear(actionPane.id, ConstraintSet.END)
             Constraint.set.clear(controlPane.id, ConstraintSet.START)
             Constraint.set.clear(controlPane.id, ConstraintSet.END)
-            Constraint.set.connect(middlePane.id, ConstraintSet.END, parentLayout.id, ConstraintSet.END, VALUE_32)
+            Constraint.set.connect(middlePane.id, ConstraintSet.END, parentLayout.id, ConstraintSet.END, 32)
             Constraint.set.connect(actionPane.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
             Constraint.set.connect(actionPane.id, ConstraintSet.END, middlePane.id, ConstraintSet.START)
             Constraint.set.connect(controlPane.id, ConstraintSet.START, parentLayout.id, ConstraintSet.END)

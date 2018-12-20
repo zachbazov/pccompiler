@@ -2,14 +2,11 @@ package com.corespark.pccompiler.service
 
 import android.content.Context
 import android.content.Intent
+import com.corespark.pccompiler.R
 import com.corespark.pccompiler.activity.Auth
 import com.corespark.pccompiler.activity.Compile
 import com.corespark.pccompiler.activity.Menu
 import com.corespark.pccompiler.activity.Workspace
-import com.corespark.pccompiler.utility.ACTIVITY_AUTH
-import com.corespark.pccompiler.utility.ACTIVITY_COMPILE
-import com.corespark.pccompiler.utility.ACTIVITY_MENU
-import com.corespark.pccompiler.utility.ACTIVITY_WORKSPACE
 
 
 /**
@@ -21,22 +18,22 @@ import com.corespark.pccompiler.utility.ACTIVITY_WORKSPACE
  */
 object Intent {
 
-    fun launch(context: Context, state: Int) : Intent {
+    fun launch(context: Context, resId: Int) : Intent {
         var intent: Intent? = null
-        when (state) {
-            ACTIVITY_AUTH -> {
+        when (resId) {
+            R.layout.activity_auth -> {
                 intent = Intent(context, Auth::class.java)
                 return intent
             }
-            ACTIVITY_WORKSPACE -> {
+            R.layout.activity_workspace -> {
                 intent = Intent(context, Workspace::class.java)
                 return intent
             }
-            ACTIVITY_MENU-> {
+            R.layout.activity_menu -> {
                 intent = Intent(context, Menu::class.java)
                 return intent
             }
-            ACTIVITY_COMPILE -> {
+            R.layout.activity_compile -> {
                 intent = Intent(context, Compile::class.java)
                 return intent
             }

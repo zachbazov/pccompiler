@@ -1,6 +1,9 @@
-package com.corespark.pccompiler.utility
+package com.corespark.pccompiler.app
 
 import android.content.Context
+import com.corespark.pccompiler.R
+import com.corespark.pccompiler.service.KEY_IS_LOGGED_IN
+import com.corespark.pccompiler.service.KEY_USRENAME
 
 
 /**
@@ -12,7 +15,7 @@ import android.content.Context
  */
 class SharedPreferences(context: Context) {
 
-    private val fileName = SHARED_PREFERENCES_FILE_NAME
+    private val fileName = context.getString(R.string.key_shared_preferences_file)
     private val sharedPreferences = context.getSharedPreferences(fileName, 0)!!
 
     var isLoggedIn: Boolean
@@ -21,7 +24,7 @@ class SharedPreferences(context: Context) {
             .apply()
 
     var username: String
-        get() = sharedPreferences.getString(KEY_USERNAME, "")!!
-        set(value) = sharedPreferences.edit().putString(KEY_USERNAME, value)
+        get() = sharedPreferences.getString(KEY_USRENAME, "")!!
+        set(value) = sharedPreferences.edit().putString(KEY_USRENAME, value)
             .apply()
 }

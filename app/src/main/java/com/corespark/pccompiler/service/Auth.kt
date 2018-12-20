@@ -1,12 +1,10 @@
 package com.corespark.pccompiler.service
 
 import android.content.Context
-import android.support.design.widget.Snackbar
-import android.view.View
 import android.widget.TextView
+import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.model.User
-import com.corespark.pccompiler.utility.*
 import com.parse.ParseUser
 
 
@@ -21,7 +19,7 @@ object Auth {
 
     var user = User
 
-    fun signIn(view: View, username: String, password: String, complete: (Boolean) -> Unit) {
+    fun signIn(username: String, password: String, complete: (Boolean) -> Unit) {
         ParseUser.logInInBackground(username, password) { parseUser, _ ->
             if (parseUser != null) {
                 user.id = parseUser.objectId
@@ -38,23 +36,20 @@ object Auth {
                 complete(true)
             } else {
                 ParseUser.logOut()
-                Snackbar.make(view, TEXT_INCORRECT_CREDENTIALS, Snackbar.LENGTH_SHORT).show()
                 complete(false)
             }
         }
     }
 
-    fun signUp(view: View, username: String, email: String, password: String, complete: (Boolean) -> Unit) {
+    fun signUp(username: String, email: String, password: String, complete: (Boolean) -> Unit) {
         val user = ParseUser()
         user.username = username
         user.email = email
         user.setPassword(password)
         user.signUpInBackground {
             if (it == null) {
-                Snackbar.make(view, TEXT_USER_CREATION_SUCCESS, Snackbar.LENGTH_LONG).show()
                 complete(true)
             } else {
-                Snackbar.make(view, TEXT_USER_CREATION_FAILURE, Snackbar.LENGTH_LONG).show()
                 complete(false)
             }
         }
@@ -62,16 +57,16 @@ object Auth {
 
     fun auth(context: Context, complete: (Boolean) -> Unit) {
         if (Compiler.preferences.isLoggedIn) {
-            context.startActivity(Intent.launch(context, ACTIVITY_WORKSPACE))
+            context.startActivity(Intent.launch(context, R.layout.activity_workspace))
             complete(true)
         }
     }
 
-    fun logOut(user: TextView, complete: (Boolean) -> Unit) {
+    fun logOut(context: Context, user: TextView, complete: (Boolean) -> Unit) {
         ParseUser.logOutInBackground {
             if (it == null) {
-                user.text = BLANK
-                Compiler.preferences.username = BLANK
+                user.text = context.getString(R.string.app_blank)
+                Compiler.preferences.username = context.getString(R.string.app_blank)
                 Compiler.preferences.isLoggedIn = false
                 Auth.user = User
                 complete(true)

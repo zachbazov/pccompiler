@@ -4,13 +4,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.constraint.ConstraintSet
 import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.service.*
 import com.corespark.pccompiler.service.Auth
-import com.corespark.pccompiler.utility.*
 import com.corespark.pccompiler.adapter.CompilationBar
 import com.corespark.pccompiler.model.Compilation
 import kotlinx.android.synthetic.main.activity_workspace.*
@@ -29,7 +27,7 @@ class Workspace : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workspace)
 
-        Broadcast.emit(this, channelSignIn)
+        Broadcast.emit(this, onChannelAuth)
 
         Window.determineTabSize(this, ivTracker, windowManager, Window.orientation) {}
 
@@ -41,7 +39,7 @@ class Workspace : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        Broadcast.abort(this, channelSignIn)
+        Broadcast.abort(this, onChannelAuth)
         super.onDestroy()
     }
 
@@ -62,23 +60,18 @@ class Workspace : AppCompatActivity() {
         setValue(tvSettings)
         setValue(tvLogout)
 
-        Parameter.set(ivTabWorkspace, VALUE_72)
-        Parameter.set(ivTabCart, VALUE_48)
+        Parameter.set(ivTabWorkspace, 72)
+        Parameter.set(ivTabCart, 48)
 
-        Parameter.set(ivUser, VALUE_96)
-        Parameter.set(ivSettings, VALUE_64)
-        Parameter.set(ivLogout, VALUE_64)
-        Parameter.set(ivRemove, VALUE_64)
-        Parameter.set(ivEdit, VALUE_64)
-        Parameter.set(ivAdd, VALUE_64)
-        Parameter.set(ivMenu, VALUE_64)
+        Parameter.set(ivUser, 96)
+        Parameter.set(ivSettings, 64)
+        Parameter.set(ivLogout, 64)
+        Parameter.set(ivRemove, 64)
+        Parameter.set(ivEdit, 64)
+        Parameter.set(ivAdd, 64)
+        Parameter.set(ivMenu, 64)
 
-        Constraint.set.clone(clDashboard)
-        Constraint.set.clear(clActionBar.id, ConstraintSet.START)
-        Constraint.set.clear(clActionBar.id, ConstraintSet.END)
-        Constraint.set.connect(clActionBar.id, ConstraintSet.START, clDashboard.id, ConstraintSet.START)
-        Constraint.set.connect(clActionBar.id, ConstraintSet.END, clUser.id, ConstraintSet.START)
-        Constraint.set.applyTo(clDashboard)
+        Constraint.set(clActionBar, clDashboard, clUser)
     }
 
     private fun activateView() {
@@ -93,15 +86,15 @@ class Workspace : AppCompatActivity() {
             clTabWorkspace.id -> {
                 view.setOnClickListener {
                     Constraint.set(clTabWorkspace, clTabParent, ivTracker)
-                    Parameter.set(ivTabWorkspace, VALUE_72)
-                    Parameter.set(ivTabCart, VALUE_48)
+                    Parameter.set(ivTabWorkspace, 72)
+                    Parameter.set(ivTabCart, 48)
                 }
             }
             clTabCart.id -> {
                 view.setOnClickListener {
                     Constraint.set(clTabCart, clTabParent, ivTracker)
-                    Parameter.set(ivTabCart, VALUE_72)
-                    Parameter.set(ivTabWorkspace, VALUE_48)
+                    Parameter.set(ivTabCart, 72)
+                    Parameter.set(ivTabWorkspace, 48)
                 }
             }
             clUser.id -> {
@@ -119,9 +112,10 @@ class Workspace : AppCompatActivity() {
             }
             ivLogout.id -> {
                 view.setOnClickListener {
-                    Auth.logOut(tvUser) { complete ->
+                    Auth.logOut(this, tvUser) { complete ->
                         if (complete) {
-                            startActivity(Intent.launch(this, ACTIVITY_AUTH))
+                            startActivity(Intent.launch(this, R.layout.activity_auth))
+                            finish()
                         }
                     }
                 }
@@ -158,7 +152,7 @@ class Workspace : AppCompatActivity() {
         }
     }
 
-    private val channelSignIn = object : BroadcastReceiver() {
+    private val onChannelAuth = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: android.content.Intent?) {
             if (Compiler.preferences.isLoggedIn) {
                 tvUser.text = Compiler.preferences.username

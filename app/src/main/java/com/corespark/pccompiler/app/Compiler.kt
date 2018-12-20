@@ -1,7 +1,6 @@
 package com.corespark.pccompiler.app
 
 import android.app.Application
-import com.corespark.pccompiler.utility.SharedPreferences
 import com.parse.Parse.initialize
 
 
