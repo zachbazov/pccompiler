@@ -38,7 +38,7 @@ object Auth {
                 complete(true)
             } else {
                 ParseUser.logOut()
-                Snackbar.make(view, MESSAGE_INCORRECT_CREDENTIALS, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(view, TEXT_INCORRECT_CREDENTIALS, Snackbar.LENGTH_SHORT).show()
                 complete(false)
             }
         }
@@ -51,10 +51,10 @@ object Auth {
         user.setPassword(password)
         user.signUpInBackground {
             if (it == null) {
-                Snackbar.make(view, MESSAGE_USER_CREATION_SUCCESS, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(view, TEXT_USER_CREATION_SUCCESS, Snackbar.LENGTH_LONG).show()
                 complete(true)
             } else {
-                Snackbar.make(view, MESSAGE_USER_CREATION_FAILURE, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(view, TEXT_USER_CREATION_FAILURE, Snackbar.LENGTH_LONG).show()
                 complete(false)
             }
         }

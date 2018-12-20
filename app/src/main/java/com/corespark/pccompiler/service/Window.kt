@@ -23,14 +23,14 @@ object Window : Tab {
     var orientation: Int? = null
 
     var density = 0f
-    var densityDpi = 0
-    var dpi = 0
-    var widthPx = 0
-    var heightPx = 0
-    var widthDp = 0f
-    var heightDp = 0f
+    private var densityDpi = 0
+    private var dpi = 0
+    private var widthPx = 0
+    private var heightPx = 0
+    private var widthDp = 0f
+    private var heightDp = 0f
 
-    var splitWidthPx = 0
+    private var splitWidthPx = 0
 
     fun measure(manager: WindowManager, metrics: DisplayMetrics) {
         manager.defaultDisplay.getMetrics(metrics)
@@ -43,7 +43,7 @@ object Window : Tab {
         heightDp = metrics.ydpi
     }
 
-    fun computeSplitWindowPx(width: Int) : Int {
+    private fun computeSplitWindowPx(width: Int) : Int {
         when (Window.metrics.density) {
             DENSITY_0_75 -> { splitWidthPx = (width / VALUE_2) }
             DENSITY_1 -> { splitWidthPx = (width / VALUE_2) }
@@ -56,7 +56,7 @@ object Window : Tab {
         return splitWidthPx
     }
 
-    fun determineLayoutMode(context: Context) : Int {
+    private fun determineLayoutMode(context: Context) : Int {
         orientation = context.resources.configuration.orientation
         return orientation as Int
     }

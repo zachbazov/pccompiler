@@ -12,6 +12,7 @@ import com.corespark.pccompiler.service.Intent
 import com.corespark.pccompiler.utility.ACTIVITY_WORKSPACE
 import kotlinx.android.synthetic.main.activity_auth.*
 
+
 /**
  * @author Zachy Bazov.
  * @since 18/12/2018.
@@ -35,11 +36,10 @@ class Auth : AppCompatActivity() {
     }
 
     private fun customizeView() {
-        ivAuthLogo.setImageResource(R.mipmap.ic_pccompiler)
-        ivAuthLogoTitle.setImageResource(R.drawable.ic_pccompiler_title)
-
-        btnSignIn.text = resources.getText(R.string.auth_sign_in)
-        btnSignUp.text = resources.getText(R.string.auth_sign_up)
+        setValue(ivAuthLogo)
+        setValue(ivAuthLogoTitle)
+        setValue(btnSignIn)
+        setValue(btnSignUp)
     }
 
     private fun activateView() {
@@ -103,12 +103,20 @@ class Auth : AppCompatActivity() {
 
     private fun setValue(view: View) {
         when (view.id) {
+            ivAuthLogo.id -> {
+                ivAuthLogo.setImageResource(R.mipmap.ic_pccompiler)
+            }
+            ivAuthLogoTitle.id -> {
+                ivAuthLogoTitle.setImageResource(R.drawable.ic_pccompiler_title)
+            }
             btnSignIn.id -> {
+                btnSignIn.text = getString(R.string.auth_sign_in)
                 etAuthDialogUsernameSignIn.hint = getString(R.string.auth_hint_username)
                 etAuthDialogPasswordSignIn.hint = getString(R.string.auth_hint_password)
                 btnAuthDialogSignIn.text = getString(R.string.auth_sign_in)
             }
             btnSignUp.id -> {
+                btnSignUp.text = getString(R.string.auth_sign_up)
                 etAuthDialogUsernameSignUp.hint = getString(R.string.auth_hint_username)
                 etAuthDialogEmailSignUp.hint = getString(R.string.auth_hint_email)
                 etAuthDialogPasswordSignUp.hint = getString(R.string.auth_hint_password)

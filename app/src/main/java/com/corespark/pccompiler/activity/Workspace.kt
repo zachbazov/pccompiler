@@ -4,16 +4,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.support.constraint.ConstraintSet
-import android.transition.TransitionManager
 import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.service.*
 import com.corespark.pccompiler.service.Auth
-import com.corespark.pccompiler.utility.ACTIVITY_AUTH
+import com.corespark.pccompiler.utility.*
 import kotlinx.android.synthetic.main.activity_workspace.*
+
 
 /**
  * @author Zachy Bazov.
@@ -35,51 +34,6 @@ class Workspace : AppCompatActivity() {
         customizeView()
 
         activateView()
-
-        clUser.setOnClickListener {
-            if (!it.isSelected) {
-                Constraint.set.clone(clDashboard)
-                Constraint.set.clear(clUser.id, ConstraintSet.END)
-                Constraint.set.connect(clUser.id, ConstraintSet.START, clDashboard.id, ConstraintSet.START)
-                Constraint.set.applyTo(clDashboard)
-                ivUser.setImageResource(R.drawable.ic_profile_active)
-                it.isSelected = !it.isSelected
-            } else {
-                Constraint.set.clone(clDashboard)
-                Constraint.set.clear(clUser.id, ConstraintSet.START)
-                Constraint.set.connect(clUser.id, ConstraintSet.END, clDashboard.id, ConstraintSet.END, 32)
-                Constraint.set.applyTo(clDashboard)
-                ivUser.setImageResource(R.drawable.ic_profile_inactive)
-                it.isSelected = !it.isSelected
-            }
-
-            Handler().postDelayed({
-                if (!ivLogout.isSelected) {
-                    Constraint.set.clone(clDashboard)
-                    Constraint.set.clear(ivSettings.id, ConstraintSet.START)
-                    Constraint.set.clear(ivLogout.id, ConstraintSet.START)
-                    Constraint.set.clear(ivRemove.id, ConstraintSet.END)
-                    Constraint.set.connect(ivSettings.id, ConstraintSet.START, clUser.id, ConstraintSet.END, 32)
-                    Constraint.set.connect(ivLogout.id, ConstraintSet.START, ivSettings.id, ConstraintSet.END, 64)
-                    Constraint.set.connect(ivRemove.id, ConstraintSet.END, clDashboard.id, ConstraintSet.START, 32)
-                    Constraint.set.applyTo(clDashboard)
-                    ivLogout.isSelected = !ivLogout.isSelected
-                } else {
-                    Constraint.set.clone(clDashboard)
-                    Constraint.set.clear(ivSettings.id, ConstraintSet.START)
-                    Constraint.set.clear(ivLogout.id, ConstraintSet.START)
-                    Constraint.set.clear(ivRemove.id, ConstraintSet.END)
-                    Constraint.set.connect(ivRemove.id, ConstraintSet.END, clUser.id, ConstraintSet.START, 48)
-                    Constraint.set.connect(ivSettings.id, ConstraintSet.START, clDashboard.id, ConstraintSet.END)
-                    Constraint.set.connect(ivLogout.id, ConstraintSet.START, clDashboard.id, ConstraintSet.END)
-                    Constraint.set.applyTo(clDashboard)
-                    ivLogout.isSelected = !ivLogout.isSelected
-                }
-                TransitionManager.beginDelayedTransition(clDashboard)
-            }, 300)
-
-            TransitionManager.beginDelayedTransition(clDashboard)
-        }
     }
 
     override fun onDestroy() {
@@ -88,36 +42,45 @@ class Workspace : AppCompatActivity() {
     }
 
     private fun customizeView() {
-        ivTabWorkspace.setImageResource(R.drawable.ic_workspace_active)
-        ivTabTrolley.setImageResource(R.drawable.ic_cart_active)
+        setValue(ivTabWorkspace)
+        setValue(ivTabCart)
+        setValue(ivUser)
+        setValue(ivRemove)
+        setValue(ivEdit)
+        setValue(ivAdd)
+        setValue(ivMenu)
+        setValue(ivSettings)
+        setValue(ivLogout)
+        setValue(tvRemove)
+        setValue(tvEdit)
+        setValue(tvAdd)
+        setValue(tvMenu)
+        setValue(tvSettings)
+        setValue(tvLogout)
 
-        Parameter.set(ivTabWorkspace, 72)
+        Parameter.set(ivTabWorkspace, VALUE_72)
+        Parameter.set(ivTabCart, VALUE_48)
 
-        ivUser.setImageResource(R.drawable.ic_profile_inactive)
-        ivSettings.setImageResource(R.drawable.ic_settings_inactive)
-        ivLogout.setImageResource(R.drawable.ic_logout_inactive)
-        ivRemove.setImageResource(R.drawable.ic_remove_inactive)
-        ivEdit.setImageResource(R.drawable.ic_edit_inactive)
-        ivAdd.setImageResource(R.drawable.ic_add_inactive)
-        ivMenu.setImageResource(R.drawable.ic_menu_inactive)
+        Parameter.set(ivUser, VALUE_94)
+        Parameter.set(ivSettings, VALUE_64)
+        Parameter.set(ivLogout, VALUE_64)
+        Parameter.set(ivRemove, VALUE_64)
+        Parameter.set(ivEdit, VALUE_64)
+        Parameter.set(ivAdd, VALUE_64)
+        Parameter.set(ivMenu, VALUE_64)
 
-        tvRemove.text = "REMOVE"
-        tvEdit.text = "EDIT"
-        tvAdd.text = "ADD"
-        tvMenu.text = "MENU"
-
-        Parameter.set(ivUser, 94)
-        Parameter.set(ivSettings, 64)
-        Parameter.set(ivLogout, 64)
-        Parameter.set(ivRemove, 64)
-        Parameter.set(ivEdit, 64)
-        Parameter.set(ivAdd, 64)
-        Parameter.set(ivMenu, 64)
+        Constraint.set.clone(clDashboard)
+        Constraint.set.clear(clActionBar.id, ConstraintSet.START)
+        Constraint.set.clear(clActionBar.id, ConstraintSet.END)
+        Constraint.set.connect(clActionBar.id, ConstraintSet.START, clDashboard.id, ConstraintSet.START)
+        Constraint.set.connect(clActionBar.id, ConstraintSet.END, clUser.id, ConstraintSet.START)
+        Constraint.set.applyTo(clDashboard)
     }
 
     private fun activateView() {
         onClick(clTabWorkspace)
-        onClick(clTabTrolley)
+        onClick(clTabCart)
+        onClick(clUser)
         onClick(ivLogout)
     }
 
@@ -126,15 +89,28 @@ class Workspace : AppCompatActivity() {
             clTabWorkspace.id -> {
                 view.setOnClickListener {
                     Constraint.set(clTabWorkspace, clTabParent, ivTracker)
-                    Parameter.set(ivTabWorkspace, 72)
-                    Parameter.set(ivTabTrolley, 48)
+                    Parameter.set(ivTabWorkspace, VALUE_72)
+                    Parameter.set(ivTabCart, VALUE_48)
                 }
             }
-            clTabTrolley.id -> {
+            clTabCart.id -> {
                 view.setOnClickListener {
-                    Constraint.set(clTabTrolley, clTabParent, ivTracker)
-                    Parameter.set(ivTabTrolley, 80)
-                    Parameter.set(ivTabWorkspace, 44)
+                    Constraint.set(clTabCart, clTabParent, ivTracker)
+                    Parameter.set(ivTabCart, VALUE_72)
+                    Parameter.set(ivTabWorkspace, VALUE_48)
+                }
+            }
+            clUser.id -> {
+                view.setOnClickListener {
+                    Constraint.set(view, clDashboard, clUser, clActionBar, clControlPanel) { complete ->
+                        if (complete) {
+                            ivUser.setImageResource(R.drawable.ic_profile_active)
+                            view.isSelected = !view.isSelected
+                        } else {
+                            ivUser.setImageResource(R.drawable.ic_profile_inactive)
+                            view.isSelected = !view.isSelected
+                        }
+                    }
                 }
             }
             ivLogout.id -> {
@@ -146,6 +122,26 @@ class Workspace : AppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+
+    private fun setValue(view: View) {
+        when (view.id) {
+            ivTabWorkspace.id -> { ivTabWorkspace.setImageResource(R.drawable.ic_workspace_active) }
+            ivTabCart.id -> { ivTabCart.setImageResource(R.drawable.ic_cart_active) }
+            ivUser.id -> { ivUser.setImageResource(R.drawable.ic_profile_inactive) }
+            ivRemove.id -> { ivRemove.setImageResource(R.drawable.ic_remove_inactive) }
+            ivEdit.id -> { ivEdit.setImageResource(R.drawable.ic_edit_inactive) }
+            ivAdd.id -> { ivAdd.setImageResource(R.drawable.ic_add_inactive) }
+            ivMenu.id -> { ivMenu.setImageResource(R.drawable.ic_menu_inactive) }
+            ivSettings.id -> { ivSettings.setImageResource(R.drawable.ic_settings_inactive) }
+            ivLogout.id -> { ivLogout.setImageResource(R.drawable.ic_logout_inactive) }
+            tvRemove.id -> { tvRemove.text = getString(R.string.text_remove) }
+            tvEdit.id -> { tvEdit.text = getString(R.string.text_edit) }
+            tvAdd.id -> { tvAdd.text = getString(R.string.text_add) }
+            tvMenu.id -> { tvMenu.text = getString(R.string.text_menu) }
+            tvSettings.id -> { tvSettings.text = getString(R.string.text_settings) }
+            tvLogout.id -> { tvLogout.text = getString(R.string.text_logout) }
         }
     }
 

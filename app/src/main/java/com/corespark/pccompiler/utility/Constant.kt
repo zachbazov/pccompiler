@@ -16,9 +16,9 @@ const val KEY_USERNAME = "username"
 const val BROADCAST_USER_UPDATE = "BROADCAST_USER_UPDATE"
 
 const val BLANK = ""
-const val MESSAGE_USER_CREATION_SUCCESS = "User has been created"
-const val MESSAGE_USER_CREATION_FAILURE = "Email must be valid.\nor Username already taken."
-const val MESSAGE_INCORRECT_CREDENTIALS = "Incorrect credentials"
+const val TEXT_USER_CREATION_SUCCESS = "User has been created"
+const val TEXT_USER_CREATION_FAILURE = "Email must be valid.\nor Username already taken."
+const val TEXT_INCORRECT_CREDENTIALS = "Incorrect credentials"
 
 const val ACTIVITY_AUTH         = 0
 const val ACTIVITY_WORKSPACE    = 1
@@ -34,3 +34,8 @@ const val DENSITY_3 = 3f
 const val DENSITY_3_5 = 3.5f
 
 const val VALUE_2 = 2
+const val VALUE_32 = 32
+const val VALUE_48 = 48
+const val VALUE_64 = 64
+const val VALUE_72 = 72
+const val VALUE_94 = 94

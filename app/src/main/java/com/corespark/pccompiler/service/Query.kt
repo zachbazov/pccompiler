@@ -16,14 +16,14 @@ import com.parse.ParseQuery
  */
 class Query<T : ParseObject?> {
 
-    var mQuery: ParseQuery<T>? = null
+    private var mQuery: ParseQuery<T>? = null
 
     fun getCurrentUser(context: Context, complete: (Boolean) -> Unit) {
         mQuery = ParseQuery.getQuery("_User")
         mQuery?.findInBackground { objects, e ->
             if (e == null) {
                 for (o in objects) {
-                    if (Compiler.preferences.username.equals(o?.get("username"))) {
+                    if (Compiler.preferences.username == o?.get("username")) {
                         context.startActivity(Intent.launch(context, ACTIVITY_WORKSPACE))
                         complete(true)
                     }

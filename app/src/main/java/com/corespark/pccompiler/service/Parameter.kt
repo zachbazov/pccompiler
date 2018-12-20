@@ -13,7 +13,7 @@ import android.view.ViewGroup
  */
 object Parameter {
 
-    lateinit var params: ViewGroup.LayoutParams
+    private lateinit var params: ViewGroup.LayoutParams
 
     fun set(view: View, pixel: Int) {
         params = view.layoutParams
