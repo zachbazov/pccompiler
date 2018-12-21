@@ -1,4 +1,4 @@
-package com.corespark.pccompiler.utils
+package com.corespark.pccompiler.utility
 
 import android.content.Context
 import android.support.v4.content.ContextCompat
