@@ -33,12 +33,12 @@ object Constraint {
                 set.applyTo(parentLayout)
             }
             clActionBar -> {
-                Constraint.set.clone(parentLayout)
-                Constraint.set.clear(applyTo.id, ConstraintSet.START)
-                Constraint.set.clear(applyTo.id, ConstraintSet.END)
-                Constraint.set.connect(applyTo.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
-                Constraint.set.connect(applyTo.id, ConstraintSet.END, view.id, ConstraintSet.START)
-                Constraint.set.applyTo(parentLayout)
+               set.clone(parentLayout)
+               set.clear(applyTo.id, ConstraintSet.START)
+               set.clear(applyTo.id, ConstraintSet.END)
+               set.connect(applyTo.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
+               set.connect(applyTo.id, ConstraintSet.END, view.id, ConstraintSet.START)
+               set.applyTo(parentLayout)
             }
         }
         TransitionManager.beginDelayedTransition(parentLayout)
