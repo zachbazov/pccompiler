@@ -12,6 +12,7 @@ import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.service.*
 import com.corespark.pccompiler.service.Auth
 import com.corespark.pccompiler.adapter.CompilationBar
+import com.corespark.pccompiler.adapter.Viewer
 import com.corespark.pccompiler.model.Compilation
 import kotlinx.android.synthetic.main.activity_workspace.*
 
@@ -39,7 +40,7 @@ class Workspace : AppCompatActivity() {
 
         activateView()
 
-        setAdapter(rvCompilation)
+        setAdapter(vpViewer)
     }
 
     override fun onDestroy() {
@@ -92,6 +93,7 @@ class Workspace : AppCompatActivity() {
                     Constraint.set(clTabWorkspace, clTabParent, ivTracker)
                     Parameter.set(ivTabWorkspace, 72)
                     Parameter.set(ivTabCart, 48)
+                    vpViewer.setCurrentItem(0, true)
                 }
             }
             clTabCart.id -> {
@@ -99,6 +101,7 @@ class Workspace : AppCompatActivity() {
                     Constraint.set(clTabCart, clTabParent, ivTracker)
                     Parameter.set(ivTabCart, 72)
                     Parameter.set(ivTabWorkspace, 48)
+                    vpViewer.setCurrentItem(1, true)
                 }
             }
             clUser.id -> {
@@ -149,9 +152,8 @@ class Workspace : AppCompatActivity() {
 
     private fun setAdapter(view: View) {
         when (view.id) {
-            rvCompilation.id -> {
-                Compilation.add()
-                rvCompilation.adapter = CompilationBar(this, Compilation.list)
+            vpViewer.id -> {
+                vpViewer.adapter = Viewer(this)
             }
         }
     }
