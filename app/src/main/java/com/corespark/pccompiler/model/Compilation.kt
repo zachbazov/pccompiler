@@ -16,8 +16,10 @@ class Compilation(val id: Int, val title: String, val image: Int) {
         val list = mutableListOf<Compilation>()
 
         fun add() {
-            list.add(0, Compilation(0, "PCCompiler", R.mipmap.ic_pccompiler))
-            list.add(0, Compilation(1, "PCCompiler", R.mipmap.ic_pccompiler))
+            if (list.size < 2) {
+                list.add(0, Compilation(0, "PCCompiler", R.mipmap.ic_pccompiler))
+                list.add(0, Compilation(1, "PCCompiler", R.mipmap.ic_pccompiler))
+            }
         }
     }
 }

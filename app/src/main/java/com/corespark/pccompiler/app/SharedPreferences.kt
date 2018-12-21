@@ -2,8 +2,8 @@ package com.corespark.pccompiler.app
 
 import android.content.Context
 import com.corespark.pccompiler.R
-import com.corespark.pccompiler.service.KEY_IS_LOGGED_IN
-import com.corespark.pccompiler.service.KEY_USRENAME
+import com.corespark.pccompiler.utils.KEY_IS_LOGGED_IN
+import com.corespark.pccompiler.utils.KEY_USRENAME
 
 
 /**

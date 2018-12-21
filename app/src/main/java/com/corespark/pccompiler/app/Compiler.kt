@@ -1,6 +1,7 @@
 package com.corespark.pccompiler.app
 
 import android.app.Application
+import com.corespark.pccompiler.utils.Color
 import com.parse.Parse.initialize
 
 
@@ -15,6 +16,7 @@ class Compiler : Application() {
 
     companion object {
         lateinit var preferences: SharedPreferences
+        lateinit var colors: Color
     }
 
     override fun onCreate() {
@@ -23,5 +25,6 @@ class Compiler : Application() {
         initialize(applicationContext)
 
         preferences = SharedPreferences(applicationContext)
+        colors = Color(applicationContext)
     }
 }
