@@ -13,12 +13,13 @@
                                         android:layout_height="wrap_content"
                                         card_view:cardBackgroundColor="@color/colorWhite"
                                         card_view:cardUseCompatPadding="true"
-                                        card_view:cardCornerRadius="@dimen/_8dp"
-                                        card_view:cardElevation="@dimen/_6dp"
+                                        card_view:cardCornerRadius="@dimen/_6dp"
+                                        card_view:cardElevation="@dimen/_2dp"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent">
+                                        app:layout_constraintTop_toTopOf="parent"
+    >
 
         <android.support.constraint.ConstraintLayout android:id="@+id/clCompilation"
                                                      android:layout_width="match_parent"

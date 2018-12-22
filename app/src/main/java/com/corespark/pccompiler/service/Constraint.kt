@@ -5,6 +5,7 @@ import android.support.constraint.ConstraintSet
 import android.transition.TransitionManager
 import android.view.View
 import com.corespark.pccompiler.R.id.*
+import kotlinx.android.synthetic.main.activity_workspace.*
 
 
 /**
@@ -17,6 +18,27 @@ import com.corespark.pccompiler.R.id.*
 object Constraint {
 
     val set = ConstraintSet()
+
+    fun set(applyTo: View, initView: View, parentLayout: ConstraintLayout, complete: (Boolean) -> Unit) {
+        when (applyTo.id) {
+            clTabWorkspace -> {
+                Constraint.set.clone(parentLayout)
+                Constraint.set.clear(initView.id, ConstraintSet.END)
+                Constraint.set.connect(initView.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
+                Constraint.set.connect(initView.id, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
+                Constraint.set.applyTo(parentLayout)
+                complete(true)
+            }
+            clTabCart -> {
+                Constraint.set.clone(parentLayout)
+                Constraint.set.clear(initView.id, ConstraintSet.START)
+                Constraint.set.clear(initView.id, ConstraintSet.END)
+                Constraint.set.connect(initView.id, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
+                Constraint.set.applyTo(parentLayout)
+                complete(true)
+            }
+        }
+    }
 
     fun set(applyTo: View, parentLayout: ConstraintLayout, view: View) {
         when (applyTo.id) {
@@ -41,7 +63,7 @@ object Constraint {
                set.applyTo(parentLayout)
             }
         }
-        TransitionManager.beginDelayedTransition(parentLayout)
+        //TransitionManager.beginDelayedTransition(parentLayout)
     }
 
     fun set(applyTo: View, parentLayout: ConstraintLayout, subLayout: ConstraintLayout, start: View, end: View) {

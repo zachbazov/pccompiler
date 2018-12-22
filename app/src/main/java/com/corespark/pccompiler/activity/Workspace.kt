@@ -4,7 +4,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.support.constraint.ConstraintLayout
 import android.support.constraint.ConstraintSet
+import android.support.v7.widget.RecyclerView
 import android.transition.TransitionManager
 import android.view.View
 import com.corespark.pccompiler.R
@@ -12,7 +15,6 @@ import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.service.*
 import com.corespark.pccompiler.service.Auth
 import com.corespark.pccompiler.adapter.CompilationBar
-import com.corespark.pccompiler.adapter.Viewer
 import com.corespark.pccompiler.model.Compilation
 import kotlinx.android.synthetic.main.activity_workspace.*
 
@@ -40,7 +42,7 @@ class Workspace : AppCompatActivity() {
 
         activateView()
 
-        setAdapter(vpViewer)
+        setAdapter(rvCompilation)
     }
 
     override fun onDestroy() {
@@ -89,19 +91,47 @@ class Workspace : AppCompatActivity() {
     private fun onClick(view: View) {
         when (view.id) {
             clTabWorkspace.id -> {
-                view.setOnClickListener {
-                    Constraint.set(clTabWorkspace, clTabParent, ivTracker)
-                    Parameter.set(ivTabWorkspace, 72)
-                    Parameter.set(ivTabCart, 48)
-                    vpViewer.setCurrentItem(0, true)
+                try {
+                    view.setOnClickListener {
+                        Constraint.set(clTabWorkspace, clTabParent, ivTracker)
+                        Parameter.set(ivTabWorkspace, 72)
+                        Parameter.set(ivTabCart, 48)
+                        Constraint.set(clTabWorkspace, clFragParent, clWorkspaceParent) {
+                            if (it) {
+                                TransitionManager.beginDelayedTransition(clWorkspaceParent)
+                            }
+                        }
+                        clFragCart.layoutParams.height = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                        Constraint.set.clone(clFragCartParent)
+                        Constraint.set.clear(clFragCart.id, ConstraintSet.TOP)
+                        Constraint.set.clear(clFragCart.id, ConstraintSet.BOTTOM)
+                        Constraint.set.connect(clFragCart.id, ConstraintSet.TOP, clFragCartParent.id, ConstraintSet.BOTTOM)
+                        Constraint.set.applyTo(clFragCartParent)
+                    }
+                } catch (e: IllegalStateException) {
+                    println(e.localizedMessage)
                 }
             }
             clTabCart.id -> {
-                view.setOnClickListener {
-                    Constraint.set(clTabCart, clTabParent, ivTracker)
-                    Parameter.set(ivTabCart, 72)
-                    Parameter.set(ivTabWorkspace, 48)
-                    vpViewer.setCurrentItem(1, true)
+                try {
+                    view.setOnClickListener {
+                        Constraint.set(clTabCart, clTabParent, ivTracker)
+                        Parameter.set(ivTabCart, 72)
+                        Parameter.set(ivTabWorkspace, 48)
+                        Constraint.set(clTabCart, clFragParent, clWorkspaceParent) {
+                            if (it) {
+                                TransitionManager.beginDelayedTransition(clWorkspaceParent)
+                            }
+                        }
+                        clFragCart.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_PARENT
+                        Constraint.set.clone(clFragCartParent)
+                        Constraint.set.clear(clFragCart.id, ConstraintSet.TOP)
+                        Constraint.set.connect(clFragCart.id, ConstraintSet.TOP, clFragCartParent.id, ConstraintSet.TOP)
+                        Constraint.set.connect(clFragCart.id, ConstraintSet.BOTTOM, clFragCartParent.id, ConstraintSet.BOTTOM)
+                        Constraint.set.applyTo(clFragCartParent)
+                    }
+                } catch (e: IllegalStateException) {
+                    println(e.localizedMessage)
                 }
             }
             clUser.id -> {
@@ -152,8 +182,12 @@ class Workspace : AppCompatActivity() {
 
     private fun setAdapter(view: View) {
         when (view.id) {
-            vpViewer.id -> {
-                vpViewer.adapter = Viewer(this)
+            //vpViewer.id -> {
+            //    vpViewer.adapter = Viewer(this)
+            //}
+            rvCompilation.id -> {
+                Compilation.add()
+                rvCompilation.adapter = CompilationBar(this, Compilation.list)
             }
         }
     }
