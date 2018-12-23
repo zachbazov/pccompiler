@@ -31,17 +31,14 @@ class CompilationBar(val context: Context, private val list: List<Compilation>)
         return list.count()
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = list[position]
-        holder.image.setImageResource(item.image)
-        holder.title.text = item.title
-        holder.card.layoutParams.width = Window.measureDividedWidthPx(Window.widthPx, 2)
-        holder.bind(holder, position)
-    }
-
     override fun onCreateViewHolder(container: ViewGroup, position: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_compilation_bar, container, false)
         return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = list[position]
+        holder.bind(holder, item, position)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -50,7 +47,11 @@ class CompilationBar(val context: Context, private val list: List<Compilation>)
         val image = itemView.findViewById<ImageView>(R.id.ivCompilation)!!
         val title = itemView.findViewById<TextView>(R.id.tvCompilation)!!
 
-        fun bind(holder: ViewHolder, position: Int) {
+        fun bind(holder: ViewHolder, item: Compilation, position: Int) {
+            holder.image.setImageResource(item.image)
+            holder.title.text = item.title
+            holder.card.layoutParams.width = Window.measureDividedWidthPx(Window.widthPx, 2)
+
             when (position) {
                 0 -> {
                     if (card0 == null) {

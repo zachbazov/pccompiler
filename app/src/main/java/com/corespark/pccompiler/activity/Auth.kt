@@ -32,10 +32,10 @@ class Auth : AppCompatActivity() {
 
         Auth.auth(this) { if (it) finish() }
 
-        customizeView()
+        customizeLayout()
     }
 
-    private fun customizeView() {
+    private fun customizeLayout() {
         val values = arrayOf(ivAuthLogo, ivAuthLogoTitle, btnSignIn, btnSignUp)
         for (value in values) setValue(value)
 

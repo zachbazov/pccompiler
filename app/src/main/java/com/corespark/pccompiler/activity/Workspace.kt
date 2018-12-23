@@ -34,7 +34,7 @@ class Workspace : AppCompatActivity() {
 
         Window.determineTabSize(this, ivTracker, windowManager, Window.orientation) {}
 
-        customizeView()
+        customizeLayout()
     }
 
     override fun onDestroy() {
@@ -42,7 +42,7 @@ class Workspace : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private fun customizeView() {
+    private fun customizeLayout() {
         Constraint.set(clTabWorkspace, clWorkspaceParent, clFragWorkspaceParent)
 
         val values = arrayOf(ivTabWorkspace, ivTabCart, ivUser, ivRemove, ivEdit, ivAdd, ivMenu, ivSettings, ivLogout,

@@ -33,7 +33,7 @@ object Constraint {
                         Constraint.set.clear(clFragWorkspaceParent, ConstraintSet.END)
                         Constraint.set.clear(clFragCartParent, ConstraintSet.START)
                         Constraint.set.clear(clFragCartParent, ConstraintSet.END)
-                        Constraint.set.connect(clFragWorkspaceParent, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
+                        Constraint.set.connect(clFragWorkspaceParent, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
                         Constraint.set.connect(clFragCartParent, ConstraintSet.START, parentLayout.id, ConstraintSet.END)
                         Constraint.set.applyTo(parentLayout)
                     }
@@ -49,6 +49,7 @@ object Constraint {
                     }
                     clFragCartParent -> {
                         Constraint.set.clone(parentLayout)
+                        Constraint.set.clear(clFragWorkspaceParent, ConstraintSet.START)
                         Constraint.set.clear(clFragWorkspaceParent, ConstraintSet.END)
                         Constraint.set.clear(clFragCartParent, ConstraintSet.START)
                         Constraint.set.connect(clFragWorkspaceParent, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
