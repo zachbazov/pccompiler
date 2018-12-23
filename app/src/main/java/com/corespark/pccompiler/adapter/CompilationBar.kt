@@ -56,13 +56,13 @@ class CompilationBar(val context: Context, private val list: List<Compilation>)
                     if (card0 == null) {
                         card0 = holder.card
                         card0?.id = R.id.compilationBarCard0
-                        onClick(card0!!) {
-                            if (it) {
-                                card0?.setCardBackgroundColor(Compiler.colors.colorGray)
-                                card1?.setCardBackgroundColor(Compiler.colors.colorWhite)
-                            } else {
-                                card0?.setCardBackgroundColor(Compiler.colors.colorWhite)
-                            }
+                    }
+                    onClick(card0!!) {
+                        if (it) {
+                            card0?.setCardBackgroundColor(Compiler.colors.colorGray)
+                            card1?.setCardBackgroundColor(Compiler.colors.colorWhite)
+                        } else {
+                            card0?.setCardBackgroundColor(Compiler.colors.colorWhite)
                         }
                     }
                 }
@@ -70,13 +70,13 @@ class CompilationBar(val context: Context, private val list: List<Compilation>)
                     if (card1 == null) {
                         card1 = holder.card
                         card1?.id = R.id.compilationBarCard1
-                        holder.onClick(card1!!) {
-                            if (it) {
-                                card1?.setCardBackgroundColor(Compiler.colors.colorGray)
-                                card0?.setCardBackgroundColor(Compiler.colors.colorWhite)
-                            } else {
-                                card1?.setCardBackgroundColor(Compiler.colors.colorWhite)
-                            }
+                    }
+                    onClick(card1!!) {
+                        if (it) {
+                            card1?.setCardBackgroundColor(Compiler.colors.colorGray)
+                            card0?.setCardBackgroundColor(Compiler.colors.colorWhite)
+                        } else {
+                            card1?.setCardBackgroundColor(Compiler.colors.colorWhite)
                         }
                     }
                 }
