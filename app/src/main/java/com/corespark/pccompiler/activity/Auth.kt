@@ -33,22 +33,38 @@ class Auth : AppCompatActivity() {
         Auth.auth(this) { if (it) finish() }
 
         customizeView()
-
-        activateView()
     }
 
     private fun customizeView() {
-        setValue(ivAuthLogo)
-        setValue(ivAuthLogoTitle)
-        setValue(btnSignIn)
-        setValue(btnSignUp)
+        val values = arrayOf(ivAuthLogo, ivAuthLogoTitle, btnSignIn, btnSignUp)
+        for (value in values) setValue(value)
+
+        val clicks = arrayOf(btnSignIn, btnSignUp, btnAuthDialogSignIn, btnAuthDialogSignUp)
+        for (click in clicks) onClick(click)
     }
 
-    private fun activateView() {
-        onClick(btnSignIn)
-        onClick(btnSignUp)
-        onClick(btnAuthDialogSignIn)
-        onClick(btnAuthDialogSignUp)
+    private fun setValue(view: View) {
+        when (view.id) {
+            ivAuthLogo.id -> {
+                ivAuthLogo.setImageResource(R.mipmap.ic_pccompiler)
+            }
+            ivAuthLogoTitle.id -> {
+                ivAuthLogoTitle.setImageResource(R.drawable.ic_pccompiler_title)
+            }
+            btnSignIn.id -> {
+                btnSignIn.text = getString(R.string.auth_sign_in)
+                etAuthDialogUsernameSignIn.hint = getString(R.string.auth_hint_username)
+                etAuthDialogPasswordSignIn.hint = getString(R.string.auth_hint_password)
+                btnAuthDialogSignIn.text = getString(R.string.auth_sign_in)
+            }
+            btnSignUp.id -> {
+                btnSignUp.text = getString(R.string.auth_sign_up)
+                etAuthDialogUsernameSignUp.hint = getString(R.string.auth_hint_username)
+                etAuthDialogEmailSignUp.hint = getString(R.string.auth_hint_email)
+                etAuthDialogPasswordSignUp.hint = getString(R.string.auth_hint_password)
+                btnAuthDialogSignUp.text = getString(R.string.auth_sign_up)
+            }
+        }
     }
 
     private fun onClick(view: View) {
@@ -61,7 +77,6 @@ class Auth : AppCompatActivity() {
                     } else {
                         TransitionManager.beginDelayedTransition(clAuthParent)
                         Constraint.set(view, clAuthParent, clAuthDialog) {}
-                        setValue(it)
                     }
                 }
             }
@@ -69,7 +84,6 @@ class Auth : AppCompatActivity() {
                 view.setOnClickListener {
                     TransitionManager.beginDelayedTransition(clAuthParent)
                     Constraint.set(view, clAuthParent, clAuthDialog) {}
-                    setValue(it)
                 }
             }
             btnAuthDialogSignIn.id -> {
@@ -98,37 +112,12 @@ class Auth : AppCompatActivity() {
                             clearInput(view)
                             TransitionManager.beginDelayedTransition(clAuthParent)
                             Constraint.set(btnSignIn, clAuthParent, clAuthDialog) {}
-                            setValue(btnSignIn)
                         } else {
                             Snackbar.make(view, getString(R.string.auth_sign_up_failure), Snackbar.LENGTH_LONG).show()
                             clearInput(view)
                         }
                     }
                 }
-            }
-        }
-    }
-
-    private fun setValue(view: View) {
-        when (view.id) {
-            ivAuthLogo.id -> {
-                ivAuthLogo.setImageResource(R.mipmap.ic_pccompiler)
-            }
-            ivAuthLogoTitle.id -> {
-                ivAuthLogoTitle.setImageResource(R.drawable.ic_pccompiler_title)
-            }
-            btnSignIn.id -> {
-                btnSignIn.text = getString(R.string.auth_sign_in)
-                etAuthDialogUsernameSignIn.hint = getString(R.string.auth_hint_username)
-                etAuthDialogPasswordSignIn.hint = getString(R.string.auth_hint_password)
-                btnAuthDialogSignIn.text = getString(R.string.auth_sign_in)
-            }
-            btnSignUp.id -> {
-                btnSignUp.text = getString(R.string.auth_sign_up)
-                etAuthDialogUsernameSignUp.hint = getString(R.string.auth_hint_username)
-                etAuthDialogEmailSignUp.hint = getString(R.string.auth_hint_email)
-                etAuthDialogPasswordSignUp.hint = getString(R.string.auth_hint_password)
-                btnAuthDialogSignUp.text = getString(R.string.auth_sign_up)
             }
         }
     }

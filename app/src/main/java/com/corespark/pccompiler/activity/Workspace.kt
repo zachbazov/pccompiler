@@ -35,11 +35,6 @@ class Workspace : AppCompatActivity() {
         Window.determineTabSize(this, ivTracker, windowManager, Window.orientation) {}
 
         customizeView()
-
-        activateView()
-
-        setAdapter(rvCompilation)
-        setAdapter(rvCart)
     }
 
     override fun onDestroy() {
@@ -48,41 +43,47 @@ class Workspace : AppCompatActivity() {
     }
 
     private fun customizeView() {
-        setValue(ivTabWorkspace)
-        setValue(ivTabCart)
-        setValue(ivUser)
-        setValue(ivRemove)
-        setValue(ivEdit)
-        setValue(ivAdd)
-        setValue(ivMenu)
-        setValue(ivSettings)
-        setValue(ivLogout)
-        setValue(tvRemove)
-        setValue(tvEdit)
-        setValue(tvAdd)
-        setValue(tvMenu)
-        setValue(tvSettings)
-        setValue(tvLogout)
-
-        Parameter.set(ivTabWorkspace, 72)
-        Parameter.set(ivTabCart, 48)
-
-        Parameter.set(ivUser, 96)
-        Parameter.set(ivSettings, 64)
-        Parameter.set(ivLogout, 64)
-        Parameter.set(ivRemove, 64)
-        Parameter.set(ivEdit, 64)
-        Parameter.set(ivAdd, 64)
-        Parameter.set(ivMenu, 64)
-
         Constraint.set(clTabWorkspace, clWorkspaceParent, clFragWorkspaceParent)
+
+        val values = arrayOf(ivTabWorkspace, ivTabCart, ivUser, ivRemove, ivEdit, ivAdd, ivMenu, ivSettings, ivLogout,
+            tvRemove, tvEdit, tvAdd, tvMenu, tvSettings, tvLogout)
+        for (value in values) setValue(value)
+
+        val params = arrayOf(ivTabWorkspace, ivTabCart, ivUser, ivRemove, ivEdit, ivAdd, ivMenu, ivSettings, ivLogout)
+        for (param in params) {
+            when (param) {
+                ivTabWorkspace -> { Parameter.set(param, 72) }
+                ivTabCart -> { Parameter.set(param, 48) }
+                ivUser -> { Parameter.set(param, 96) }
+                else -> { Parameter.set(param, 64) }
+            }
+        }
+
+        val clicks = arrayOf(clTabWorkspace, clTabCart, clUser, ivLogout)
+        for (click in clicks) onClick(click)
+
+        val adapters = arrayOf(rvCompilation, rvCart)
+        for (adapter in adapters) setAdapter(adapter)
     }
 
-    private fun activateView() {
-        onClick(clTabWorkspace)
-        onClick(clTabCart)
-        onClick(clUser)
-        onClick(ivLogout)
+    private fun setValue(view: View) {
+        when (view.id) {
+            ivTabWorkspace.id -> { ivTabWorkspace.setImageResource(R.drawable.ic_workspace_active) }
+            ivTabCart.id -> { ivTabCart.setImageResource(R.drawable.ic_cart_active) }
+            ivUser.id -> { ivUser.setImageResource(R.drawable.ic_profile_inactive) }
+            ivRemove.id -> { ivRemove.setImageResource(R.drawable.ic_remove_inactive) }
+            ivEdit.id -> { ivEdit.setImageResource(R.drawable.ic_edit_inactive) }
+            ivAdd.id -> { ivAdd.setImageResource(R.drawable.ic_add_inactive) }
+            ivMenu.id -> { ivMenu.setImageResource(R.drawable.ic_menu_inactive) }
+            ivSettings.id -> { ivSettings.setImageResource(R.drawable.ic_settings_inactive) }
+            ivLogout.id -> { ivLogout.setImageResource(R.drawable.ic_logout_inactive) }
+            tvRemove.id -> { tvRemove.text = getString(R.string.text_remove) }
+            tvEdit.id -> { tvEdit.text = getString(R.string.text_edit) }
+            tvAdd.id -> { tvAdd.text = getString(R.string.text_add) }
+            tvMenu.id -> { tvMenu.text = getString(R.string.text_menu) }
+            tvSettings.id -> { tvSettings.text = getString(R.string.text_settings) }
+            tvLogout.id -> { tvLogout.text = getString(R.string.text_logout) }
+        }
     }
 
     private fun onClick(view: View) {
@@ -137,26 +138,6 @@ class Workspace : AppCompatActivity() {
                     }
                 }
             }
-        }
-    }
-
-    private fun setValue(view: View) {
-        when (view.id) {
-            ivTabWorkspace.id -> { ivTabWorkspace.setImageResource(R.drawable.ic_workspace_active) }
-            ivTabCart.id -> { ivTabCart.setImageResource(R.drawable.ic_cart_active) }
-            ivUser.id -> { ivUser.setImageResource(R.drawable.ic_profile_inactive) }
-            ivRemove.id -> { ivRemove.setImageResource(R.drawable.ic_remove_inactive) }
-            ivEdit.id -> { ivEdit.setImageResource(R.drawable.ic_edit_inactive) }
-            ivAdd.id -> { ivAdd.setImageResource(R.drawable.ic_add_inactive) }
-            ivMenu.id -> { ivMenu.setImageResource(R.drawable.ic_menu_inactive) }
-            ivSettings.id -> { ivSettings.setImageResource(R.drawable.ic_settings_inactive) }
-            ivLogout.id -> { ivLogout.setImageResource(R.drawable.ic_logout_inactive) }
-            tvRemove.id -> { tvRemove.text = getString(R.string.text_remove) }
-            tvEdit.id -> { tvEdit.text = getString(R.string.text_edit) }
-            tvAdd.id -> { tvAdd.text = getString(R.string.text_add) }
-            tvMenu.id -> { tvMenu.text = getString(R.string.text_menu) }
-            tvSettings.id -> { tvSettings.text = getString(R.string.text_settings) }
-            tvLogout.id -> { tvLogout.text = getString(R.string.text_logout) }
         }
     }
 
