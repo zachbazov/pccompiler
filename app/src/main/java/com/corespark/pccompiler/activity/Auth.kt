@@ -3,6 +3,7 @@ package com.corespark.pccompiler.activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.transition.TransitionManager
 import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
@@ -58,14 +59,16 @@ class Auth : AppCompatActivity() {
                         startActivity(Intent.launch(this, R.layout.activity_auth))
                         finish()
                     } else {
-                        Constraint.set(view, clAuthParent, clAuthDialog, clAuthDialogSignUp, clAuthDialogSignIn)
+                        TransitionManager.beginDelayedTransition(clAuthParent)
+                        Constraint.set(view, clAuthParent, clAuthDialog) {}
                         setValue(it)
                     }
                 }
             }
             btnSignUp.id -> {
                 view.setOnClickListener {
-                    Constraint.set(view, clAuthParent, clAuthDialog, clAuthDialogSignIn, clAuthDialogSignUp)
+                    TransitionManager.beginDelayedTransition(clAuthParent)
+                    Constraint.set(view, clAuthParent, clAuthDialog) {}
                     setValue(it)
                 }
             }
@@ -93,7 +96,8 @@ class Auth : AppCompatActivity() {
                         if (complete) {
                             Snackbar.make(view, getString(R.string.auth_sign_up_success), Snackbar.LENGTH_LONG).show()
                             clearInput(view)
-                            Constraint.set(btnSignIn, clAuthParent, clAuthDialog, clAuthDialogSignUp, clAuthDialogSignIn)
+                            TransitionManager.beginDelayedTransition(clAuthParent)
+                            Constraint.set(btnSignIn, clAuthParent, clAuthDialog) {}
                             setValue(btnSignIn)
                         } else {
                             Snackbar.make(view, getString(R.string.auth_sign_up_failure), Snackbar.LENGTH_LONG).show()

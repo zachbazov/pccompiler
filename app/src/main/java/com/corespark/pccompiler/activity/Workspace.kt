@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
-import android.support.constraint.ConstraintSet
 import android.transition.TransitionManager
 import android.view.View
 import com.corespark.pccompiler.R
@@ -26,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_workspace.*
  */
 class Workspace : AppCompatActivity() {
 
-    //TODO action bar activation | compilation empty mode | attract user settings for parameters
+    //TODO action bar activation | compilation empty mode | attract user settings for parameters | rvCart modification.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,10 +75,7 @@ class Workspace : AppCompatActivity() {
         Parameter.set(ivAdd, 64)
         Parameter.set(ivMenu, 64)
 
-        Constraint.set(clActionBar, clDashboard, clUser)
-
-
-        Constraint.set(clTabCart, clWorkspaceParent, clFragWorkspaceParent)
+        Constraint.set(clTabWorkspace, clWorkspaceParent, clFragWorkspaceParent)
     }
 
     private fun activateView() {
@@ -99,7 +94,7 @@ class Workspace : AppCompatActivity() {
                         Parameter.set(ivTabWorkspace, 72)
                         Parameter.set(ivTabCart, 48)
                         Constraint.set(clTabWorkspace, clTabParent, ivTracker)
-                        Constraint.set(clTabCart, clWorkspaceParent, clFragWorkspaceParent)
+                        Constraint.set(clTabWorkspace, clWorkspaceParent, clFragWorkspaceParent)
                     }
                 } catch (e: IllegalStateException) {
                     println(e.localizedMessage)
@@ -120,7 +115,8 @@ class Workspace : AppCompatActivity() {
             }
             clUser.id -> {
                 view.setOnClickListener {
-                    Constraint.set(view, clDashboard, clUser, clActionBar, clControlPanel) { complete ->
+                    TransitionManager.beginDelayedTransition(clDashboard)
+                    Constraint.set(view, clDashboard) { complete ->
                         if (complete) {
                             ivUser.setImageResource(R.drawable.ic_profile_active)
                             view.isSelected = !view.isSelected

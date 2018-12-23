@@ -5,7 +5,6 @@ import android.support.constraint.ConstraintSet
 import android.transition.TransitionManager
 import android.view.View
 import com.corespark.pccompiler.R.id.*
-import kotlinx.android.synthetic.main.activity_workspace.*
 
 
 /**
@@ -22,106 +21,95 @@ object Constraint {
     fun set(applyTo: View, parentLayout: ConstraintLayout, view: View) {
         when (applyTo.id) {
             clTabWorkspace -> {
-                set.clone(parentLayout)
-                set.clear(view.id, ConstraintSet.END)
-                set.connect(view.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
-                set.applyTo(parentLayout)
-            }
-            clTabCart -> {
                 when (view.id) {
                     ivTracker -> {
                         set.clone(parentLayout)
-                        set.clear(view.id, ConstraintSet.START)
-                        set.connect(view.id, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
+                        set.clear(ivTracker, ConstraintSet.END)
+                        set.connect(ivTracker, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
                         set.applyTo(parentLayout)
                     }
                     clFragWorkspaceParent -> {
                         Constraint.set.clone(parentLayout)
                         Constraint.set.clear(clFragWorkspaceParent, ConstraintSet.END)
-                        Constraint.set.connect(clFragWorkspaceParent, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
-                        Constraint.set.applyTo(parentLayout)
-
-
-                        Constraint.set.clone(parentLayout)
                         Constraint.set.clear(clFragCartParent, ConstraintSet.START)
                         Constraint.set.clear(clFragCartParent, ConstraintSet.END)
+                        Constraint.set.connect(clFragWorkspaceParent, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
                         Constraint.set.connect(clFragCartParent, ConstraintSet.START, parentLayout.id, ConstraintSet.END)
                         Constraint.set.applyTo(parentLayout)
+                    }
+                }
+            }
+            clTabCart -> {
+                when (view.id) {
+                    ivTracker -> {
+                        set.clone(parentLayout)
+                        set.clear(ivTracker, ConstraintSet.START)
+                        set.connect(ivTracker, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
+                        set.applyTo(parentLayout)
                     }
                     clFragCartParent -> {
                         Constraint.set.clone(parentLayout)
                         Constraint.set.clear(clFragWorkspaceParent, ConstraintSet.END)
-                        Constraint.set.connect(clFragWorkspaceParent, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
-                        Constraint.set.applyTo(parentLayout)
-
-                        Constraint.set.clone(parentLayout)
                         Constraint.set.clear(clFragCartParent, ConstraintSet.START)
+                        Constraint.set.connect(clFragWorkspaceParent, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
                         Constraint.set.connect(clFragCartParent, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
                         Constraint.set.applyTo(parentLayout)
                     }
                 }
             }
-            clActionBar -> {
-               set.clone(parentLayout)
-               set.clear(applyTo.id, ConstraintSet.START)
-               set.clear(applyTo.id, ConstraintSet.END)
-               set.connect(applyTo.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
-               set.connect(applyTo.id, ConstraintSet.END, view.id, ConstraintSet.START)
-               set.applyTo(parentLayout)
-            }
         }
-        //TransitionManager.beginDelayedTransition(parentLayout)
     }
 
-    fun set(applyTo: View, parentLayout: ConstraintLayout, subLayout: ConstraintLayout, start: View, end: View) {
+    fun set(applyTo: View, parentLayout: ConstraintLayout, complete: (Boolean) -> Unit) {
+        when (applyTo.id) {
+            clUser -> {
+                if (!applyTo.isSelected) {
+                    Constraint.set.clone(parentLayout)
+                    Constraint.set.clear(clUser, ConstraintSet.END)
+                    Constraint.set.clear(clActionBar, ConstraintSet.START)
+                    Constraint.set.clear(clActionBar, ConstraintSet.END)
+                    Constraint.set.clear(clControlPanel, ConstraintSet.START)
+                    Constraint.set.connect(clUser, ConstraintSet.START, parentLayout.id, ConstraintSet.START, 32)
+                    Constraint.set.connect(clActionBar, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
+                    Constraint.set.connect(clControlPanel, ConstraintSet.START, clUser, ConstraintSet.END, 32)
+                    Constraint.set.applyTo(parentLayout)
+                    complete(true)
+                } else {
+                    Constraint.set.clone(parentLayout)
+                    Constraint.set.clear(clUser, ConstraintSet.START)
+                    Constraint.set.clear(clActionBar, ConstraintSet.START)
+                    Constraint.set.clear(clActionBar, ConstraintSet.END)
+                    Constraint.set.clear(clControlPanel, ConstraintSet.START)
+                    Constraint.set.clear(clControlPanel, ConstraintSet.END)
+                    Constraint.set.connect(clUser, ConstraintSet.END, parentLayout.id, ConstraintSet.END, 32)
+                    Constraint.set.connect(clActionBar, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
+                    Constraint.set.connect(clActionBar, ConstraintSet.END, clUser, ConstraintSet.START)
+                    Constraint.set.connect(clControlPanel, ConstraintSet.START, parentLayout.id, ConstraintSet.END)
+                    Constraint.set.applyTo(parentLayout)
+                    complete(false)
+                }
+            }
+        }
+    }
+
+    fun set(applyTo: View, parentLayout: ConstraintLayout, subLayout: ConstraintLayout, complete: (Boolean) -> Unit) {
         when (applyTo.id) {
             btnSignIn -> {
                 set.clone(parentLayout)
-                set.connect(start.id, ConstraintSet.TOP, parentLayout.id, ConstraintSet.BOTTOM)
-                set.connect(start.id, ConstraintSet.LEFT, parentLayout.id, ConstraintSet.RIGHT)
-                set.connect(end.id, ConstraintSet.TOP, subLayout.id, ConstraintSet.BOTTOM)
+                set.connect(clAuthDialogSignUp, ConstraintSet.TOP, parentLayout.id, ConstraintSet.BOTTOM)
+                set.connect(clAuthDialogSignUp, ConstraintSet.LEFT, parentLayout.id, ConstraintSet.RIGHT)
+                set.connect(clAuthDialogSignIn, ConstraintSet.TOP, subLayout.id, ConstraintSet.BOTTOM)
                 set.applyTo(parentLayout)
+                complete(true)
             }
             btnSignUp -> {
                 set.clone(parentLayout)
-                set.connect(start.id, ConstraintSet.TOP, parentLayout.id, ConstraintSet.BOTTOM)
-                set.connect(start.id, ConstraintSet.LEFT, parentLayout.id, ConstraintSet.RIGHT)
-                set.connect(end.id, ConstraintSet.TOP, subLayout.id, ConstraintSet.BOTTOM)
+                set.connect(clAuthDialogSignIn, ConstraintSet.TOP, parentLayout.id, ConstraintSet.BOTTOM)
+                set.connect(clAuthDialogSignIn, ConstraintSet.LEFT, parentLayout.id, ConstraintSet.RIGHT)
+                set.connect(clAuthDialogSignUp, ConstraintSet.TOP, subLayout.id, ConstraintSet.BOTTOM)
                 set.applyTo(parentLayout)
+                complete(true)
             }
         }
-        TransitionManager.beginDelayedTransition(parentLayout)
-    }
-
-    fun set(
-        applyTo: View, parentLayout: ConstraintLayout, middlePane: View, actionPane: View, controlPane: View,
-        complete: (Boolean) -> Unit
-    ) {
-        if (!applyTo.isSelected) {
-            Constraint.set.clone(parentLayout)
-            Constraint.set.clear(middlePane.id, ConstraintSet.END)
-            Constraint.set.clear(actionPane.id, ConstraintSet.START)
-            Constraint.set.clear(actionPane.id, ConstraintSet.END)
-            Constraint.set.clear(controlPane.id, ConstraintSet.START)
-            Constraint.set.connect(middlePane.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START, 32)
-            Constraint.set.connect(actionPane.id, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
-            Constraint.set.connect(controlPane.id, ConstraintSet.START, middlePane.id, ConstraintSet.END, 32)
-            Constraint.set.applyTo(parentLayout)
-            complete(true)
-        } else {
-            Constraint.set.clone(parentLayout)
-            Constraint.set.clear(middlePane.id, ConstraintSet.START)
-            Constraint.set.clear(actionPane.id, ConstraintSet.START)
-            Constraint.set.clear(actionPane.id, ConstraintSet.END)
-            Constraint.set.clear(controlPane.id, ConstraintSet.START)
-            Constraint.set.clear(controlPane.id, ConstraintSet.END)
-            Constraint.set.connect(middlePane.id, ConstraintSet.END, parentLayout.id, ConstraintSet.END, 32)
-            Constraint.set.connect(actionPane.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
-            Constraint.set.connect(actionPane.id, ConstraintSet.END, middlePane.id, ConstraintSet.START)
-            Constraint.set.connect(controlPane.id, ConstraintSet.START, parentLayout.id, ConstraintSet.END)
-            Constraint.set.applyTo(parentLayout)
-            complete(false)
-        }
-        TransitionManager.beginDelayedTransition(parentLayout)
     }
 }
