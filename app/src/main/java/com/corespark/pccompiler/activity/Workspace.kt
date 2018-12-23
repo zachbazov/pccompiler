@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_workspace.*
  */
 class Workspace : AppCompatActivity() {
 
-    //TODO action bar activation | compilation empty mode | attract user settings for parameters | rvCart modification.
+    //TODO action bar activation | compilation empty mode | rvCart modification.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
