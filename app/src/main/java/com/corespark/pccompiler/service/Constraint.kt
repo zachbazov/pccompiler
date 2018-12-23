@@ -19,27 +19,6 @@ object Constraint {
 
     val set = ConstraintSet()
 
-    fun set(applyTo: View, initView: View, parentLayout: ConstraintLayout, complete: (Boolean) -> Unit) {
-        when (applyTo.id) {
-            clTabWorkspace -> {
-                Constraint.set.clone(parentLayout)
-                Constraint.set.clear(initView.id, ConstraintSet.END)
-                Constraint.set.connect(initView.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
-                Constraint.set.connect(initView.id, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
-                Constraint.set.applyTo(parentLayout)
-                complete(true)
-            }
-            clTabCart -> {
-                Constraint.set.clone(parentLayout)
-                Constraint.set.clear(initView.id, ConstraintSet.START)
-                Constraint.set.clear(initView.id, ConstraintSet.END)
-                Constraint.set.connect(initView.id, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
-                Constraint.set.applyTo(parentLayout)
-                complete(true)
-            }
-        }
-    }
-
     fun set(applyTo: View, parentLayout: ConstraintLayout, view: View) {
         when (applyTo.id) {
             clTabWorkspace -> {
@@ -49,10 +28,38 @@ object Constraint {
                 set.applyTo(parentLayout)
             }
             clTabCart -> {
-                set.clone(parentLayout)
-                set.clear(view.id, ConstraintSet.START)
-                set.connect(view.id, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
-                set.applyTo(parentLayout)
+                when (view.id) {
+                    ivTracker -> {
+                        set.clone(parentLayout)
+                        set.clear(view.id, ConstraintSet.START)
+                        set.connect(view.id, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
+                        set.applyTo(parentLayout)
+                    }
+                    clFragWorkspaceParent -> {
+                        Constraint.set.clone(parentLayout)
+                        Constraint.set.clear(clFragWorkspaceParent, ConstraintSet.END)
+                        Constraint.set.connect(clFragWorkspaceParent, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
+                        Constraint.set.applyTo(parentLayout)
+
+
+                        Constraint.set.clone(parentLayout)
+                        Constraint.set.clear(clFragCartParent, ConstraintSet.START)
+                        Constraint.set.clear(clFragCartParent, ConstraintSet.END)
+                        Constraint.set.connect(clFragCartParent, ConstraintSet.START, parentLayout.id, ConstraintSet.END)
+                        Constraint.set.applyTo(parentLayout)
+                    }
+                    clFragCartParent -> {
+                        Constraint.set.clone(parentLayout)
+                        Constraint.set.clear(clFragWorkspaceParent, ConstraintSet.END)
+                        Constraint.set.connect(clFragWorkspaceParent, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
+                        Constraint.set.applyTo(parentLayout)
+
+                        Constraint.set.clone(parentLayout)
+                        Constraint.set.clear(clFragCartParent, ConstraintSet.START)
+                        Constraint.set.connect(clFragCartParent, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
+                        Constraint.set.applyTo(parentLayout)
+                    }
+                }
             }
             clActionBar -> {
                set.clone(parentLayout)
