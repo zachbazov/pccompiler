@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
+import com.corespark.pccompiler.impl.Bar
 import com.corespark.pccompiler.impl.Tab
 
 
@@ -15,7 +16,7 @@ import com.corespark.pccompiler.impl.Tab
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
-object Window : Tab {
+object Window : Tab, Bar {
 
     val metrics = DisplayMetrics()
 
@@ -42,7 +43,7 @@ object Window : Tab {
         heightDp = metrics.ydpi
     }
 
-    fun measureDividedWidthPx(width: Int, divide: Int) : Int {
+    fun measureMultiDeviceDensity(width: Int, divide: Int) : Int {
         when (Window.metrics.density) {
             0.75f -> { dividedWidthPx = (width / divide) }
             1f -> { dividedWidthPx = (width / divide) }
@@ -60,19 +61,19 @@ object Window : Tab {
         return orientation as Int
     }
 
-    override fun determineTabSize(
-        context: Context, view: View, manager: WindowManager, orientation: Int?, complete: (Boolean) -> Unit
+    override fun determineSpan(
+        context: Context, view: View, manager: WindowManager, orientation: Int?, span: Int, complete: (Boolean) -> Unit
     ) {
         Window.determineLayoutMode(context)
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Window.measure(manager, Window.metrics)
             val params = view.layoutParams
-            params.width = Window.measureDividedWidthPx(Window.widthPx, 2)
+            params.width = Window.measureMultiDeviceDensity(Window.widthPx, span)
             complete(true)
         } else {
             Window.measure(manager, Window.metrics)
             val params = view.layoutParams
-            params.width = Window.measureDividedWidthPx(Window.widthPx, 2)
+            params.width = Window.measureMultiDeviceDensity(Window.widthPx, span)
             complete(false)
         }
     }

@@ -26,6 +26,7 @@
     <string name="auth_sign_up_success">User has been created</string>
     <string name="auth_sign_up_failure">Email must be valid.\nor Username already taken.</string>
 
+    <string name="text_guest">Guest</string>
     <string name="text_remove">REMOVE</string>
     <string name="text_edit">EDIT</string>
     <string name="text_add">ADD</string>

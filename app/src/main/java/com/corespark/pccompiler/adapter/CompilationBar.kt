@@ -28,12 +28,12 @@ class CompilationBar(val context: Context, private val list: List<Compilation>)
     var card1: CardView? = null
 
     override fun getItemCount(): Int {
-        return list.count()
+        return list.size
     }
 
     override fun onCreateViewHolder(container: ViewGroup, position: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_compilation_bar, container, false)
-        return ViewHolder(view)
+        val layout = LayoutInflater.from(context).inflate(R.layout.item_compilation_bar, container, false)
+        return ViewHolder(layout)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -50,7 +50,7 @@ class CompilationBar(val context: Context, private val list: List<Compilation>)
         fun bind(holder: ViewHolder, item: Compilation, position: Int) {
             holder.image.setImageResource(item.image)
             holder.title.text = item.title
-            holder.card.layoutParams.width = Window.measureDividedWidthPx(Window.widthPx, 2)
+            holder.card.layoutParams.width = Window.measureMultiDeviceDensity(Window.widthPx, 2)
 
             when (position) {
                 0 -> {

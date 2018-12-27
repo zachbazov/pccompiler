@@ -18,7 +18,6 @@ class Compilation(val id: Int, val title: String, val image: Int) {
         fun add() {
             if (list.size < 2) {
                 list.add(0, Compilation(0, "PCCompiler", R.mipmap.ic_pccompiler))
-                list.add(0, Compilation(0, "PCCompiler", R.mipmap.ic_pccompiler))
             }
         }
     }
