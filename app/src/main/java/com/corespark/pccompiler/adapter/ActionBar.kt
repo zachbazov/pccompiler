@@ -35,6 +35,7 @@ class ActionBar(val context: Context, val activity: Activity, private val list: 
 
     override fun onCreateViewHolder(container: ViewGroup, position: Int): ViewHolder {
         val layout = LayoutInflater.from(context).inflate(R.layout.item_action_bar, container, false)
+        ControlPanel().create()
         return ViewHolder(layout)
     }
 
@@ -53,14 +54,6 @@ class ActionBar(val context: Context, val activity: Activity, private val list: 
         val image = itemView.findViewById<ImageView>(R.id.ivActionBar)!!
         val title = itemView.findViewById<TextView>(R.id.tvActionBar)!!
         val divider = itemView.findViewById<View>(R.id.dvActionBar)!!
-
-        val parent = activity.findViewById<ConstraintLayout>(R.id.clWorkspaceParent)!!
-        val fragment = LayoutInflater.from(context).inflate(R.layout.fragment_control_panel, parent, false)!!
-
-        val dashboard = parent.findViewById<ConstraintLayout>(R.id.clDashboard)!!
-        val controlPanel = fragment.findViewById<ConstraintLayout>(R.id.clControlPanelParent)!!
-
-        var isAdded = false
 
         fun span() {
             try {
@@ -119,59 +112,57 @@ class ActionBar(val context: Context, val activity: Activity, private val list: 
             view.setOnClickListener {
                 when (view.id) {
                     R.id.actionBarLayout0 -> {
-                        TransitionManager.beginDelayedTransition(parent)
-                        ControlPanel().create()
                         ControlPanel().constraint(view)
                     }
                 }
             }
         }
+    }
 
-        inner class ControlPanel {
+    inner class ControlPanel {
 
-            val card0 = (activity as Workspace).compilationBar.card0
-            val cvControlPanel = fragment.findViewById<CardView>(R.id.cvControlPanel)!!
-            val ivSettings = fragment.findViewById<ImageView>(R.id.ivSettings)!!
-            val tvSettings = fragment.findViewById<TextView>(R.id.tvSettings)!!
-            val ivLogout = fragment.findViewById<ImageView>(R.id.ivLogout)!!
-            val tvLogout = fragment.findViewById<TextView>(R.id.tvLogout)!!
-            val dvControlPanel = fragment.findViewById<View>(R.id.dvControlPanel)!!
+        val parent = activity.findViewById<ConstraintLayout>(R.id.clWorkspaceParent)!!
+        val dashboard = parent.findViewById<ConstraintLayout>(R.id.clDashboard)!!
+        val controlPanel = parent.findViewById<ConstraintLayout>(R.id.clFragControlPanelParent)!!
 
-            fun create() {
-                if (!isAdded) {
-                    fragment.id = R.id.controlPanelLayout
-                    parent.addView(fragment)
-                    customize()
-                    isAdded = true
+        val card0 = (activity as Workspace).compilationBar.card0
+        val cvControlPanel = parent.findViewById<CardView>(R.id.cvControlPanel)!!
+        val ivSettings = parent.findViewById<ImageView>(R.id.ivSettings)!!
+        val tvSettings = parent.findViewById<TextView>(R.id.tvSettings)!!
+        val ivLogout = parent.findViewById<ImageView>(R.id.ivLogout)!!
+        val tvLogout = parent.findViewById<TextView>(R.id.tvLogout)!!
+        val dvControlPanel = parent.findViewById<View>(R.id.dvControlPanel)!!
+
+        fun create() {
+            customize()
+        }
+
+        fun customize() {
+            Window.determineSpan(context, dvControlPanel, activity.windowManager, Window.orientation, 2) {}
+
+            val values = listOf(ivSettings, tvSettings, ivLogout, tvLogout)
+            for (value in values) setValue(value)
+        }
+
+        fun constraint(view: View) {
+            TransitionManager.beginDelayedTransition(parent)
+            Constraint.set(view, parent, dashboard, controlPanel) {
+                if (it) {
+                    card0?.isClickable = false
+                    view.isSelected = !view.isSelected
+                } else {
+                    card0?.isClickable = true
+                    view.isSelected = !view.isSelected
                 }
             }
+        }
 
-            fun constraint(view: View) {
-                Constraint.set(layout, parent, dashboard, controlPanel) {
-                    if (it) {
-                        card0?.isClickable = false
-                        view.isSelected = !view.isSelected
-                    } else {
-                        card0?.isClickable = true
-                        view.isSelected = !view.isSelected
-                    }
-                }
-            }
-
-            fun customize() {
-                Window.determineSpan(context, dvControlPanel, activity.windowManager, Window.orientation, 2) {}
-
-                val values = listOf(ivSettings, tvSettings, ivLogout, tvLogout)
-                for (value in values) setValue(value)
-            }
-
-            fun setValue(view: View) {
-                when (view.id) {
-                    ivSettings.id -> { ivSettings.setImageResource(R.drawable.ic_settings_inactive) }
-                    tvSettings.id -> { tvSettings.text = context.getString(R.string.text_settings) }
-                    ivLogout.id -> { ivLogout.setImageResource(R.drawable.ic_logout_inactive) }
-                    tvLogout.id -> { tvLogout.text = context.getString(R.string.text_logout) }
-                }
+        fun setValue(view: View) {
+            when (view.id) {
+                ivSettings.id -> { ivSettings.setImageResource(R.drawable.ic_settings_inactive) }
+                tvSettings.id -> { tvSettings.text = context.getString(R.string.text_settings) }
+                ivLogout.id -> { ivLogout.setImageResource(R.drawable.ic_logout_inactive) }
+                tvLogout.id -> { tvLogout.text = context.getString(R.string.text_logout) }
             }
         }
     }

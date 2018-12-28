@@ -1,7 +1,6 @@
 package com.corespark.pccompiler.service
 
 import android.content.Context
-import android.widget.TextView
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.model.User
@@ -62,10 +61,9 @@ object Auth {
         }
     }
 
-    fun logOut(context: Context, user: TextView, complete: (Boolean) -> Unit) {
+    fun logOut(context: Context, complete: (Boolean) -> Unit) {
         ParseUser.logOutInBackground {
             if (it == null) {
-                user.text = context.getString(R.string.app_blank)
                 Compiler.preferences.username = context.getString(R.string.app_blank)
                 Compiler.preferences.isLoggedIn = false
                 Auth.user = User

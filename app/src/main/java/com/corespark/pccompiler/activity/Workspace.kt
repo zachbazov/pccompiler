@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.constraint.ConstraintSet
 import android.transition.TransitionManager
 import android.view.View
 import com.corespark.pccompiler.R
@@ -60,7 +61,7 @@ class Workspace : AppCompatActivity() {
                 else -> { Parameter.set(param, 64) }
             }
 
-        val clicks = arrayOf(clTabWorkspace, clTabCart)
+        val clicks = arrayOf(clTabWorkspace, clTabCart, ivLogout)
         for (click in clicks) onClick(click)
 
         val adapters = arrayOf(rvActionBar, rvCompilation, rvCart)
@@ -84,6 +85,18 @@ class Workspace : AppCompatActivity() {
                         Parameter.set(ivTabCart, 48)
                         Constraint.set(clTabWorkspace, clTabParent, ivTracker)
                         Constraint.set(clTabWorkspace, clWorkspaceParent, clFragWorkspaceParent)
+
+                        Constraint.set.clone(clDashboard)
+                        Constraint.set.clear(clActionBar.id, ConstraintSet.START)
+                        Constraint.set.connect(clActionBar.id, ConstraintSet.START, clDashboard.id, ConstraintSet.START)
+                        Constraint.set.connect(clActionBar.id, ConstraintSet.END, clDashboard.id, ConstraintSet.END)
+                        Constraint.set.applyTo(clDashboard)
+
+                        Constraint.set.clone(clDashboard)
+                        Constraint.set.clear(clCartBar.id, ConstraintSet.START)
+                        Constraint.set.clear(clCartBar.id, ConstraintSet.END)
+                        Constraint.set.connect(clCartBar.id, ConstraintSet.END, clDashboard.id, ConstraintSet.START)
+                        Constraint.set.applyTo(clDashboard)
                     }
                 } catch (e: IllegalStateException) {
                     println(e.localizedMessage)
@@ -97,21 +110,33 @@ class Workspace : AppCompatActivity() {
                         Parameter.set(ivTabWorkspace, 48)
                         Constraint.set(clTabCart, clTabParent, ivTracker)
                         Constraint.set(clTabCart, clWorkspaceParent, clFragCartParent)
+
+                        Constraint.set.clone(clDashboard)
+                        Constraint.set.clear(clActionBar.id, ConstraintSet.START)
+                        Constraint.set.clear(clActionBar.id, ConstraintSet.END)
+                        Constraint.set.connect(clActionBar.id, ConstraintSet.START, clDashboard.id, ConstraintSet.END)
+                        Constraint.set.applyTo(clDashboard)
+
+                        Constraint.set.clone(clDashboard)
+                        Constraint.set.clear(clCartBar.id, ConstraintSet.END)
+                        Constraint.set.connect(clCartBar.id, ConstraintSet.START, clDashboard.id, ConstraintSet.START)
+                        Constraint.set.connect(clCartBar.id, ConstraintSet.END, clDashboard.id, ConstraintSet.END)
+                        Constraint.set.applyTo(clDashboard)
                     }
                 } catch (e: IllegalStateException) {
                     println(e.localizedMessage)
                 }
             }
-//            ivLogout.id -> {
-//                view.setOnClickListener {
-//                    Auth.logOut(this, tvUser) { complete ->
-//                        if (complete) {
-//                            startActivity(Intent.launch(this, R.layout.activity_auth))
-//                            finish()
-//                        }
-//                    }
-//                }
-//            }
+            ivLogout.id -> {
+                view.setOnClickListener {
+                    com.corespark.pccompiler.service.Auth.logOut(this) { complete ->
+                        if (complete) {
+                            startActivity(Intent.launch(this, R.layout.activity_auth))
+                            finish()
+                        }
+                    }
+                }
+            }
         }
     }
 

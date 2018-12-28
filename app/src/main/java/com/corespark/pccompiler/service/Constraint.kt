@@ -5,6 +5,7 @@ import android.support.constraint.ConstraintSet
 import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.R.id.*
+import kotlinx.android.synthetic.main.activity_workspace.*
 
 
 /**
@@ -18,11 +19,7 @@ object Constraint {
 
     val set = ConstraintSet()
 
-    fun set(
-        applyTo: View,
-        parentLayout: ConstraintLayout,
-        view: View
-    ) {
+    fun set(applyTo: View, parentLayout: ConstraintLayout, view: View) {
         when (applyTo.id) {
             clTabWorkspace -> {
                 when (view.id) {
@@ -40,6 +37,7 @@ object Constraint {
                         Constraint.set.connect(clFragCartParent, ConstraintSet.START, parentLayout.id, ConstraintSet.END)
                         Constraint.set.applyTo(parentLayout)
                     }
+
                 }
             }
             clTabCart -> {
@@ -59,17 +57,13 @@ object Constraint {
                         Constraint.set.connect(clFragCartParent, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
                         Constraint.set.applyTo(parentLayout)
                     }
+
                 }
             }
         }
     }
 
-    fun set(
-        applyTo: View,
-        parentLayout: ConstraintLayout,
-        subLayout: ConstraintLayout,
-        complete: (Boolean) -> Unit
-    ) {
+    fun set(applyTo: View, parentLayout: ConstraintLayout, subLayout: ConstraintLayout, complete: (Boolean) -> Unit) {
         when (applyTo.id) {
             btnSignIn -> {
                 set.clone(parentLayout)
@@ -90,13 +84,7 @@ object Constraint {
         }
     }
 
-    fun set(
-        applyTo: View,
-        parentLayout: ConstraintLayout,
-        subLayout: ConstraintLayout,
-        view: View,
-        complete: (Boolean) -> Unit
-    ) {
+    fun set(applyTo: View, parentLayout: ConstraintLayout, subLayout: ConstraintLayout, view: View, complete: (Boolean) -> Unit) {
         when (applyTo.id) {
             R.id.actionBarLayout0 -> {
                 if (!applyTo.isSelected) {
@@ -114,6 +102,7 @@ object Constraint {
                     complete(false)
                 }
             }
+
         }
     }
 }
