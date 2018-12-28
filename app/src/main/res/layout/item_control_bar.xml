@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="wrap_content"
+                                             android:layout_height="wrap_content" android:id="@+id/clControlBarParent">
+
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/clControlBarSub">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ivControlBar"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+        />
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvControlBar" app:layout_constraintStart_toStartOf="@+id/ivControlBar"
+                app:layout_constraintEnd_toEndOf="@+id/ivControlBar"
+                app:layout_constraintTop_toBottomOf="@+id/ivControlBar" app:layout_constraintBottom_toBottomOf="parent"
+        />
+    </android.support.constraint.ConstraintLayout>
+    <View
+            android:id="@+id/dvControlBar"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+    />
+</android.support.constraint.ConstraintLayout>

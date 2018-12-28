@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_workspace.*
  */
 class Workspace : AppCompatActivity() {
 
-    //TODO action bar activation | compilation empty mode | rvCart modification
+    //TODO action bar activation | compilation & cart empty mode | rvCart modification + dragNdrog | fix purity in itemCart xml
 
     lateinit var compilationBar: CompilationBar
 
@@ -60,7 +60,7 @@ class Workspace : AppCompatActivity() {
         val clicks = arrayOf(clTabWorkspace, clTabCart)
         for (click in clicks) onClick(click)
 
-        val adapters = arrayOf(rvActionBar, rvControlPanel, rvCompilation, rvCart, rvCartBar)
+        val adapters = arrayOf(rvCompilation, rvCartBar, rvActionBar, rvControlBar, rvControlPanel)
         for (adapter in adapters) setAdapter(adapter)
     }
 
@@ -81,7 +81,7 @@ class Workspace : AppCompatActivity() {
                         Parameter.set(ivTabCart, 48)
                         Constraint.set(clTabWorkspace, clTabParent, ivTracker)
                         Constraint.set(clTabWorkspace, clWorkspaceParent, clFragWorkspaceParent)
-                        Constraint.set(clTabWorkspace, clDashboard, clFragCartBarParent, clActionBar)
+                        Constraint.set(clTabWorkspace, clDashboard, clFragControlBarParent, clActionBar)
                     }
                 } catch (e: IllegalStateException) {
                     println(e.localizedMessage)
@@ -95,7 +95,7 @@ class Workspace : AppCompatActivity() {
                         Parameter.set(ivTabWorkspace, 48)
                         Constraint.set(clTabCart, clTabParent, ivTracker)
                         Constraint.set(clTabCart, clWorkspaceParent, clFragCartParent)
-                        Constraint.set(clTabCart, clDashboard, clFragCartBarParent, clActionBar)
+                        Constraint.set(clTabCart, clDashboard, clFragControlBarParent, clActionBar)
                     }
                 } catch (e: IllegalStateException) {
                     println(e.localizedMessage)
@@ -106,28 +106,29 @@ class Workspace : AppCompatActivity() {
 
     private fun setAdapter(view: View) {
         when (view.id) {
-            rvActionBar.id -> {
-                ActionBar.addActions(this)
-                rvActionBar.adapter = com.corespark.pccompiler.adapter.ActionBar(
-                    this, this, ActionBar.actionList)
-            }
-            rvControlPanel.id -> {
-                ControlPanel.addControls(this)
-                rvControlPanel.adapter = com.corespark.pccompiler.adapter.ControlPanel(
-                    this, this, ControlPanel.controlList)
-            }
             rvCompilation.id -> {
                 Compilation.add()
                 compilationBar = CompilationBar(this, Compilation.list)
                 rvCompilation.adapter = compilationBar
             }
-            rvCart.id -> {
-                rvCart.adapter = CompilationBar(this, Compilation.list)
-            }
             rvCartBar.id -> {
-                CartBar.addActions(this)
-                rvCartBar.adapter = com.corespark.pccompiler.adapter.CartBar(
-                    this, this, CartBar.actionList)
+                CartBar.add()
+                rvCartBar.adapter = com.corespark.pccompiler.adapter.CartBar(this, this, CartBar.cartList)
+            }
+            rvActionBar.id -> {
+                ActionBar.addActions(this)
+                rvActionBar.adapter = com.corespark.pccompiler.adapter.ActionBar(
+                    this, this, ActionBar.actionList)
+            }
+            rvControlBar.id -> {
+                ControlBar.addActions(this)
+                rvControlBar.adapter = com.corespark.pccompiler.adapter.ControlBar(
+                    this, this, ControlBar.actionList)
+            }
+            rvControlPanel.id -> {
+                ControlPanel.addControls(this)
+                rvControlPanel.adapter = com.corespark.pccompiler.adapter.ControlPanel(
+                    this, this, ControlPanel.controlList)
             }
         }
     }
