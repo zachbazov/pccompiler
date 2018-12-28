@@ -107,10 +107,10 @@ class ActionBar(
     inner class ControlPanel {
 
         val parent = activity.findViewById<ConstraintLayout>(R.id.clWorkspaceParent)!!
-        val dashboard = parent.findViewById<ConstraintLayout>(R.id.clDashboard)!!
-        val controlPanel = parent.findViewById<ConstraintLayout>(R.id.clFragControlPanelParent)!!
+        private val dashboard = parent.findViewById<ConstraintLayout>(R.id.clDashboard)!!
+        private val controlPanel = parent.findViewById<ConstraintLayout>(R.id.clFragControlPanelParent)!!
 
-        val card0 = (activity as Workspace).compilationBar.card0
+        private val card0 = (activity as Workspace).compilationBar.card0
 
         fun constraint(view: View) {
             TransitionManager.beginDelayedTransition(parent)
