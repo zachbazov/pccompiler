@@ -3,6 +3,7 @@ package com.corespark.pccompiler.adapter
 import android.app.Activity
 import android.content.Context
 import android.support.constraint.ConstraintLayout
+import android.support.constraint.ConstraintSet
 import android.support.v7.widget.RecyclerView
 import android.transition.TransitionManager
 import android.view.LayoutInflater
@@ -50,6 +51,7 @@ class ActionBar(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val layout = itemView.findViewById<ConstraintLayout>(R.id.clActionBarParent)!!
+        val sub = itemView.findViewById<ConstraintLayout>(R.id.clActionBarSub)!!
         val image = itemView.findViewById<ImageView>(R.id.ivActionBar)!!
         val title = itemView.findViewById<TextView>(R.id.tvActionBar)!!
         val divider = itemView.findViewById<View>(R.id.dvActionBar)!!
@@ -76,18 +78,25 @@ class ActionBar(
             when (position) {
                 0 -> {
                     layout.id = R.id.actionBarLayout0
+                    image.id = R.id.actionBarImage0
                     title.id = R.id.actionBarText0
                 }
             }
         }
 
         fun customize(position: Int) {
+            Parameter.set(image, 56)
             when (position) {
                 0 -> {
+                    sub.removeView(title)
                     Parameter.set(image, 64)
-                    title.textSize = 12f
+                    layout.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_PARENT
+                    Constraint.set(image, sub, image)
                 }
-                4 -> {
+                1 -> {
+
+                }
+                2 -> {
                     layout.removeView(divider)
                 }
             }

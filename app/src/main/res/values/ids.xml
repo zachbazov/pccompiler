@@ -3,6 +3,7 @@
     <item name="compilationBarCard0" type="id"/>
     <item name="compilationBarCard1" type="id"/>
     <item name="actionBarLayout0" type="id"/>
+    <item name="actionBarImage0" type="id"/>
     <item name="actionBarText0" type="id"/>
     <item name="actionBarDivider4" type="id"/>
     <item name="controlPanelLayout0" type="id"/>

@@ -10,10 +10,7 @@ import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.service.*
 import com.corespark.pccompiler.adapter.CompilationBar
-import com.corespark.pccompiler.model.ActionBar
-import com.corespark.pccompiler.model.Compilation
-import com.corespark.pccompiler.model.ControlPanel
-import com.corespark.pccompiler.model.User
+import com.corespark.pccompiler.model.*
 import kotlinx.android.synthetic.main.activity_workspace.*
 
 
@@ -63,7 +60,7 @@ class Workspace : AppCompatActivity() {
         val clicks = arrayOf(clTabWorkspace, clTabCart)
         for (click in clicks) onClick(click)
 
-        val adapters = arrayOf(rvActionBar, rvControlPanel, rvCompilation, rvCart)
+        val adapters = arrayOf(rvActionBar, rvControlPanel, rvCompilation, rvCart, rvCartBar)
         for (adapter in adapters) setAdapter(adapter)
     }
 
@@ -84,7 +81,7 @@ class Workspace : AppCompatActivity() {
                         Parameter.set(ivTabCart, 48)
                         Constraint.set(clTabWorkspace, clTabParent, ivTracker)
                         Constraint.set(clTabWorkspace, clWorkspaceParent, clFragWorkspaceParent)
-                        Constraint.set(clTabWorkspace, clDashboard, clCartBar, clActionBar)
+                        Constraint.set(clTabWorkspace, clDashboard, clFragCartBarParent, clActionBar)
                     }
                 } catch (e: IllegalStateException) {
                     println(e.localizedMessage)
@@ -98,7 +95,7 @@ class Workspace : AppCompatActivity() {
                         Parameter.set(ivTabWorkspace, 48)
                         Constraint.set(clTabCart, clTabParent, ivTracker)
                         Constraint.set(clTabCart, clWorkspaceParent, clFragCartParent)
-                        Constraint.set(clTabCart, clDashboard, clCartBar, clActionBar)
+                        Constraint.set(clTabCart, clDashboard, clFragCartBarParent, clActionBar)
                     }
                 } catch (e: IllegalStateException) {
                     println(e.localizedMessage)
@@ -125,8 +122,12 @@ class Workspace : AppCompatActivity() {
                 rvCompilation.adapter = compilationBar
             }
             rvCart.id -> {
-                Compilation.add()
                 rvCart.adapter = CompilationBar(this, Compilation.list)
+            }
+            rvCartBar.id -> {
+                CartBar.addActions(this)
+                rvCartBar.adapter = com.corespark.pccompiler.adapter.CartBar(
+                    this, this, CartBar.actionList)
             }
         }
     }

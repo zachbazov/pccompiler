@@ -58,6 +58,11 @@ object Constraint {
                     }
                 }
             }
+            R.id.actionBarImage0 -> {
+                set.clone(parentLayout)
+                set.connect(view.id, ConstraintSet.BOTTOM, parentLayout.id, ConstraintSet.BOTTOM)
+                set.applyTo(parentLayout)
+            }
         }
     }
 

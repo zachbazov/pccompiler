@@ -3,32 +3,32 @@
                                              xmlns:app="http://schemas.android.com/apk/res-auto"
                                              xmlns:tools="http://schemas.android.com/tools"
                                              android:layout_width="wrap_content"
-                                             android:layout_height="wrap_content" android:id="@+id/clActionBarParent">
+                                             android:layout_height="wrap_content" android:id="@+id/clCartBarParent">
 
     <android.support.constraint.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/clActionBarSub">
+            android:id="@+id/clCartBarSub">
 
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/ivActionBar"
+                android:id="@+id/ivCartBar"
                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
         />
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvActionBar" app:layout_constraintStart_toStartOf="@+id/ivActionBar"
-                app:layout_constraintEnd_toEndOf="@+id/ivActionBar"
-                app:layout_constraintTop_toBottomOf="@+id/ivActionBar" app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/tvCartBar" app:layout_constraintStart_toStartOf="@+id/ivCartBar"
+                app:layout_constraintEnd_toEndOf="@+id/ivCartBar"
+                app:layout_constraintTop_toBottomOf="@+id/ivCartBar" app:layout_constraintBottom_toBottomOf="parent"
         />
     </android.support.constraint.ConstraintLayout>
     <View
-            android:id="@+id/dvActionBar"
+            android:id="@+id/dvCartBar"
             android:layout_width="1dp"
             android:layout_height="0dp"
             android:background="?android:attr/listDivider"
