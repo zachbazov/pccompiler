@@ -5,7 +5,6 @@ import android.support.constraint.ConstraintSet
 import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.R.id.*
-import kotlinx.android.synthetic.main.activity_workspace.*
 
 
 /**
@@ -57,7 +56,39 @@ object Constraint {
                         Constraint.set.connect(clFragCartParent, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
                         Constraint.set.applyTo(parentLayout)
                     }
+                }
+            }
+        }
+    }
 
+    fun set(applyTo: View, parentLayout: ConstraintLayout, subLayout: ConstraintLayout, view: View) {
+        when (applyTo.id) {
+            clTabWorkspace -> {
+                when (view.id) {
+                    clActionBar -> {
+                        Constraint.set.clone(parentLayout)
+                        Constraint.set.clear(view.id, ConstraintSet.START)
+                        Constraint.set.clear(subLayout.id, ConstraintSet.START)
+                        Constraint.set.clear(subLayout.id, ConstraintSet.END)
+                        Constraint.set.connect(view.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
+                        Constraint.set.connect(view.id, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
+                        Constraint.set.connect(subLayout.id, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
+                        Constraint.set.applyTo(parentLayout)
+                    }
+                }
+            }
+            clTabCart -> {
+                when (view.id) {
+                    clActionBar -> {
+                        Constraint.set.clone(parentLayout)
+                        Constraint.set.clear(view.id, ConstraintSet.START)
+                        Constraint.set.clear(view.id, ConstraintSet.END)
+                        Constraint.set.clear(subLayout.id, ConstraintSet.END)
+                        Constraint.set.connect(view.id, ConstraintSet.START, parentLayout.id, ConstraintSet.END)
+                        Constraint.set.connect(subLayout.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
+                        Constraint.set.connect(subLayout.id, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
+                        Constraint.set.applyTo(parentLayout)
+                    }
                 }
             }
         }

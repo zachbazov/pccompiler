@@ -14,15 +14,15 @@ import com.corespark.pccompiler.R
 class ActionBar(val image: Int, val title: String) {
 
     companion object {
-        val list = mutableListOf<ActionBar>()
+        val actionList = mutableListOf<ActionBar>()
 
-        fun add(context: Context) {
-            if (list.size < 5) {
-                list.add(0, ActionBar(R.drawable.ic_profile_inactive, context.resources.getString(R.string.text_guest)))
-                list.add(1, ActionBar(R.drawable.ic_menu_inactive, context.resources.getString(R.string.text_menu)))
-                list.add(2, ActionBar(R.drawable.ic_add_inactive, context.resources.getString(R.string.text_add)))
-                list.add(3, ActionBar(R.drawable.ic_edit_inactive, context.resources.getString(R.string.text_edit)))
-                list.add(4, ActionBar(R.drawable.ic_remove_inactive, context.resources.getString(R.string.text_remove)))
+        fun addActions(context: Context) {
+            if (actionList.size < 5) {
+                actionList.add(0, ActionBar(R.drawable.ic_profile_inactive, context.resources.getString(R.string.text_guest)))
+                actionList.add(1, ActionBar(R.drawable.ic_menu_inactive, context.resources.getString(R.string.text_menu)))
+                actionList.add(2, ActionBar(R.drawable.ic_add_inactive, context.resources.getString(R.string.text_add)))
+                actionList.add(3, ActionBar(R.drawable.ic_edit_inactive, context.resources.getString(R.string.text_edit)))
+                actionList.add(4, ActionBar(R.drawable.ic_remove_inactive, context.resources.getString(R.string.text_remove)))
             }
         }
     }

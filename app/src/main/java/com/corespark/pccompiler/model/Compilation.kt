@@ -16,7 +16,7 @@ class Compilation(val id: Int, val title: String, val image: Int) {
         val list = mutableListOf<Compilation>()
 
         fun add() {
-            if (list.size < 2) {
+            if (list.size < 1) {
                 list.add(0, Compilation(0, "PCCompiler", R.mipmap.ic_pccompiler))
             }
         }

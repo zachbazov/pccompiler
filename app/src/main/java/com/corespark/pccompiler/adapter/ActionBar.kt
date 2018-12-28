@@ -3,7 +3,6 @@ package com.corespark.pccompiler.adapter
 import android.app.Activity
 import android.content.Context
 import android.support.constraint.ConstraintLayout
-import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.transition.TransitionManager
 import android.view.LayoutInflater
@@ -26,7 +25,8 @@ import com.corespark.pccompiler.service.Window
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
-class ActionBar(val context: Context, val activity: Activity, private val list: List<com.corespark.pccompiler.model.ActionBar>)
+class ActionBar(
+    val context: Context, val activity: Activity, private val list: List<com.corespark.pccompiler.model.ActionBar>)
     : RecyclerView.Adapter<ActionBar.ViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -35,7 +35,6 @@ class ActionBar(val context: Context, val activity: Activity, private val list: 
 
     override fun onCreateViewHolder(container: ViewGroup, position: Int): ViewHolder {
         val layout = LayoutInflater.from(context).inflate(R.layout.item_action_bar, container, false)
-        ControlPanel().create()
         return ViewHolder(layout)
     }
 
@@ -79,14 +78,6 @@ class ActionBar(val context: Context, val activity: Activity, private val list: 
                     layout.id = R.id.actionBarLayout0
                     title.id = R.id.actionBarText0
                 }
-                1 -> {
-                }
-                2 -> {
-                }
-                3 -> {
-                }
-                4 -> {
-                }
             }
         }
 
@@ -95,12 +86,6 @@ class ActionBar(val context: Context, val activity: Activity, private val list: 
                 0 -> {
                     Parameter.set(image, 64)
                     title.textSize = 12f
-                }
-                1 -> {
-                }
-                2 -> {
-                }
-                3 -> {
                 }
                 4 -> {
                     layout.removeView(divider)
@@ -126,23 +111,6 @@ class ActionBar(val context: Context, val activity: Activity, private val list: 
         val controlPanel = parent.findViewById<ConstraintLayout>(R.id.clFragControlPanelParent)!!
 
         val card0 = (activity as Workspace).compilationBar.card0
-        val cvControlPanel = parent.findViewById<CardView>(R.id.cvControlPanel)!!
-        val ivSettings = parent.findViewById<ImageView>(R.id.ivSettings)!!
-        val tvSettings = parent.findViewById<TextView>(R.id.tvSettings)!!
-        val ivLogout = parent.findViewById<ImageView>(R.id.ivLogout)!!
-        val tvLogout = parent.findViewById<TextView>(R.id.tvLogout)!!
-        val dvControlPanel = parent.findViewById<View>(R.id.dvControlPanel)!!
-
-        fun create() {
-            customize()
-        }
-
-        fun customize() {
-            Window.determineSpan(context, dvControlPanel, activity.windowManager, Window.orientation, 2) {}
-
-            val values = listOf(ivSettings, tvSettings, ivLogout, tvLogout)
-            for (value in values) setValue(value)
-        }
 
         fun constraint(view: View) {
             TransitionManager.beginDelayedTransition(parent)
@@ -154,15 +122,6 @@ class ActionBar(val context: Context, val activity: Activity, private val list: 
                     card0?.isClickable = true
                     view.isSelected = !view.isSelected
                 }
-            }
-        }
-
-        fun setValue(view: View) {
-            when (view.id) {
-                ivSettings.id -> { ivSettings.setImageResource(R.drawable.ic_settings_inactive) }
-                tvSettings.id -> { tvSettings.text = context.getString(R.string.text_settings) }
-                ivLogout.id -> { ivLogout.setImageResource(R.drawable.ic_logout_inactive) }
-                tvLogout.id -> { tvLogout.text = context.getString(R.string.text_logout) }
             }
         }
     }
