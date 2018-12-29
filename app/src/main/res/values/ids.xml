@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="clTabWorkspace" type="id"/>
+    <item name="clTabCart" type="id"/>
+    <item name="ivTabWorkspace" type="id"/>
+    <item name="ivTabCart" type="id"/>
     <item name="compilationBarCard0" type="id"/>
     <item name="compilationBarCard1" type="id"/>
     <item name="actionBarLayout0" type="id"/>

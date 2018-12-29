@@ -109,7 +109,7 @@ class Workspace : AppCompatActivity() {
     private fun setAdapter(view: View) {
         when (view.id) {
             rvCompilationBar.id -> {
-                CompilationBar.add()
+                CompilationBar.addEmpty(this)
                 if (CompilationBar.list.size > 0) {
                     compilationBar = Recycler(this, this, CompilationBar.list, 0)
                     rvCompilationBar.adapter = compilationBar

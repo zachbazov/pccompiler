@@ -111,20 +111,6 @@ class Recycler(val context: Context, val activity: Activity, private val list: L
         }
     }
 
-    inner class EmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        val layout = itemView.findViewById<ConstraintLayout>(R.id.clCompilationEmptyParent)
-        val sub = itemView.findViewById<ConstraintLayout>(R.id.clCompilationEmpty)
-        val image = itemView.findViewById<ImageView>(R.id.ivCompilationEmpty)
-        val title = itemView.findViewById<TextView>(R.id.tvCompilationEmpty)
-
-        fun bind(item: EmptyBar) {
-            sub.layoutParams.width = Window.measureMultiDeviceDensity(Window.widthPx, 1)
-            image.setImageResource(item.image)
-            title.text = item.title
-        }
-    }
-
     inner class CompilationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val card = itemView.findViewById<ConstraintLayout>(R.id.clCompilation)!!
@@ -372,6 +358,20 @@ class Recycler(val context: Context, val activity: Activity, private val list: L
                     view.isSelected = !view.isSelected
                 }
             }
+        }
+    }
+
+    inner class EmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        val layout = itemView.findViewById<ConstraintLayout>(R.id.clCompilationEmptyParent)
+        val sub = itemView.findViewById<ConstraintLayout>(R.id.clCompilationEmpty)
+        val image = itemView.findViewById<ImageView>(R.id.ivCompilationEmpty)
+        val title = itemView.findViewById<TextView>(R.id.tvCompilationEmpty)
+
+        fun bind(item: EmptyBar) {
+            sub.layoutParams.width = Window.measureMultiDeviceDensity(Window.widthPx, 1)
+            image.setImageResource(item.image)
+            title.text = item.title
         }
     }
 }
