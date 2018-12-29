@@ -14,6 +14,8 @@ import com.corespark.pccompiler.R
  */
 class Color(context: Context) {
 
+    val colorPrimary = ContextCompat.getColor(context, R.color.colorPrimary)
+    val colorAccent = ContextCompat.getColor(context, R.color.colorAccent)
     val colorWhite = ContextCompat.getColor(context, R.color.colorWhite)
-    val colorGray = ContextCompat.getColor(context, R.color.colorSoftGray)
+    val colorCloud = ContextCompat.getColor(context, R.color.colorCloud)
 }

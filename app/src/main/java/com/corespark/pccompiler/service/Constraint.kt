@@ -28,12 +28,12 @@ object Constraint {
                         set.connect(ivTracker, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
                         set.applyTo(parentLayout)
                     }
-                    clFragWorkspaceParent -> {
+                    clFragWorkspace -> {
                         Constraint.set.clone(parentLayout)
-                        Constraint.set.clear(clFragWorkspaceParent, ConstraintSet.END)
-                        Constraint.set.clear(clFragCartParent, ConstraintSet.START)
-                        Constraint.set.connect(clFragWorkspaceParent, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
-                        Constraint.set.connect(clFragCartParent, ConstraintSet.START, parentLayout.id, ConstraintSet.END)
+                        Constraint.set.clear(clFragWorkspace, ConstraintSet.END)
+                        Constraint.set.clear(clFragCart, ConstraintSet.START)
+                        Constraint.set.connect(clFragWorkspace, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
+                        Constraint.set.connect(clFragCart, ConstraintSet.START, parentLayout.id, ConstraintSet.END)
                         Constraint.set.applyTo(parentLayout)
                     }
 
@@ -47,13 +47,13 @@ object Constraint {
                         set.connect(ivTracker, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
                         set.applyTo(parentLayout)
                     }
-                    clFragCartParent -> {
+                    clFragCart -> {
                         Constraint.set.clone(parentLayout)
-                        Constraint.set.clear(clFragWorkspaceParent, ConstraintSet.START)
-                        Constraint.set.clear(clFragWorkspaceParent, ConstraintSet.END)
-                        Constraint.set.clear(clFragCartParent, ConstraintSet.START)
-                        Constraint.set.connect(clFragWorkspaceParent, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
-                        Constraint.set.connect(clFragCartParent, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
+                        Constraint.set.clear(clFragWorkspace, ConstraintSet.START)
+                        Constraint.set.clear(clFragWorkspace, ConstraintSet.END)
+                        Constraint.set.clear(clFragCart, ConstraintSet.START)
+                        Constraint.set.connect(clFragWorkspace, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
+                        Constraint.set.connect(clFragCart, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
                         Constraint.set.applyTo(parentLayout)
                     }
                 }
@@ -70,7 +70,7 @@ object Constraint {
         when (applyTo.id) {
             clTabWorkspace -> {
                 when (view.id) {
-                    clActionBar -> {
+                    clFragActionBar -> {
                         Constraint.set.clone(parentLayout)
                         Constraint.set.clear(view.id, ConstraintSet.START)
                         Constraint.set.clear(subLayout.id, ConstraintSet.START)
@@ -84,7 +84,7 @@ object Constraint {
             }
             clTabCart -> {
                 when (view.id) {
-                    clActionBar -> {
+                    clFragActionBar -> {
                         Constraint.set.clone(parentLayout)
                         Constraint.set.clear(view.id, ConstraintSet.START)
                         Constraint.set.clear(view.id, ConstraintSet.END)

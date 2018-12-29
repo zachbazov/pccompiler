@@ -26,6 +26,7 @@
     <string name="auth_sign_up_success">User has been created</string>
     <string name="auth_sign_up_failure">Email must be valid.\nor Username already taken.</string>
 
+    <!-- Workspace -->
     <string name="text_guest">Guest</string>
     <string name="text_remove">REMOVE</string>
     <string name="text_edit">EDIT</string>
@@ -36,6 +37,9 @@
     <string name="text_explore">EXPLORE</string>
     <string name="text_change">CHANGE</string>
     <string name="text_trash">TRASH</string>
+
+    <string name="text_no_compilations">No compilations found</string>
+    <string name="text_no_components">No components found</string>
 
     <!-- ContentDescription -->
     <string name="cd_app_logo">App Logo</string>

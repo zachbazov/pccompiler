@@ -9,7 +9,7 @@ import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.service.*
-import com.corespark.pccompiler.adapter.CompilationBar
+import com.corespark.pccompiler.adapter.Recycler
 import com.corespark.pccompiler.model.*
 import kotlinx.android.synthetic.main.activity_workspace.*
 
@@ -23,9 +23,9 @@ import kotlinx.android.synthetic.main.activity_workspace.*
  */
 class Workspace : AppCompatActivity() {
 
-    //TODO action bar activation | compilation & cart empty mode | rvCart modification + dragNdrog | fix purity in itemCart xml
+    //TODO action bar activation | rvCart modification + dragNdrog | fix purity in xml | fix control panel
 
-    lateinit var compilationBar: CompilationBar
+    lateinit var compilationBar: Recycler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,7 @@ class Workspace : AppCompatActivity() {
     }
 
     private fun customize() {
-        Constraint.set(clTabWorkspace, clWorkspaceParent, clFragWorkspaceParent)
+        Constraint.set(clTabWorkspace, clWorkspace, clFragWorkspace)
 
         val values = arrayOf(ivTabWorkspace, ivTabCart)
         for (value in values) setValue(value)
@@ -54,13 +54,12 @@ class Workspace : AppCompatActivity() {
             when (param) {
                 ivTabWorkspace -> { Parameter.set(param, 72) }
                 ivTabCart -> { Parameter.set(param, 48) }
-                else -> { Parameter.set(param, 64) }
             }
 
         val clicks = arrayOf(clTabWorkspace, clTabCart)
         for (click in clicks) onClick(click)
 
-        val adapters = arrayOf(rvCompilation, rvCartBar, rvActionBar, rvControlBar, rvControlPanel)
+        val adapters = arrayOf(rvCompilationBar, rvCartBar, rvActionBar, rvControlBar, rvControlPanel)
         for (adapter in adapters) setAdapter(adapter)
     }
 
@@ -76,12 +75,13 @@ class Workspace : AppCompatActivity() {
             clTabWorkspace.id -> {
                 try {
                     view.setOnClickListener {
-                        TransitionManager.beginDelayedTransition(clWorkspaceParent)
+                        TransitionManager.beginDelayedTransition(clWorkspace)
                         Parameter.set(ivTabWorkspace, 72)
                         Parameter.set(ivTabCart, 48)
                         Constraint.set(clTabWorkspace, clTabParent, ivTracker)
-                        Constraint.set(clTabWorkspace, clWorkspaceParent, clFragWorkspaceParent)
-                        Constraint.set(clTabWorkspace, clDashboard, clFragControlBarParent, clActionBar)
+                        Constraint.set(clTabWorkspace, clWorkspace, clFragWorkspace)
+                        Constraint.set(clTabWorkspace, clWorkspace, clFragControlBar, clFragActionBar)
+                        //ivTracker.setColorFilter(Compiler.colors.colorPrimary)
                     }
                 } catch (e: IllegalStateException) {
                     println(e.localizedMessage)
@@ -90,12 +90,14 @@ class Workspace : AppCompatActivity() {
             clTabCart.id -> {
                 try {
                     view.setOnClickListener {
-                        TransitionManager.beginDelayedTransition(clWorkspaceParent)
+                        TransitionManager.beginDelayedTransition(clWorkspace)
                         Parameter.set(ivTabCart, 72)
                         Parameter.set(ivTabWorkspace, 48)
                         Constraint.set(clTabCart, clTabParent, ivTracker)
-                        Constraint.set(clTabCart, clWorkspaceParent, clFragCartParent)
-                        Constraint.set(clTabCart, clDashboard, clFragControlBarParent, clActionBar)
+                        Constraint.set(clTabCart, clWorkspace, clFragCart)
+                        Constraint.set(clTabCart, clWorkspace, clFragControlBar, clFragActionBar)
+                        //ivTracker.setColorFilter(Compiler.colors.colorRed)
+
                     }
                 } catch (e: IllegalStateException) {
                     println(e.localizedMessage)
@@ -106,29 +108,35 @@ class Workspace : AppCompatActivity() {
 
     private fun setAdapter(view: View) {
         when (view.id) {
-            rvCompilation.id -> {
-                Compilation.add()
-                compilationBar = CompilationBar(this, Compilation.list)
-                rvCompilation.adapter = compilationBar
+            rvCompilationBar.id -> {
+                CompilationBar.add()
+                if (CompilationBar.list.size > 0) {
+                    compilationBar = Recycler(this, this, CompilationBar.list, 0)
+                    rvCompilationBar.adapter = compilationBar
+                } else {
+                    compilationBar = Recycler(this, this, CompilationBar.empty, 5)
+                    rvCompilationBar.adapter = compilationBar
+                }
             }
             rvCartBar.id -> {
-                CartBar.add()
-                rvCartBar.adapter = com.corespark.pccompiler.adapter.CartBar(this, this, CartBar.cartList)
+                CartBar.addEmpty(this)
+                if (CartBar.list.size > 0) {
+                    rvCartBar.adapter = Recycler(this, this, CartBar.list, 1)
+                } else {
+                    rvCartBar.adapter = Recycler(this, this, CartBar.empty, 5)
+                }
             }
             rvActionBar.id -> {
                 ActionBar.addActions(this)
-                rvActionBar.adapter = com.corespark.pccompiler.adapter.ActionBar(
-                    this, this, ActionBar.actionList)
+                rvActionBar.adapter = Recycler(this, this, ActionBar.actionList, 2)
             }
             rvControlBar.id -> {
                 ControlBar.addActions(this)
-                rvControlBar.adapter = com.corespark.pccompiler.adapter.ControlBar(
-                    this, this, ControlBar.actionList)
+                rvControlBar.adapter = Recycler(this, this, ControlBar.actionList, 3)
             }
             rvControlPanel.id -> {
                 ControlPanel.addControls(this)
-                rvControlPanel.adapter = com.corespark.pccompiler.adapter.ControlPanel(
-                    this, this, ControlPanel.controlList)
+                rvControlPanel.adapter = Recycler(this, this, ControlPanel.controlList, 4)
             }
         }
     }
