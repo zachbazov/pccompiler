@@ -58,11 +58,6 @@ object Constraint {
                     }
                 }
             }
-            R.id.actionBarImage0 -> {
-                set.clone(parentLayout)
-                set.connect(view.id, ConstraintSet.BOTTOM, parentLayout.id, ConstraintSet.BOTTOM)
-                set.applyTo(parentLayout)
-            }
         }
     }
 
@@ -122,7 +117,7 @@ object Constraint {
 
     fun set(applyTo: View, parentLayout: ConstraintLayout, subLayout: ConstraintLayout, view: View, complete: (Boolean) -> Unit) {
         when (applyTo.id) {
-            R.id.actionBarLayout0 -> {
+            R.id.clActionUser -> {
                 if (!applyTo.isSelected) {
                     set.clone(parentLayout)
                     set.clear(view.id, ConstraintSet.END)

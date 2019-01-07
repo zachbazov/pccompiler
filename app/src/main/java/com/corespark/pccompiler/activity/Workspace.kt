@@ -23,17 +23,13 @@ import kotlinx.android.synthetic.main.activity_workspace.*
  */
 class Workspace : AppCompatActivity() {
 
-    //TODO action bar activation | rvCart modification + dragNdrog | fix purity in xml | fix control panel
-
-    lateinit var compilationBar: Recycler
+    //TODO action bar activation | rvCart modification + dragNdrog | fix purity in xml | progressbars
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workspace)
 
         Broadcast.emit(this, onChannelAuth)
-
-        Window.determineSpan(this, ivTracker, windowManager, Window.orientation, 2) {}
 
         customize()
     }
@@ -44,6 +40,8 @@ class Workspace : AppCompatActivity() {
     }
 
     private fun customize() {
+        Window.determineSpan(this, ivTracker, windowManager, Window.orientation, 2) {}
+
         Constraint.set(clTabWorkspace, clWorkspace, clFragWorkspace)
 
         val values = arrayOf(ivTabWorkspace, ivTabCart)
@@ -52,8 +50,8 @@ class Workspace : AppCompatActivity() {
         val params = arrayOf(ivTabWorkspace, ivTabCart)
         for (param in params)
             when (param) {
-                ivTabWorkspace -> { Parameter.set(param, 72) }
-                ivTabCart -> { Parameter.set(param, 48) }
+                ivTabWorkspace -> { Parameter.set(param, 64) }
+                ivTabCart -> { Parameter.set(param, 64) }
             }
 
         val clicks = arrayOf(clTabWorkspace, clTabCart)
@@ -66,7 +64,7 @@ class Workspace : AppCompatActivity() {
     private fun setValue(view: View) {
         when (view.id) {
             ivTabWorkspace.id -> { ivTabWorkspace.setImageResource(R.drawable.ic_workspace_active) }
-            ivTabCart.id -> { ivTabCart.setImageResource(R.drawable.ic_cart_active) }
+            ivTabCart.id -> { ivTabCart.setImageResource(R.drawable.ic_cart_inactive) }
         }
     }
 
@@ -76,12 +74,13 @@ class Workspace : AppCompatActivity() {
                 try {
                     view.setOnClickListener {
                         TransitionManager.beginDelayedTransition(clWorkspace)
-                        Parameter.set(ivTabWorkspace, 72)
-                        Parameter.set(ivTabCart, 48)
+                        //Parameter.set(ivTabWorkspace, 72)
+                        //Parameter.set(ivTabCart, 48)
                         Constraint.set(clTabWorkspace, clTabParent, ivTracker)
                         Constraint.set(clTabWorkspace, clWorkspace, clFragWorkspace)
                         Constraint.set(clTabWorkspace, clWorkspace, clFragControlBar, clFragActionBar)
-                        //ivTracker.setColorFilter(Compiler.colors.colorPrimary)
+                        ivTabWorkspace.setImageResource(R.drawable.ic_workspace_active)
+                        ivTabCart.setImageResource(R.drawable.ic_cart_inactive)
                     }
                 } catch (e: IllegalStateException) {
                     println(e.localizedMessage)
@@ -91,13 +90,13 @@ class Workspace : AppCompatActivity() {
                 try {
                     view.setOnClickListener {
                         TransitionManager.beginDelayedTransition(clWorkspace)
-                        Parameter.set(ivTabCart, 72)
-                        Parameter.set(ivTabWorkspace, 48)
+                        //Parameter.set(ivTabCart, 72)
+                        //Parameter.set(ivTabWorkspace, 48)
                         Constraint.set(clTabCart, clTabParent, ivTracker)
                         Constraint.set(clTabCart, clWorkspace, clFragCart)
                         Constraint.set(clTabCart, clWorkspace, clFragControlBar, clFragActionBar)
-                        //ivTracker.setColorFilter(Compiler.colors.colorRed)
-
+                        ivTabWorkspace.setImageResource(R.drawable.ic_workspace_inactive)
+                        ivTabCart.setImageResource(R.drawable.ic_cart_active)
                     }
                 } catch (e: IllegalStateException) {
                     println(e.localizedMessage)
@@ -108,35 +107,33 @@ class Workspace : AppCompatActivity() {
 
     private fun setAdapter(view: View) {
         when (view.id) {
+            rvActionBar.id -> {
+                Bar.Action.add(this)
+                rvActionBar.adapter = Recycler(this, Bar.Action.list, 0)
+            }
+            rvControlBar.id -> {
+                Bar.Control.add(this)
+                rvControlBar.adapter = Recycler(this, Bar.Control.list, 1)
+            }
+            rvControlPanel.id -> {
+                Panel.ControlPanel.add(this)
+                rvControlPanel.adapter = Recycler(this, Panel.ControlPanel.list, 2)
+            }
             rvCompilationBar.id -> {
-                CompilationBar.addEmpty(this)
-                if (CompilationBar.list.size > 0) {
-                    compilationBar = Recycler(this, this, CompilationBar.list, 0)
-                    rvCompilationBar.adapter = compilationBar
+                Bar.CompilationBar.addEmpty(this)
+                if (Bar.CompilationBar.list.size > 0) {
+                    rvCompilationBar.adapter = Recycler(this, Bar.CompilationBar.list, 3)
                 } else {
-                    compilationBar = Recycler(this, this, CompilationBar.empty, 5)
-                    rvCompilationBar.adapter = compilationBar
+                    rvCompilationBar.adapter = Recycler(this, Bar.CompilationBar.empty, 6)
                 }
             }
             rvCartBar.id -> {
-                CartBar.addEmpty(this)
-                if (CartBar.list.size > 0) {
-                    rvCartBar.adapter = Recycler(this, this, CartBar.list, 1)
+                Bar.CartBar.addEmpty(this)
+                if (Bar.CartBar.list.size > 0) {
+                    rvCartBar.adapter = Recycler(this, Bar.CartBar.list, 4)
                 } else {
-                    rvCartBar.adapter = Recycler(this, this, CartBar.empty, 5)
+                    rvCartBar.adapter = Recycler(this, Bar.CartBar.empty, 6)
                 }
-            }
-            rvActionBar.id -> {
-                ActionBar.addActions(this)
-                rvActionBar.adapter = Recycler(this, this, ActionBar.actionList, 2)
-            }
-            rvControlBar.id -> {
-                ControlBar.addActions(this)
-                rvControlBar.adapter = Recycler(this, this, ControlBar.actionList, 3)
-            }
-            rvControlPanel.id -> {
-                ControlPanel.addControls(this)
-                rvControlPanel.adapter = Recycler(this, this, ControlPanel.controlList, 4)
             }
         }
     }

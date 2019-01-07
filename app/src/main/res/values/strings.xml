@@ -27,16 +27,14 @@
     <string name="auth_sign_up_failure">Email must be valid.\nor Username already taken.</string>
 
     <!-- Workspace -->
-    <string name="text_guest">Guest</string>
-    <string name="text_remove">REMOVE</string>
-    <string name="text_edit">EDIT</string>
-    <string name="text_add">ADD</string>
-    <string name="text_menu">MENU</string>
-    <string name="text_settings">SETTINGS</string>
-    <string name="text_logout">LOGOUT</string>
-    <string name="text_explore">EXPLORE</string>
-    <string name="text_change">CHANGE</string>
-    <string name="text_trash">TRASH</string>
+    <string name="text_remove">Remove</string>
+    <string name="text_edit">Edit</string>
+    <string name="text_compile">Compile</string>
+    <string name="text_settings">Settings</string>
+    <string name="text_logout">Logout</string>
+    <string name="text_explore">Explore</string>
+    <string name="text_change">Change</string>
+    <string name="text_trash">Trash</string>
 
     <string name="text_no_compilations">No compilations found</string>
     <string name="text_no_components">No components found</string>
@@ -52,7 +50,12 @@
     <string name="cd_edit">Compilation Edit Button</string>
     <string name="cd_add">Compilation Add Button</string>
     <string name="cd_menu">Compilation Menu Button</string>
+    <string name="cd_control_panel">User Control Panel</string>
     <string name="cd_settings">User Settings Button</string>
     <string name="cd_logout">User Logout Button</string>
     <string name="cd_compilation">Compilation Button</string>
+    <string name="cd_action_bar">Action Bar Button</string>
+    <string name="cd_control_bar">Control Bar Button</string>
+    <string name="cd_component_bar">Component Bar Button</string>
+    <string name="cd_cart_bar">Cart Bar Button</string>
 </resources>

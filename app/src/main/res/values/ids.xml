@@ -4,11 +4,29 @@
     <item name="clTabCart" type="id"/>
     <item name="ivTabWorkspace" type="id"/>
     <item name="ivTabCart" type="id"/>
-    <item name="compilationBarCard0" type="id"/>
-    <item name="compilationBarCard1" type="id"/>
-    <item name="actionBarLayout0" type="id"/>
-    <item name="actionBarImage0" type="id"/>
-    <item name="actionBarText0" type="id"/>
-    <item name="actionBarDivider4" type="id"/>
-    <item name="controlPanelLayout0" type="id"/>
+
+    <item name="clActionUser" type="id"/>
+    <item name="clActionCompile" type="id"/>
+    <item name="ivActionUser" type="id"/>
+    <item name="ivActionCompile" type="id"/>
+    <item name="tvActionUser" type="id"/>
+    <item name="dvAction4" type="id"/>
+
+    <item name="cvCompilation0" type="id"/>
+    <item name="cvCompilation1" type="id"/>
+
+    <item name="clControlPanelLogout" type="id"/>
+
+    <item name="componentBarItem0" type="id"/>
+    <item name="componentBarItem1" type="id"/>
+    <item name="componentBarItem2" type="id"/>
+    <item name="componentBarItem3" type="id"/>
+    <item name="componentBarItem4" type="id"/>
+    <item name="componentBarItem5" type="id"/>
+    <item name="componentBarItem6" type="id"/>
+    <item name="componentBarItem7" type="id"/>
+    <item name="componentBarItem8" type="id"/>
+    <item name="componentBarItem9" type="id"/>
+    <item name="componentBarItem10" type="id"/>
+    <item name="componentBarItem11" type="id"/>
 </resources>

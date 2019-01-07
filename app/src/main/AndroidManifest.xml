@@ -26,8 +26,6 @@
         </activity>
         <activity android:name=".activity.Workspace">
         </activity>
-        <activity android:name=".activity.Menu">
-        </activity>
         <activity android:name=".activity.Compile">
         </activity>
 

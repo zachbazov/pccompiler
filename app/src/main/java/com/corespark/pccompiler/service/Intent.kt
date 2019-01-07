@@ -5,7 +5,6 @@ import android.content.Intent
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.activity.Auth
 import com.corespark.pccompiler.activity.Compile
-import com.corespark.pccompiler.activity.Menu
 import com.corespark.pccompiler.activity.Workspace
 
 
@@ -27,10 +26,6 @@ object Intent {
             }
             R.layout.activity_workspace -> {
                 intent = Intent(context, Workspace::class.java)
-                return intent
-            }
-            R.layout.activity_menu -> {
-                intent = Intent(context, Menu::class.java)
                 return intent
             }
             R.layout.activity_compile -> {
