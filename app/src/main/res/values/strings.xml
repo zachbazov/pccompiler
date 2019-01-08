@@ -35,6 +35,9 @@
     <string name="text_change">Change</string>
     <string name="text_trash">Trash</string>
 
+    <string name="text_my_compilations">My Compilations</string>
+    <string name="text_my_cart">My Cart</string>
+
     <string name="text_no_compilations">No compilations found</string>
     <string name="text_no_components">No components found</string>
 

@@ -36,7 +36,14 @@ object Constraint {
                         Constraint.set.connect(clFragCart, ConstraintSet.START, parentLayout.id, ConstraintSet.END)
                         Constraint.set.applyTo(parentLayout)
                     }
-
+                    tvWorkspaceTitle -> {
+                        Constraint.set.clone(parentLayout)
+                        Constraint.set.clear(tvWorkspaceTitle, ConstraintSet.END)
+                        Constraint.set.clear(tvCartTitle, ConstraintSet.START)
+                        Constraint.set.connect(tvWorkspaceTitle, ConstraintSet.START, clFragTitle, ConstraintSet.START, 32)
+                        Constraint.set.connect(tvCartTitle, ConstraintSet.START, clFragTitle, ConstraintSet.END)
+                        Constraint.set.applyTo(parentLayout)
+                    }
                 }
             }
             clTabCart -> {
@@ -54,6 +61,14 @@ object Constraint {
                         Constraint.set.clear(clFragCart, ConstraintSet.START)
                         Constraint.set.connect(clFragWorkspace, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
                         Constraint.set.connect(clFragCart, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
+                        Constraint.set.applyTo(parentLayout)
+                    }
+                    tvCartTitle -> {
+                        Constraint.set.clone(parentLayout)
+                        Constraint.set.clear(tvCartTitle, ConstraintSet.END)
+                        Constraint.set.clear(tvWorkspaceTitle, ConstraintSet.END)
+                        Constraint.set.connect(tvCartTitle, ConstraintSet.START, clFragTitle, ConstraintSet.START, 32)
+                        Constraint.set.connect(tvWorkspaceTitle, ConstraintSet.START, clFragTitle, ConstraintSet.END)
                         Constraint.set.applyTo(parentLayout)
                     }
                 }
@@ -122,7 +137,7 @@ object Constraint {
                     set.clone(parentLayout)
                     set.clear(view.id, ConstraintSet.END)
                     set.connect(view.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START, 8)
-                    set.connect(view.id, ConstraintSet.TOP, subLayout.id, ConstraintSet.BOTTOM, 8)
+                    set.connect(view.id, ConstraintSet.TOP, subLayout.id, ConstraintSet.BOTTOM)
                     set.applyTo(parentLayout)
                     complete(true)
                 } else {

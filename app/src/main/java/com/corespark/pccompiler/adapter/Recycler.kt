@@ -138,6 +138,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
         var clTabCart: ConstraintLayout? = null
         var ivTabWorkspace: ImageView? = null
         var ivTabCart: ImageView? = null
+
         val clWorkspace = (context as Workspace).clWorkspace!!
         val clTabParent = (context as Workspace).clFragTabBar!!
         val clFragActionBar = (context as Workspace).clFragActionBar!!
@@ -145,6 +146,9 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
         val clFragWorkspace = (context as Workspace).clFragWorkspace!!
         val clFragCart = (context as Workspace).clFragCart!!
         val ivTracker = (context as Workspace).ivTracker!!
+        val clFragTitle = (context as Workspace).clFragTitle!!
+        val tvWorkspaceTitle = (context as Workspace).tvWorkspaceTitle!!
+        val tvCartTitle = (context as Workspace).tvCartTitle!!
 
         inner class TabBarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -155,7 +159,8 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
 
             fun span() {
                 try {
-                    Window.determineSpan(context, layout, (context as Workspace).windowManager, Window.orientation, list.size) {}
+                    Window.determineSpan(
+                        context, layout, (context as Workspace).windowManager, Window.orientation, list.size) {}
                 } catch (e: IllegalStateException) {
                     println(e.localizedMessage)
                 }
@@ -183,6 +188,8 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
             }
 
             fun customize(position: Int) {
+                tvWorkspaceTitle.text = context.getString(R.string.text_my_compilations)
+                tvCartTitle.text = context.getString(R.string.text_my_cart)
                 when (position) {
                     0 -> {
                         ivTabWorkspace!!.setImageResource(R.drawable.ic_workspace_active)
@@ -205,6 +212,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                                 Constraint.set(clTabWorkspace!!, clTabParent, ivTracker)
                                 Constraint.set(clTabWorkspace!!, clWorkspace, clFragWorkspace)
                                 Constraint.set(clTabWorkspace!!, clWorkspace, clFragControlBar, clFragActionBar)
+                                Constraint.set(clTabWorkspace!!, clFragTitle, tvWorkspaceTitle)
                             }
                         } catch (e: IllegalStateException) {
                             println(e.localizedMessage)
@@ -217,6 +225,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                                 Constraint.set(clTabCart!!, clTabParent, ivTracker)
                                 Constraint.set(clTabCart!!, clWorkspace, clFragCart)
                                 Constraint.set(clTabCart!!, clWorkspace, clFragControlBar, clFragActionBar)
+                                Constraint.set(clTabCart!!, clFragTitle, tvCartTitle)
                             }
                         } catch (e: IllegalStateException) {
                             println(e.localizedMessage)
@@ -353,13 +362,13 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
 
     inner class ControlPanel {
 
-        val parent = (context as Workspace).findViewById<ConstraintLayout>(R.id.clWorkspace)!!
-        private val dashboard = parent.findViewById<ConstraintLayout>(R.id.clFragActionBar)!!
-        private val controlPanel = parent.findViewById<ConstraintLayout>(R.id.clFragControlPanel)!!
+        val clWorkspace = (context as Workspace).clWorkspace!!
+        private val clFragTitle = (context as Workspace).clFragTitle!!
+        private val clFragControlPanel = (context as Workspace).clFragControlPanel!!
 
         fun constraint(view: View) {
-            TransitionManager.beginDelayedTransition(parent)
-            Constraint.set(view, parent, dashboard, controlPanel) {
+            TransitionManager.beginDelayedTransition(clWorkspace)
+            Constraint.set(view, clWorkspace, clFragTitle, clFragControlPanel) {
                 if (it) {
                     Compilation().card0?.isClickable = false
                     view.isSelected = !view.isSelected
