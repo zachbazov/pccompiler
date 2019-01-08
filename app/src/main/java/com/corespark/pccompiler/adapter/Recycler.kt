@@ -18,6 +18,7 @@ import com.corespark.pccompiler.service.Constraint
 import com.corespark.pccompiler.service.Intent
 import com.corespark.pccompiler.service.Parameter
 import com.corespark.pccompiler.service.Window
+import kotlinx.android.synthetic.main.activity_workspace.*
 
 
 /**
@@ -37,23 +38,26 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
         val infalter = LayoutInflater.from(context)
         when (type) {
             0 -> {
-                holder = ActionBarViewHolder(infalter.inflate(R.layout.item_action_bar, container, false))
+                holder = TabBar().TabBarViewHolder(infalter.inflate(R.layout.item_tab_bar, container, false))
             }
             1 -> {
-                holder = ControlBarViewHolder(infalter.inflate(R.layout.item_control_bar, container, false))
+                holder = ActionBarViewHolder(infalter.inflate(R.layout.item_action_bar, container, false))
             }
             2 -> {
+                holder = ControlBarViewHolder(infalter.inflate(R.layout.item_control_bar, container, false))
+            }
+            3 -> {
                 holder = ControlPanel().ControlPanelViewHolder(
                     infalter.inflate(R.layout.item_control_panel, container, false))
             }
-            3 -> {
+            4 -> {
                 holder = Compilation().CompilationViewHolder(
                     infalter.inflate(R.layout.item_compilation_bar, container, false))
             }
-            4 -> {
+            5 -> {
                 holder = CartBarViewHolder(infalter.inflate(R.layout.item_cart_bar, container, false))
             }
-            5 -> {
+            6 -> {
                 holder = Component().ComponentBarViewHolder(
                     infalter.inflate(R.layout.item_component_bar, container, false))
             }
@@ -68,6 +72,15 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
         when (type) {
             0 -> {
                 val item = list[position]
+                holder as TabBar.TabBarViewHolder
+                holder.span()
+                holder.mapId(position)
+                holder.bind(item as Bar.Tab)
+                holder.customize(position)
+                holder.onClick(holder.layout)
+            }
+            1 -> {
+                val item = list[position]
                 holder as ActionBarViewHolder
                 holder.span()
                 holder.bind(item as Bar.Action)
@@ -76,14 +89,14 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                 holder.activate(holder.image, position)
                 holder.onClick(holder.layout)
             }
-            1 -> {
+            2 -> {
                 val item = list[position]
                 holder as ControlBarViewHolder
                 holder.span()
                 holder.bind(item as Bar.Control)
                 holder.activate(holder.image, position)
             }
-            2 -> {
+            3 -> {
                 val item = list[position]
                 holder as ControlPanel.ControlPanelViewHolder
                 holder.span()
@@ -92,29 +105,124 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                 holder.customize(position)
                 holder.onClick(holder.layout)
             }
-            3 -> {
+            4 -> {
                 val item = list[position]
                 holder as Compilation.CompilationViewHolder
                 holder.span()
-                holder.bind(holder, item as Bar.CompilationBar, position)
+                holder.bind(holder, item as Bar.Compilation, position)
             }
-            4 -> {
+            5 -> {
                 val item = list[position]
                 holder as CartBarViewHolder
                 holder.span()
-                holder.bind(item as Bar.CartBar)
+                holder.bind(item as Bar.Cart)
             }
-            5 -> {
+            6 -> {
                 val item = list[position]
                 holder as Component.ComponentBarViewHolder
                 holder.span()
                 holder.mapId(position)
-                holder.bind(item as Bar.ComponentBar)
+                holder.bind(item as Bar.Component)
             }
             else -> {
                 val item = list[position]
                 holder as EmptyViewHolder
-                holder.bind(item as Bar.EmptyBar)
+                holder.bind(item as Bar.Empty)
+            }
+        }
+    }
+
+    inner class TabBar {
+
+        var clTabWorkspace: ConstraintLayout? = null
+        var clTabCart: ConstraintLayout? = null
+        var ivTabWorkspace: ImageView? = null
+        var ivTabCart: ImageView? = null
+        val clWorkspace = (context as Workspace).clWorkspace!!
+        val clTabParent = (context as Workspace).clFragTabBar!!
+        val clFragActionBar = (context as Workspace).clFragActionBar!!
+        val clFragControlBar = (context as Workspace).clFragControlBar!!
+        val clFragWorkspace = (context as Workspace).clFragWorkspace!!
+        val clFragCart = (context as Workspace).clFragCart!!
+        val ivTracker = (context as Workspace).ivTracker!!
+
+        inner class TabBarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+            val parent = itemView.findViewById<ConstraintLayout>(R.id.clTabBarParent)!!
+            val layout = itemView.findViewById<ConstraintLayout>(R.id.clTabBar)!!
+            val image = itemView.findViewById<ImageView>(R.id.ivTabBar)!!
+            val divider = itemView.findViewById<View>(R.id.dvTabBar)!!
+
+            fun span() {
+                try {
+                    Window.determineSpan(context, layout, (context as Workspace).windowManager, Window.orientation, list.size) {}
+                } catch (e: IllegalStateException) {
+                    println(e.localizedMessage)
+                }
+            }
+
+            fun mapId(position: Int) {
+                when (position) {
+                    0 -> {
+                        clTabWorkspace = layout
+                        ivTabWorkspace = image
+                        layout.id = R.id.clTabWorkspace
+                        image.id = R.id.ivTabWorkspace
+                    }
+                    1 -> {
+                        clTabCart = layout
+                        ivTabCart = image
+                        layout.id = R.id.clTabCart
+                        image.id = R.id.ivTabCart
+                    }
+                }
+            }
+
+            fun bind(item: Bar.Tab) {
+                image.setImageResource(item.image)
+            }
+
+            fun customize(position: Int) {
+                when (position) {
+                    0 -> {
+                        ivTabWorkspace!!.setImageResource(R.drawable.ic_workspace_active)
+                        Parameter.set(ivTabWorkspace!!, 64)
+                    }
+                    1 -> {
+                        ivTabCart!!.setImageResource(R.drawable.ic_cart_active)
+                        Parameter.set(ivTabCart!!, 64)
+                        layout.removeView(divider)
+                    }
+                }
+            }
+
+            fun onClick(view: View) {
+                when (view.id) {
+                    clTabWorkspace?.id -> {
+                        try {
+                            view.setOnClickListener {
+                                TransitionManager.beginDelayedTransition(clWorkspace)
+                                Constraint.set(clTabWorkspace!!, clTabParent, ivTracker)
+                                Constraint.set(clTabWorkspace!!, clWorkspace, clFragWorkspace)
+                                Constraint.set(clTabWorkspace!!, clWorkspace, clFragControlBar, clFragActionBar)
+                            }
+                        } catch (e: IllegalStateException) {
+                            println(e.localizedMessage)
+                        }
+                    }
+                    clTabCart?.id -> {
+                        try {
+                            view.setOnClickListener {
+                                TransitionManager.beginDelayedTransition(clWorkspace)
+                                Constraint.set(clTabCart!!, clTabParent, ivTracker)
+                                Constraint.set(clTabCart!!, clWorkspace, clFragCart)
+                                Constraint.set(clTabCart!!, clWorkspace, clFragControlBar, clFragActionBar)
+                            }
+                        } catch (e: IllegalStateException) {
+                            println(e.localizedMessage)
+                        }
+                    }
+                }
             }
         }
     }
@@ -180,7 +288,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                     }
                 }
                 1 -> {
-                    if (Bar.CompilationBar.list.size == 0) {
+                    if (Bar.Compilation.list.size == 0) {
                         (view as ImageView).setImageResource(R.drawable.ic_compile_active)
                     }
                 }
@@ -229,7 +337,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
         fun activate(view: View, position: Int) {
             when (position) {
                 0 -> {
-                    if (Bar.CartBar.list.size == 0) {
+                    if (Bar.Cart.list.size == 0) {
                         (view as ImageView).setImageResource(R.drawable.ic_explore_active)
                     }
                 }
@@ -331,7 +439,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                 }
             }
 
-            fun bind(holder: CompilationViewHolder, item: Bar.CompilationBar, position: Int) {
+            fun bind(holder: CompilationViewHolder, item: Bar.Compilation, position: Int) {
                 image.setImageResource(item.image)
                 title.text = item.title
                 Parameter.set(image, 64)
@@ -412,7 +520,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
             }
         }
 
-        fun bind(item: Bar.CartBar) {
+        fun bind(item: Bar.Cart) {
             image.setImageResource(item.image)
             title.text = item.component
             price.text = item.price
@@ -463,7 +571,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                 }
             }
 
-            fun bind(item: Bar.ComponentBar) {
+            fun bind(item: Bar.Component) {
                 image.setImageResource(item.image)
             }
         }
@@ -476,7 +584,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
         val image = itemView.findViewById<ImageView>(R.id.ivCompilationEmpty)!!
         val title = itemView.findViewById<TextView>(R.id.tvCompilationEmpty)!!
 
-        fun bind(item: Bar.EmptyBar) {
+        fun bind(item: Bar.Empty) {
             layout.layoutParams.width = Window.measureMultiDeviceDensity(Window.widthPx, 1)
             image.setImageResource(item.image)
             title.text = item.title

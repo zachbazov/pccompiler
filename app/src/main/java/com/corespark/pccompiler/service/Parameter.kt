@@ -1,6 +1,5 @@
 package com.corespark.pccompiler.service
 
-import android.support.constraint.ConstraintLayout
 import android.view.View
 import android.view.ViewGroup
 
@@ -15,7 +14,6 @@ import android.view.ViewGroup
 object Parameter {
 
     private lateinit var params: ViewGroup.LayoutParams
-    private lateinit var rparams: ConstraintLayout.LayoutParams
 
     fun set(view: View, pixel: Int) {
         params = view.layoutParams

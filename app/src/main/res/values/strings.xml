@@ -27,7 +27,6 @@
     <string name="auth_sign_up_failure">Email must be valid.\nor Username already taken.</string>
 
     <!-- Workspace -->
-    <string name="text_remove">Remove</string>
     <string name="text_edit">Edit</string>
     <string name="text_compile">Compile</string>
     <string name="text_settings">Settings</string>
@@ -42,17 +41,9 @@
     <!-- ContentDescription -->
     <string name="cd_app_logo">App Logo</string>
     <string name="cd_app_title">App Title</string>
+    <string name="cd_tab">Tab Bar Button</string>
     <string name="cd_tab_tracker">Tab Tracker</string>
-    <string name="cd_workspace">Workspace Button</string>
-    <string name="cd_cart">Cart Button</string>
-    <string name="cd_user">User Button</string>
-    <string name="cd_remove">Compilation Remove Button</string>
-    <string name="cd_edit">Compilation Edit Button</string>
-    <string name="cd_add">Compilation Add Button</string>
-    <string name="cd_menu">Compilation Menu Button</string>
     <string name="cd_control_panel">User Control Panel</string>
-    <string name="cd_settings">User Settings Button</string>
-    <string name="cd_logout">User Logout Button</string>
     <string name="cd_compilation">Compilation Button</string>
     <string name="cd_action_bar">Action Bar Button</string>
     <string name="cd_control_bar">Control Bar Button</string>

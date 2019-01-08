@@ -26,8 +26,8 @@ class Compile : AppCompatActivity() {
     private fun setAdapter(view: View) {
         when (view.id) {
             R.id.rvComponentBar -> {
-                Bar.ComponentBar.add()
-                rvComponentBar.adapter = Recycler(this, Bar.ComponentBar.list, 5)
+                Bar.Component.add()
+                rvComponentBar.adapter = Recycler(this, Bar.Component.list, 5)
             }
         }
     }
