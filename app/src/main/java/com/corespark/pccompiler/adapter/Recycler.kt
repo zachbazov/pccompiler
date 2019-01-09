@@ -315,7 +315,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                     }
                     R.id.clActionCompile -> {
                         val dialog = Dialog(context, 0)
-                        dialog.Workspace().Compilation().create(it)
+                        dialog.Workspace().Compilation().create()
                     }
                 }
             }

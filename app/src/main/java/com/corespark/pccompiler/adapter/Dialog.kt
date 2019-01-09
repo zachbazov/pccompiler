@@ -19,6 +19,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.ViewGroup
 import com.corespark.pccompiler.service.Intent
+import kotlinx.android.synthetic.main.activity_workspace.view.*
 
 
 /**
@@ -33,6 +34,7 @@ class Dialog(val context: Context, val type: Int) {
     inner class Workspace {
 
         val clWorkspace = (context as com.corespark.pccompiler.activity.Workspace).clWorkspace!!
+        val clActionCompile = clWorkspace.rvActionBar.findViewById<ConstraintLayout>(R.id.clActionCompile)
 
         inner class Compilation {
 
@@ -44,9 +46,9 @@ class Dialog(val context: Context, val type: Int) {
             val etDialog = layout.findViewById<EditText>(R.id.etDialogCompile)!!
             val btnDialog = layout.findViewById<Button>(R.id.btnDialogCompile)!!
 
-            fun create(view: View) {
-                if (!view.isSelected) {
-                    view.isSelected = true
+            fun create() {
+                if (!clActionCompile.isSelected) {
+                    clActionCompile.isSelected = true
                     instantiate()
                     customize()
                     constraint()
@@ -88,7 +90,7 @@ class Dialog(val context: Context, val type: Int) {
                             TransitionManager.beginDelayedTransition(clWorkspace)
                             clWorkspace.removeView(layout)
                             clWorkspace.removeView(bgTransparent)
-                            view.isSelected = false
+                            clActionCompile.isSelected = false
                             Window.hideKeyboard(context)
                         }
                     }
