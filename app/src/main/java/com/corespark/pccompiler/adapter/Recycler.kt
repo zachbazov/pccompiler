@@ -33,7 +33,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
 
     override fun getItemCount() = list.size
 
-    override fun onCreateViewHolder(container: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(container: ViewGroup, viewType: Int) : RecyclerView.ViewHolder {
         val holder: RecyclerView.ViewHolder
         val infalter = LayoutInflater.from(context)
         when (type) {
@@ -211,7 +211,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                                 TransitionManager.beginDelayedTransition(clWorkspace)
                                 Constraint.set(clTabWorkspace!!, clTabParent, ivTracker)
                                 Constraint.set(clTabWorkspace!!, clWorkspace, clFragWorkspace)
-                                Constraint.set(clTabWorkspace!!, clWorkspace, clFragControlBar, clFragActionBar)
+                                Constraint.set(clTabWorkspace!!, clWorkspace) {}
                                 Constraint.set(clTabWorkspace!!, clFragTitle, tvWorkspaceTitle)
                             }
                         } catch (e: IllegalStateException) {
@@ -224,7 +224,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                                 TransitionManager.beginDelayedTransition(clWorkspace)
                                 Constraint.set(clTabCart!!, clTabParent, ivTracker)
                                 Constraint.set(clTabCart!!, clWorkspace, clFragCart)
-                                Constraint.set(clTabCart!!, clWorkspace, clFragControlBar, clFragActionBar)
+                                Constraint.set(clTabCart!!, clWorkspace) {}
                                 Constraint.set(clTabCart!!, clFragTitle, tvCartTitle)
                             }
                         } catch (e: IllegalStateException) {
@@ -274,7 +274,6 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
             when (position) {
                 0 -> {
                     title.text = User.username
-                    layout.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_PARENT
                 }
                 1 -> {
 
@@ -297,12 +296,12 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                     }
                 }
                 1 -> {
-                    if (Bar.Compilation.list.size == 0) {
-                        (view as ImageView).setImageResource(R.drawable.ic_compile_active)
-                    }
+                    (view as ImageView).setImageResource(R.drawable.ic_compile_active)
                 }
                 2 -> {
-
+                    if (Bar.Compilation.list.size > 0) {
+                        (view as ImageView).setImageResource(R.drawable.ic_edit_active)
+                    }
                 }
             }
         }
@@ -315,8 +314,8 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                         activate(image, 0)
                     }
                     R.id.clActionCompile -> {
-                        (context as Workspace).startActivity(Intent.launch(context, R.layout.activity_compile))
-                        context.finish()
+                        val dialog = Dialog(context, 0)
+                        dialog.Workspace().Compilation().create(it)
                     }
                 }
             }
@@ -368,7 +367,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
 
         fun constraint(view: View) {
             TransitionManager.beginDelayedTransition(clWorkspace)
-            Constraint.set(view, clWorkspace, clFragTitle, clFragControlPanel) {
+            Constraint.set(view, clWorkspace) {
                 if (it) {
                     Compilation().card0?.isClickable = false
                     view.isSelected = !view.isSelected
@@ -406,8 +405,10 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
 
             fun customize(position: Int) {
                 when (position) {
+                    0 -> {}
                     1 -> {
                         divider.visibility = View.INVISIBLE
+                        image.setImageResource(R.drawable.ic_logout_active)
                     }
                 }
             }
@@ -523,7 +524,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
 
         fun span() {
             try {
-                Window.determineSpan(context, layout, (context as Workspace).windowManager, Window.orientation, 1) {}
+                Window.determineSpan(context, layout, (context as Compile).windowManager, Window.orientation, 1) {}
             } catch (e: IllegalStateException) {
                 println(e.localizedMessage)
             }

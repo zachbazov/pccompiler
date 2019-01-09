@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
@@ -21,8 +22,6 @@ import kotlinx.android.synthetic.main.activity_workspace.*
  * All Rights Reserved. Copyright (c) 2018.
  */
 class Workspace : AppCompatActivity() {
-
-    //TODO action bar activation | rvCart dragNdrog | progressbars
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,10 +1,12 @@
 package com.corespark.pccompiler.service
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import com.corespark.pccompiler.impl.Bar
 import com.corespark.pccompiler.impl.Tab
 
@@ -43,6 +45,11 @@ object Window : Tab, Bar {
         heightDp = metrics.ydpi
     }
 
+    private fun determineLayoutMode(context: Context) : Int {
+        orientation = context.resources.configuration.orientation
+        return orientation as Int
+    }
+
     fun measureMultiDeviceDensity(width: Int, divide: Int) : Int {
         when (Window.metrics.density) {
             0.75f -> { dividedWidthPx = (width / divide) }
@@ -54,11 +61,6 @@ object Window : Tab, Bar {
             3.5f -> { dividedWidthPx = (width / divide) }
         }
         return dividedWidthPx
-    }
-
-    private fun determineLayoutMode(context: Context) : Int {
-        orientation = context.resources.configuration.orientation
-        return orientation as Int
     }
 
     override fun determineSpan(
@@ -75,6 +77,13 @@ object Window : Tab, Bar {
             val params = view.layoutParams
             params.width = Window.measureMultiDeviceDensity(Window.widthPx, span)
             complete(false)
+        }
+    }
+
+    fun hideKeyboard(context: Context) {
+        val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (inputManager.isActive) {
+            inputManager.hideSoftInputFromWindow((context as Activity).currentFocus?.applicationWindowToken, 0)
         }
     }
 }
