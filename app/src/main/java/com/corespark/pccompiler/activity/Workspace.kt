@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler

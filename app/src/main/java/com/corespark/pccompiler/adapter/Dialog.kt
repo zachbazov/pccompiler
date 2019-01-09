@@ -32,17 +32,17 @@ class Dialog(val context: Context, val type: Int) {
 
     inner class Workspace {
 
-        val clWorkspace = (context as com.corespark.pccompiler.activity.Workspace).clWorkspace
+        val clWorkspace = (context as com.corespark.pccompiler.activity.Workspace).clWorkspace!!
 
         inner class Compilation {
 
             val bgTransparent = ConstraintLayout(context)
-            val layout = LayoutInflater.from(context).inflate(R.layout.dialog_compile, clWorkspace, false)
-            val clDialog = layout.findViewById<ConstraintLayout>(R.id.clDialogCompile)
-            val ivDialog = layout.findViewById<ImageView>(R.id.ivDialogCompile)
-            val tvDialog = layout.findViewById<TextView>(R.id.tvDialogCompile)
-            val etDialog = layout.findViewById<EditText>(R.id.etDialogCompile)
-            val btnDialog = layout.findViewById<Button>(R.id.btnDialogCompile)
+            val layout = LayoutInflater.from(context).inflate(R.layout.dialog_compile, clWorkspace, false)!!
+            val clDialog = layout.findViewById<ConstraintLayout>(R.id.clDialogCompile)!!
+            private val ivDialog = layout.findViewById<ImageView>(R.id.ivDialogCompile)!!
+            private val tvDialog = layout.findViewById<TextView>(R.id.tvDialogCompile)!!
+            val etDialog = layout.findViewById<EditText>(R.id.etDialogCompile)!!
+            val btnDialog = layout.findViewById<Button>(R.id.btnDialogCompile)!!
 
             fun create(view: View) {
                 if (!view.isSelected) {
@@ -59,7 +59,7 @@ class Dialog(val context: Context, val type: Int) {
                 clWorkspace.addView(layout)
             }
 
-            fun customize() {
+            private fun customize() {
                 bgTransparent.id = R.id.bgTransparent
                 bgTransparent.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
                 bgTransparent.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
@@ -81,7 +81,7 @@ class Dialog(val context: Context, val type: Int) {
                 Constraint.set(etDialog, clDialog, etDialog)
             }
 
-            fun listener(view: View) {
+            private fun listener(view: View) {
                 when (view.id) {
                     ivDialog.id -> {
                         ivDialog.setOnClickListener {

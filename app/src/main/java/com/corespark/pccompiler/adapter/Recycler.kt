@@ -362,8 +362,6 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
     inner class ControlPanel {
 
         val clWorkspace = (context as Workspace).clWorkspace!!
-        private val clFragTitle = (context as Workspace).clFragTitle!!
-        private val clFragControlPanel = (context as Workspace).clFragControlPanel!!
 
         fun constraint(view: View) {
             TransitionManager.beginDelayedTransition(clWorkspace)
