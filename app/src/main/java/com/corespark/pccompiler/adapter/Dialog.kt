@@ -1,6 +1,5 @@
 package com.corespark.pccompiler.adapter
 
-import android.app.Activity
 import android.content.Context
 import android.support.constraint.ConstraintLayout
 import android.transition.TransitionManager
@@ -19,6 +18,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.ViewGroup
 import com.corespark.pccompiler.service.Intent
+import com.corespark.pccompiler.service.Intent.intent
+import com.corespark.pccompiler.utility.KEY_COMPILATION_TITLE
 import kotlinx.android.synthetic.main.activity_workspace.view.*
 
 
@@ -116,8 +117,12 @@ class Dialog(val context: Context, val type: Int) {
                     }
                     btnDialog.id -> {
                         btnDialog.setOnClickListener {
-                            (context as Activity).startActivity(Intent.launch(context, R.layout.activity_compile))
-                            context.finish()
+                            it.isEnabled = false
+                            val compilationTitle = etDialog.text.toString()
+                            Intent.launch(context, R.layout.activity_compile) {
+                                intent.putExtra(KEY_COMPILATION_TITLE, compilationTitle)
+                            }
+                            Intent.finish(context)
                         }
                     }
                 }
