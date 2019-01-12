@@ -553,15 +553,26 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
 
     inner class Component {
 
-        val recycler = (context as Compile).rvComponent!!
-
-        var cmp0: ConstraintLayout? = null
-        var cmp1: ConstraintLayout? = null
+        val clCompile = (context as Compile).clCompile!!
+        val rvComponent = (context as Compile).rvComponent!!
 
         inner class ComponentBarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             val layout = itemView.findViewById<ConstraintLayout>(R.id.clComponent)!!
             val image = itemView.findViewById<ImageView>(R.id.ivComponent)!!
+
+            var clCpu: ConstraintLayout? = null
+            var clCooler: ConstraintLayout? = null
+            var clMotherboard: ConstraintLayout? = null
+            var clMemory: ConstraintLayout? = null
+            var clStorage: ConstraintLayout? = null
+            var clExtStorage: ConstraintLayout? = null
+            var clOptDrive: ConstraintLayout? = null
+            var clGraphicCard: ConstraintLayout? = null
+            var clSoundCard: ConstraintLayout? = null
+            var clPowerSupply: ConstraintLayout? = null
+            var clCase: ConstraintLayout? = null
+            var clOpSystem: ConstraintLayout? = null
 
             fun span() {
                 Window.determineSpan(
@@ -571,23 +582,53 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
             fun mapId(position: Int) {
                 when (position) {
                     0 -> {
-                        cmp0 = layout
-                        cmp0?.id = R.id.componentBarItem0
+                        clCpu = layout
+                        clCpu?.id = R.id.clComponentBarCpu
                     }
                     2 -> {
-                        cmp1 = layout
-                        cmp1?.id = R.id.componentBarItem1
+                        clCooler = layout
+                        clCooler?.id = R.id.clComponentBarCooler
                     }
-//                2 -> { image.id = R.id.componentBarItem2 }
-//                3 -> { image.id = R.id.componentBarItem3 }
-//                4 -> { image.id = R.id.componentBarItem4 }
-//                5 -> { image.id = R.id.componentBarItem5 }
-//                6 -> { image.id = R.id.componentBarItem6 }
-//                7 -> { image.id = R.id.componentBarItem7 }
-//                8 -> { image.id = R.id.componentBarItem8 }
-//                9 -> { image.id = R.id.componentBarItem9 }
-//                10 -> { image.id = R.id.componentBarItem10 }
-//                11 -> { image.id = R.id.componentBarItem11 }
+                    4 -> {
+                        clMotherboard = layout
+                        clMotherboard?.id = R.id.clComponentBarMotherboard
+                    }
+                    6 -> {
+                        clMemory = layout
+                        clMemory?.id = R.id.clComponentBarMemory
+                    }
+                    8 -> {
+                        clStorage = layout
+                        clStorage?.id = R.id.clComponentBarStorage
+                    }
+                    10 -> {
+                        clExtStorage = layout
+                        clExtStorage?.id = R.id.clComponentBarExtStorage
+                    }
+                    1 -> {
+                        clOptDrive = layout
+                        clOptDrive?.id = R.id.clComponentBarOptDrive
+                    }
+                    3 -> {
+                        clGraphicCard = layout
+                        clGraphicCard?.id = R.id.clComponentBarGraphicCard
+                    }
+                    5 -> {
+                        clSoundCard = layout
+                        clSoundCard?.id = R.id.clComponentBarSoundCard
+                    }
+                    7 -> {
+                        clPowerSupply = layout
+                        clPowerSupply?.id = R.id.clComponentBarPowerSupply
+                    }
+                    9 -> {
+                        clCase = layout
+                        clCase?.id = R.id.clComponentBarCase
+                    }
+                    11 -> {
+                        clOpSystem = layout
+                        clOpSystem?.id = R.id.clComponentBarOpSystem
+                    }
                 }
             }
 
@@ -597,13 +638,20 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
 
             fun onClick(view: View) {
                 view.setOnClickListener {
+                    TransitionManager.beginDelayedTransition(clCompile)
                     when (view.id) {
-                        cmp0?.id -> {
-                            //recycler.adapter = Recycler(context, Compiler.cpuList, 7, 0)
-                        }
-                        cmp1?.id -> {
-                            //recycler.adapter = Recycler(context, Compiler.coolerList, 7, 1)
-                        }
+                        clCpu?.id -> { rvComponent.adapter = Recycler(context, Compiler.cpuList, 7, 0) }
+                        clCooler?.id -> { rvComponent.adapter = Recycler(context, Compiler.coolerList, 7, 1) }
+                        clMotherboard?.id -> { rvComponent.adapter = Recycler(context, Compiler.motherboardList, 7, 2) }
+                        clMemory?.id -> { rvComponent.adapter = Recycler(context, Compiler.memoryList, 7, 3) }
+                        clStorage?.id -> { rvComponent.adapter = Recycler(context, Compiler.storageList, 7, 4) }
+                        clExtStorage?.id -> { rvComponent.adapter = Recycler(context, Compiler.extStorageList, 7, 5) }
+                        clOptDrive?.id -> { rvComponent.adapter = Recycler(context, Compiler.optDriveList, 7, 6) }
+                        clGraphicCard?.id -> { rvComponent.adapter = Recycler(context, Compiler.graphicCardList, 7, 7) }
+                        clSoundCard?.id -> { rvComponent.adapter = Recycler(context, Compiler.soundCardList, 7, 8) }
+                        clPowerSupply?.id -> { rvComponent.adapter = Recycler(context, Compiler.powerSupplyList, 7, 9) }
+                        clCase?.id -> { rvComponent.adapter = Recycler(context, Compiler.caseList, 7, 10) }
+                        clOpSystem?.id -> { rvComponent.adapter = Recycler(context, Compiler.opSystemList, 7, 11) }
                     }
                 }
             }
@@ -648,8 +696,120 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                         paramB.text = item.paramB
                         price.text = String.format("$%s", item.price)
                     }
+                    2 -> {
+                        item as com.corespark.pccompiler.model.Component.Motherboard
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+                        paramA.text = item.paramA
+                        paramB.text = item.paramB
+                        paramC.text = String.format("%s Slot", item.paramC)
+                        paramD.text = item.paramD
+                        price.text = String.format("$%s", item.price)
+                    }
+                    3 -> {
+                        item as com.corespark.pccompiler.model.Component.Memory
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+                        paramA.text = item.paramA
+                        paramB.text = item.paramB
+                        paramC.text = item.paramC
+                        paramD.text = item.paramD
+                        paramE.text = item.paramE
+                        paramF.text = item.paramF
+                        price.text = String.format("$%s", item.price)
+                    }
+                    4 -> {
+                        item as com.corespark.pccompiler.model.Component.Storage
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+                        paramA.text = item.paramA
+                        paramB.text = item.paramB
+                        paramC.text = item.paramC
+                        paramD.text = item.paramD
+                        paramE.text = item.paramE
+                        paramF.text = item.paramF
+                        price.text = String.format("$%s", item.price)
+                    }
+                    5 -> {
+                        item as com.corespark.pccompiler.model.Component.ExternalStorage
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+                        paramA.text = item.paramA
+                        paramB.text = item.paramB
+                        paramC.text = item.paramC
+                        price.text = String.format("$%s", item.price)
+                    }
+                    6 -> {
+                        item as com.corespark.pccompiler.model.Component.OpticalDrive
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+                        paramA.text = item.paramA
+                        paramB.text = item.paramB
+                        paramC.text = item.paramC
+                        paramD.text = item.paramD
+                        paramE.text = item.paramE
+                        paramF.text = item.paramF
+                        price.text = String.format("$%s", item.price)
+                    }
+                    7 -> {
+                        item as com.corespark.pccompiler.model.Component.GraphicCard
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+                        paramA.text = item.paramA
+                        paramB.text = item.paramB
+                        paramC.text = item.paramC
+                        paramD.text = item.paramD
+                        price.text = String.format("$%s", item.price)
+                    }
+                    8 -> {
+                        item as com.corespark.pccompiler.model.Component.SoundCard
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+                        paramA.text = item.paramA
+                        paramB.text = item.paramB
+                        paramC.text = item.paramC
+                        paramD.text = item.paramD
+                        paramE.text = item.paramE
+                        price.text = String.format("$%s", item.price)
+                    }
+                    9 -> {
+                        item as com.corespark.pccompiler.model.Component.PowerSupply
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+                        paramA.text = item.paramA
+                        paramB.text = item.paramB
+                        paramC.text = item.paramC
+                        paramD.text = item.paramD
+                        paramE.text = item.paramE
+                        price.text = String.format("$%s", item.price)
+                    }
+                    10 -> {
+                        item as com.corespark.pccompiler.model.Component.Case
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+                        paramA.text = item.paramA
+                        paramB.text = item.paramB
+                        paramC.text = item.paramC
+                        paramD.text = item.paramD
+                        price.text = String.format("$%s", item.price)
+                    }
+                    11 -> {
+                        item as com.corespark.pccompiler.model.Component.OperatingSystem
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+                        price.text = String.format("$%s", item.price)
+                    }
                 }
-
             }
 
             fun style(position: Int) {
@@ -663,29 +823,66 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
             }
 
             fun expand() {
-                layout.setOnClickListener {
-                    if (!it.isSelected) {
-                        TransitionManager.beginDelayedTransition(parent)
-                        paramA.visibility = View.VISIBLE
-                        paramB.visibility = View.VISIBLE
-                        paramC.visibility = View.VISIBLE
-                        Constraint.set.clone(layout)
-                        Constraint.set.clear(image.id, ConstraintSet.BOTTOM)
-                        Constraint.set.connect(paramA.id, ConstraintSet.BOTTOM, layout.id, ConstraintSet.BOTTOM, 16)
-                        Constraint.set.applyTo(layout)
-                        recycler.scrollToPosition(adapterPosition)
-                        it.isSelected = !it.isSelected
-                    } else {
-                        TransitionManager.beginDelayedTransition(parent)
-                        paramA.visibility = View.GONE
-                        paramB.visibility = View.GONE
-                        paramC.visibility = View.GONE
-                        Constraint.set.clone(layout)
-                        Constraint.set.clear(paramA.id, ConstraintSet.BOTTOM)
-                        Constraint.set.connect(image.id, ConstraintSet.BOTTOM, layout.id, ConstraintSet.BOTTOM, 16)
-                        Constraint.set.applyTo(layout)
-                        recycler.scrollToPosition(adapterPosition)
-                        it.isSelected = !it.isSelected
+                when (subType) {
+                    0, 1, 5 -> {
+                        layout.setOnClickListener {
+                            if (!it.isSelected) {
+                                TransitionManager.beginDelayedTransition(parent)
+                                paramA.visibility = View.VISIBLE
+                                paramB.visibility = View.VISIBLE
+                                paramC.visibility = View.VISIBLE
+                                Constraint.set.clone(layout)
+                                Constraint.set.clear(image.id, ConstraintSet.BOTTOM)
+                                Constraint.set.connect(paramA.id, ConstraintSet.BOTTOM, layout.id, ConstraintSet.BOTTOM, 16)
+                                Constraint.set.applyTo(layout)
+                                rvComponent.scrollToPosition(adapterPosition)
+                                title.setSingleLine(false)
+                                it.isSelected = !it.isSelected
+                            } else {
+                                TransitionManager.beginDelayedTransition(parent)
+                                paramA.visibility = View.GONE
+                                paramB.visibility = View.GONE
+                                paramC.visibility = View.GONE
+                                Constraint.set.clone(layout)
+                                Constraint.set.clear(paramA.id, ConstraintSet.BOTTOM)
+                                Constraint.set.connect(image.id, ConstraintSet.BOTTOM, layout.id, ConstraintSet.BOTTOM, 16)
+                                Constraint.set.applyTo(layout)
+                                rvComponent.scrollToPosition(adapterPosition)
+                                title.setSingleLine(true)
+                                it.isSelected = !it.isSelected
+                            }
+                        }
+                    }
+                    2, 3, 4, 6, 7, 8, 9, 10 -> {
+                        layout.setOnClickListener {
+                            if (!it.isSelected) {
+                                TransitionManager.beginDelayedTransition(parent)
+                                paramA.visibility = View.VISIBLE
+                                paramB.visibility = View.VISIBLE
+                                paramC.visibility = View.VISIBLE
+                                paramD.visibility = View.VISIBLE
+                                Constraint.set.clone(layout)
+                                Constraint.set.clear(image.id, ConstraintSet.BOTTOM)
+                                Constraint.set.connect(paramD.id, ConstraintSet.BOTTOM, layout.id, ConstraintSet.BOTTOM, 16)
+                                Constraint.set.applyTo(layout)
+                                rvComponent.scrollToPosition(adapterPosition)
+                                title.setSingleLine(false)
+                                it.isSelected = !it.isSelected
+                            } else {
+                                TransitionManager.beginDelayedTransition(parent)
+                                paramA.visibility = View.GONE
+                                paramB.visibility = View.GONE
+                                paramC.visibility = View.GONE
+                                paramD.visibility = View.GONE
+                                Constraint.set.clone(layout)
+                                Constraint.set.clear(paramD.id, ConstraintSet.BOTTOM)
+                                Constraint.set.connect(image.id, ConstraintSet.BOTTOM, layout.id, ConstraintSet.BOTTOM, 16)
+                                Constraint.set.applyTo(layout)
+                                rvComponent.scrollToPosition(adapterPosition)
+                                title.setSingleLine(true)
+                                it.isSelected = !it.isSelected
+                            }
+                        }
                     }
                 }
             }

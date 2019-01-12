@@ -19,16 +19,16 @@
 
     <item name="clControlPanelLogout" type="id"/>
 
-    <item name="componentBarItem0" type="id"/>
-    <item name="componentBarItem1" type="id"/>
-    <item name="componentBarItem2" type="id"/>
-    <item name="componentBarItem3" type="id"/>
-    <item name="componentBarItem4" type="id"/>
-    <item name="componentBarItem5" type="id"/>
-    <item name="componentBarItem6" type="id"/>
-    <item name="componentBarItem7" type="id"/>
-    <item name="componentBarItem8" type="id"/>
-    <item name="componentBarItem9" type="id"/>
-    <item name="componentBarItem10" type="id"/>
-    <item name="componentBarItem11" type="id"/>
+    <item name="clComponentBarCpu" type="id"/>
+    <item name="clComponentBarCooler" type="id"/>
+    <item name="clComponentBarMotherboard" type="id"/>
+    <item name="clComponentBarMemory" type="id"/>
+    <item name="clComponentBarStorage" type="id"/>
+    <item name="clComponentBarExtStorage" type="id"/>
+    <item name="clComponentBarOptDrive" type="id"/>
+    <item name="clComponentBarGraphicCard" type="id"/>
+    <item name="clComponentBarSoundCard" type="id"/>
+    <item name="clComponentBarPowerSupply" type="id"/>
+    <item name="clComponentBarCase" type="id"/>
+    <item name="clComponentBarOpSystem" type="id"/>
 </resources>

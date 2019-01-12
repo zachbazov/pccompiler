@@ -31,6 +31,13 @@ class Compile : AppCompatActivity() {
     }
 
     private fun customize() {
+        val attr = theme.obtainStyledAttributes(R.style.AppTheme, intArrayOf(R.attr.homeAsUpIndicator))
+        val attrResId = attr.getResourceId(0, 0)
+        val drawable = resources.getDrawable(attrResId, theme)
+        attr.recycle()
+        ivWorkspace.setImageResource(R.drawable.ic_workspace_inactive)
+        ivReturn.setImageDrawable(drawable)
+
         val adapters = arrayOf(rvComponentBar, rvComponent)
         for (adapter in adapters) setAdapter(adapter)
     }
