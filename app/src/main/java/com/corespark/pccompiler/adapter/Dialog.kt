@@ -1,6 +1,5 @@
 package com.corespark.pccompiler.adapter
 
-import android.app.Activity
 import android.content.Context
 import android.support.constraint.ConstraintLayout
 import android.transition.TransitionManager
@@ -19,6 +18,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.ViewGroup
 import com.corespark.pccompiler.service.Intent
+import com.corespark.pccompiler.service.Intent.intent
+import com.corespark.pccompiler.utility.KEY_COMPILATION_TITLE
+import kotlinx.android.synthetic.main.activity_workspace.view.*
 
 
 /**
@@ -33,6 +35,7 @@ class Dialog(val context: Context, val type: Int) {
     inner class Workspace {
 
         val clWorkspace = (context as com.corespark.pccompiler.activity.Workspace).clWorkspace!!
+        val clActionCompile = clWorkspace.rvActionBar.findViewById<ConstraintLayout>(R.id.clActionCompile)
 
         inner class Compilation {
 
@@ -44,9 +47,9 @@ class Dialog(val context: Context, val type: Int) {
             val etDialog = layout.findViewById<EditText>(R.id.etDialogCompile)!!
             val btnDialog = layout.findViewById<Button>(R.id.btnDialogCompile)!!
 
-            fun create(view: View) {
-                if (!view.isSelected) {
-                    view.isSelected = true
+            fun create() {
+                if (!clActionCompile.isSelected) {
+                    clActionCompile.isSelected = true
                     instantiate()
                     customize()
                     constraint()
@@ -88,7 +91,7 @@ class Dialog(val context: Context, val type: Int) {
                             TransitionManager.beginDelayedTransition(clWorkspace)
                             clWorkspace.removeView(layout)
                             clWorkspace.removeView(bgTransparent)
-                            view.isSelected = false
+                            clActionCompile.isSelected = false
                             Window.hideKeyboard(context)
                         }
                     }
@@ -114,8 +117,12 @@ class Dialog(val context: Context, val type: Int) {
                     }
                     btnDialog.id -> {
                         btnDialog.setOnClickListener {
-                            (context as Activity).startActivity(Intent.launch(context, R.layout.activity_compile))
-                            context.finish()
+                            it.isEnabled = false
+                            val compilationTitle = etDialog.text.toString()
+                            Intent.launch(context, R.layout.activity_compile) {
+                                intent.putExtra(KEY_COMPILATION_TITLE, compilationTitle)
+                            }
+                            Intent.finish(context)
                         }
                     }
                 }

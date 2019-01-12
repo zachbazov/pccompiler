@@ -16,7 +16,7 @@ object Bar {
     class Tab(val image: Int) {
 
         companion object {
-            val list = mutableListOf<Tab>()
+            val list = mutableListOf<Any>()
 
             fun add() {
                 if (list.size < 2) {
@@ -30,7 +30,7 @@ object Bar {
     class Action(val image: Int, val title: String) {
 
         companion object {
-            val list = mutableListOf<Action>()
+            val list = mutableListOf<Any>()
 
             fun add(context: Context) {
                 if (list.size < 3) {
@@ -45,7 +45,7 @@ object Bar {
     class Control(val image: Int, val title: String) {
 
         companion object {
-            val list = mutableListOf<Control>()
+            val list = mutableListOf<Any>()
 
             fun add(context: Context) {
                 if (list.size < 3) {
@@ -60,8 +60,8 @@ object Bar {
     class Compilation(val id: Int, val title: String, val image: Int) {
 
         companion object {
-            val list = mutableListOf<Compilation>()
-            val empty = mutableListOf<Empty>()
+            val list = mutableListOf<Any>()
+            val empty = mutableListOf<Any>()
 
             fun add() {
                 if (list.size < 1) {
@@ -80,8 +80,8 @@ object Bar {
     class Cart(val image: Int, val component: String, val price: String) {
 
         companion object {
-            val list = mutableListOf<Cart>()
-            val empty = mutableListOf<Empty>()
+            val list = mutableListOf<Any>()
+            val empty = mutableListOf<Any>()
 
             fun add() {
                 if (list.size < 3) {
@@ -102,7 +102,7 @@ object Bar {
     class Component(val id: Int, val image: Int) {
 
         companion object {
-            val list = mutableListOf<Component>()
+            val list = mutableListOf<Any>()
 
             fun add() {
                 if (list.size < 2) {

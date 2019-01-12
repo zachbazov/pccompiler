@@ -47,34 +47,34 @@ class Workspace : AppCompatActivity() {
         when (view.id) {
             rvTabBar.id -> {
                 Bar.Tab.add()
-                rvTabBar.adapter = Recycler(this, Bar.Tab.list, 0)
+                rvTabBar.adapter = Recycler(this, Bar.Tab.list, 0, 0)
             }
             rvActionBar.id -> {
                 Bar.Action.add(this)
-                rvActionBar.adapter = Recycler(this, Bar.Action.list, 1)
+                rvActionBar.adapter = Recycler(this, Bar.Action.list, 1, 0)
             }
             rvControlBar.id -> {
                 Bar.Control.add(this)
-                rvControlBar.adapter = Recycler(this, Bar.Control.list, 2)
+                rvControlBar.adapter = Recycler(this, Bar.Control.list, 2, 0)
             }
             rvControlPanel.id -> {
                 Panel.ControlPanel.add(this)
-                rvControlPanel.adapter = Recycler(this, Panel.ControlPanel.list, 3)
+                rvControlPanel.adapter = Recycler(this, Panel.ControlPanel.list, 3, 0)
             }
             rvCompilationBar.id -> {
                 Bar.Compilation.addEmpty(this)
                 if (Bar.Compilation.list.size > 0) {
-                    rvCompilationBar.adapter = Recycler(this, Bar.Compilation.list, 4)
+                    rvCompilationBar.adapter = Recycler(this, Bar.Compilation.list, 4, 0)
                 } else {
-                    rvCompilationBar.adapter = Recycler(this, Bar.Compilation.empty, 7)
+                    rvCompilationBar.adapter = Recycler(this, Bar.Compilation.empty, 8, 0)
                 }
             }
             rvCartBar.id -> {
                 Bar.Cart.addEmpty(this)
                 if (Bar.Cart.list.size > 0) {
-                    rvCartBar.adapter = Recycler(this, Bar.Cart.list, 5)
+                    rvCartBar.adapter = Recycler(this, Bar.Cart.list, 5, 0)
                 } else {
-                    rvCartBar.adapter = Recycler(this, Bar.Cart.empty, 7)
+                    rvCartBar.adapter = Recycler(this, Bar.Cart.empty, 8, 0)
                 }
             }
         }

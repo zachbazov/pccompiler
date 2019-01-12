@@ -73,8 +73,8 @@ class Auth : AppCompatActivity() {
                     User.password = etAuthSignInPassword.text.toString()
                     Auth.signIn(User.username, User.password) { complete ->
                         if (complete) {
-                            startActivity(Intent.launch(this, R.layout.activity_workspace))
-                            finish()
+                            Intent.launch(this, R.layout.activity_workspace) {}
+                            Intent.finish(this)
                         } else {
                             Snackbar.make(view, getString(R.string.auth_incorrect_credentials), Snackbar.LENGTH_SHORT).show()
                             clearInput(view)

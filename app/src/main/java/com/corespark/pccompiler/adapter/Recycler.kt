@@ -2,6 +2,7 @@ package com.corespark.pccompiler.adapter
 
 import android.content.Context
 import android.support.constraint.ConstraintLayout
+import android.support.constraint.ConstraintSet
 import android.support.v7.widget.RecyclerView
 import android.transition.TransitionManager
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import com.corespark.pccompiler.service.Constraint
 import com.corespark.pccompiler.service.Intent
 import com.corespark.pccompiler.service.Parameter
 import com.corespark.pccompiler.service.Window
+import kotlinx.android.synthetic.main.activity_compile.*
 import kotlinx.android.synthetic.main.activity_workspace.*
 
 
@@ -28,7 +30,7 @@ import kotlinx.android.synthetic.main.activity_workspace.*
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
-class Recycler(val context: Context, private val list: List<Any>, val type: Int)
+class Recycler(val context: Context, private val list: MutableList<Any>, val type: Int, val subType: Int)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount() = list.size
@@ -60,6 +62,10 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
             6 -> {
                 holder = Component().ComponentBarViewHolder(
                     infalter.inflate(R.layout.item_component_bar, container, false))
+            }
+            7 -> {
+                holder = Component().ComponentViewHolder(
+                    infalter.inflate(R.layout.item_component, container, false))
             }
             else -> {
                 holder = EmptyViewHolder(infalter.inflate(R.layout.item_empty, container, false))
@@ -123,6 +129,16 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                 holder.span()
                 holder.mapId(position)
                 holder.bind(item as Bar.Component)
+                holder.onClick(holder.layout)
+            }
+            7 -> {
+                val item = list[position]
+                holder as Component.ComponentViewHolder
+                holder.span()
+                holder.bind(item)
+                holder.style(position)
+                holder.customize()
+                holder.expand()
             }
             else -> {
                 val item = list[position]
@@ -315,7 +331,7 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                     }
                     R.id.clActionCompile -> {
                         val dialog = Dialog(context, 0)
-                        dialog.Workspace().Compilation().create(it)
+                        dialog.Workspace().Compilation().create()
                     }
                 }
             }
@@ -417,8 +433,8 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                         view.setOnClickListener {
                             com.corespark.pccompiler.service.Auth.logOut(context) { complete ->
                                 if (complete) {
-                                    (context as Workspace).startActivity(Intent.launch(context, R.layout.activity_auth))
-                                    context.finish()
+                                    Intent.launch(context, R.layout.activity_auth) {}
+                                    Intent.finish(context)
                                 }
                             }
                         }
@@ -537,6 +553,8 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
 
     inner class Component {
 
+        val recycler = (context as Compile).rvComponent!!
+
         var cmp0: ConstraintLayout? = null
         var cmp1: ConstraintLayout? = null
 
@@ -555,16 +573,10 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
                     0 -> {
                         cmp0 = layout
                         cmp0?.id = R.id.componentBarItem0
-                        cmp0?.setOnClickListener {
-                            println(cmp0?.id)
-                        }
                     }
-                    1 -> {
+                    2 -> {
                         cmp1 = layout
                         cmp1?.id = R.id.componentBarItem1
-                        cmp1?.setOnClickListener {
-                            println(cmp1?.id)
-                        }
                     }
 //                2 -> { image.id = R.id.componentBarItem2 }
 //                3 -> { image.id = R.id.componentBarItem3 }
@@ -581,6 +593,101 @@ class Recycler(val context: Context, private val list: List<Any>, val type: Int)
 
             fun bind(item: Bar.Component) {
                 image.setImageResource(item.image)
+            }
+
+            fun onClick(view: View) {
+                view.setOnClickListener {
+                    when (view.id) {
+                        cmp0?.id -> {
+                            //recycler.adapter = Recycler(context, Compiler.cpuList, 7, 0)
+                        }
+                        cmp1?.id -> {
+                            //recycler.adapter = Recycler(context, Compiler.coolerList, 7, 1)
+                        }
+                    }
+                }
+            }
+        }
+
+        inner class ComponentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+            val parent = itemView.findViewById<ConstraintLayout>(R.id.clComponentParent)!!
+            val layout = itemView.findViewById<ConstraintLayout>(R.id.clComponent)!!
+            val image = itemView.findViewById<ImageView>(R.id.ivComponent)!!
+            val title = itemView.findViewById<TextView>(R.id.tvComponent)!!
+            val paramA = itemView.findViewById<TextView>(R.id.tvComponentParamA)!!
+            val paramB = itemView.findViewById<TextView>(R.id.tvComponentParamB)!!
+            val paramC = itemView.findViewById<TextView>(R.id.tvComponentParamC)!!
+            val paramD = itemView.findViewById<TextView>(R.id.tvComponentParamD)!!
+            val paramE = itemView.findViewById<TextView>(R.id.tvComponentParamE)!!
+            val paramF = itemView.findViewById<TextView>(R.id.tvComponentParamF)!!
+            val price = itemView.findViewById<TextView>(R.id.tvComponentPrice)!!
+
+            fun span() {
+                Window.determineSpan(context, layout, (context as Compile).windowManager, Window.orientation, 1) {}
+            }
+
+            fun bind(item: Any) {
+                when (subType) {
+                    0 -> {
+                        item as com.corespark.pccompiler.model.Component.CPU
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+                        paramA.text = String.format("%s Core", item.paramA)
+                        paramB.text = item.paramB
+                        paramC.text = item.paramC
+                        price.text = String.format("$%s", item.price)
+                    }
+                    1 -> {
+                        item as com.corespark.pccompiler.model.Component.Cooler
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+                        paramA.text = item.paramA
+                        paramB.text = item.paramB
+                        price.text = String.format("$%s", item.price)
+                    }
+                }
+
+            }
+
+            fun style(position: Int) {
+                if (position % 2 == 0) layout.setBackgroundColor(Compiler.colors.colorGray)
+                else layout.setBackgroundColor(Compiler.colors.colorWhite)
+            }
+
+            fun customize() {
+                val params = arrayOf(paramA, paramB, paramC, paramD, paramE, paramF)
+                for (param in params) param.visibility = View.GONE
+            }
+
+            fun expand() {
+                layout.setOnClickListener {
+                    if (!it.isSelected) {
+                        TransitionManager.beginDelayedTransition(parent)
+                        paramA.visibility = View.VISIBLE
+                        paramB.visibility = View.VISIBLE
+                        paramC.visibility = View.VISIBLE
+                        Constraint.set.clone(layout)
+                        Constraint.set.clear(image.id, ConstraintSet.BOTTOM)
+                        Constraint.set.connect(paramA.id, ConstraintSet.BOTTOM, layout.id, ConstraintSet.BOTTOM, 16)
+                        Constraint.set.applyTo(layout)
+                        recycler.scrollToPosition(adapterPosition)
+                        it.isSelected = !it.isSelected
+                    } else {
+                        TransitionManager.beginDelayedTransition(parent)
+                        paramA.visibility = View.GONE
+                        paramB.visibility = View.GONE
+                        paramC.visibility = View.GONE
+                        Constraint.set.clone(layout)
+                        Constraint.set.clear(paramA.id, ConstraintSet.BOTTOM)
+                        Constraint.set.connect(image.id, ConstraintSet.BOTTOM, layout.id, ConstraintSet.BOTTOM, 16)
+                        Constraint.set.applyTo(layout)
+                        recycler.scrollToPosition(adapterPosition)
+                        it.isSelected = !it.isSelected
+                    }
+                }
             }
         }
     }

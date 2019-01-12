@@ -16,7 +16,7 @@ object Panel {
     class ControlPanel(val image: Int, val title: String) {
 
         companion object {
-            val list = mutableListOf<ControlPanel>()
+            val list = mutableListOf<Any>()
 
             fun add(context: Context) {
                 if (list.size < 2) {

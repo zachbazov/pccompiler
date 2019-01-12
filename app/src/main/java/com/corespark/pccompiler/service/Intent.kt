@@ -1,8 +1,9 @@
 package com.corespark.pccompiler.service
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import com.corespark.pccompiler.R
+import com.corespark.pccompiler.R.layout.*
 import com.corespark.pccompiler.activity.Auth
 import com.corespark.pccompiler.activity.Compile
 import com.corespark.pccompiler.activity.Workspace
@@ -17,22 +18,28 @@ import com.corespark.pccompiler.activity.Workspace
  */
 object Intent {
 
-    fun launch(context: Context, resId: Int) : Intent {
-        var intent: Intent? = null
+    lateinit var intent: Intent
+
+    fun launch(context: Context, resId: Int, pipe: (Boolean) -> Unit) : Intent {
         when (resId) {
-            R.layout.activity_auth -> {
+            activity_auth -> {
                 intent = Intent(context, Auth::class.java)
-                return intent
             }
-            R.layout.activity_workspace -> {
+            activity_workspace -> {
                 intent = Intent(context, Workspace::class.java)
-                return intent
             }
-            R.layout.activity_compile -> {
+            activity_compile -> {
                 intent = Intent(context, Compile::class.java)
-                return intent
             }
         }
-        return intent!!
+        pipe(true)
+        context.startActivity(intent)
+        return intent
+    }
+
+    fun finish(context: Context) {
+        (context as Activity).finish()
     }
 }
+
+

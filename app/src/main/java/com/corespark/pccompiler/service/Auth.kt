@@ -56,7 +56,7 @@ object Auth {
 
     fun auth(context: Context, complete: (Boolean) -> Unit) {
         if (Compiler.preferences.isLoggedIn) {
-            context.startActivity(Intent.launch(context, R.layout.activity_workspace))
+            Intent.launch(context, R.layout.activity_workspace) {}
             complete(true)
         }
     }

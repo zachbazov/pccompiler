@@ -1,6 +1,7 @@
 package com.corespark.pccompiler.app
 
 import android.app.Application
+import com.corespark.pccompiler.model.Component
 import com.corespark.pccompiler.utility.Color
 import com.parse.Parse.initialize
 
@@ -16,7 +17,11 @@ class Compiler : Application() {
 
     companion object {
         lateinit var preferences: SharedPreferences
+        lateinit var queries: Query
         lateinit var colors: Color
+
+        var cpuList = mutableListOf<Any>()
+        var coolerList = mutableListOf<Any>()
     }
 
     override fun onCreate() {
@@ -26,5 +31,10 @@ class Compiler : Application() {
 
         preferences = SharedPreferences(applicationContext)
         colors = Color(applicationContext)
+
+        queries = Query(0)
+        queries.retrieve("CPU", cpuList)
+        queries = Query(1)
+        queries.retrieve("Cooler", coolerList)
     }
 }
