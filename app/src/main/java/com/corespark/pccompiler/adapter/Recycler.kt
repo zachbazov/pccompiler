@@ -2,7 +2,6 @@ package com.corespark.pccompiler.adapter
 
 import android.content.Context
 import android.support.constraint.ConstraintLayout
-import android.support.constraint.ConstraintSet
 import android.support.v7.widget.RecyclerView
 import android.transition.TransitionManager
 import android.view.LayoutInflater
@@ -30,7 +29,7 @@ import kotlinx.android.synthetic.main.activity_workspace.*
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
-class Recycler(val context: Context, private val list: MutableList<Any>, val type: Int, val subType: Int)
+class Recycler(val context: Context, private val list: MutableList<Any>, val type: Int, val component: Int)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount() = list.size
@@ -383,10 +382,10 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
             TransitionManager.beginDelayedTransition(clWorkspace)
             Constraint.set(view, clWorkspace) {
                 if (it) {
-                    Compilation().card0?.isClickable = false
+                    Compilation().clCompilationBar00?.isClickable = false
                     view.isSelected = !view.isSelected
                 } else {
-                    Compilation().card0?.isClickable = true
+                    Compilation().clCompilationBar00?.isClickable = true
                     view.isSelected = !view.isSelected
                 }
             }
@@ -446,8 +445,8 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
 
     inner class Compilation {
 
-        var card0: ConstraintLayout? = null
-        var card1: ConstraintLayout? = null
+        var clCompilationBar00: ConstraintLayout? = null
+        var clCompilationBar01: ConstraintLayout? = null
 
         inner class CompilationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -470,30 +469,30 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
 
                 when (position) {
                     0 -> {
-                        if (card0 == null) {
-                            card0 = holder.layout
-                            card0?.id = R.id.cvCompilation0
+                        if (clCompilationBar00 == null) {
+                            clCompilationBar00 = holder.layout
+                            clCompilationBar00?.id = R.id.cvCompilation0
                         }
-                        onClick(card0!!) {
+                        onClick(clCompilationBar00!!) {
                             if (it) {
-                                card0?.setBackgroundColor(Compiler.colors.colorAccent)
-                                card1?.setBackgroundColor(Compiler.colors.colorCloud)
+                                clCompilationBar00?.setBackgroundColor(Compiler.colors.colorAccent)
+                                clCompilationBar01?.setBackgroundColor(Compiler.colors.colorCloud)
                             } else {
-                                card0?.setBackgroundColor(Compiler.colors.colorCloud)
+                                clCompilationBar00?.setBackgroundColor(Compiler.colors.colorCloud)
                             }
                         }
                     }
                     1 -> {
-                        if (card1 == null) {
-                            card1 = holder.layout
-                            card1?.id = R.id.cvCompilation1
+                        if (clCompilationBar01 == null) {
+                            clCompilationBar01 = holder.layout
+                            clCompilationBar01?.id = R.id.cvCompilation1
                         }
-                        onClick(card1!!) {
+                        onClick(clCompilationBar01!!) {
                             if (it) {
-                                card1?.setBackgroundColor(Compiler.colors.colorAccent)
-                                card0?.setBackgroundColor(Compiler.colors.colorCloud)
+                                clCompilationBar01?.setBackgroundColor(Compiler.colors.colorAccent)
+                                clCompilationBar00?.setBackgroundColor(Compiler.colors.colorCloud)
                             } else {
-                                card1?.setBackgroundColor(Compiler.colors.colorCloud)
+                                clCompilationBar01?.setBackgroundColor(Compiler.colors.colorCloud)
                             }
                         }
                     }
@@ -505,21 +504,21 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                     when (view.id) {
                         R.id.cvCompilation0 -> {
                             if (!it.isSelected) {
-                                card0?.isSelected = true
-                                card1?.isSelected = false
+                                clCompilationBar00?.isSelected = true
+                                clCompilationBar01?.isSelected = false
                                 complete(true)
                             } else {
-                                card0?.isSelected = false
+                                clCompilationBar00?.isSelected = false
                                 complete(false)
                             }
                         }
                         R.id.cvCompilation1 -> {
                             if (!it.isSelected) {
-                                card0?.isSelected = false
-                                card1?.isSelected = true
+                                clCompilationBar00?.isSelected = false
+                                clCompilationBar01?.isSelected = true
                                 complete(true)
                             } else {
-                                card1?.isSelected = false
+                                clCompilationBar01?.isSelected = false
                                 complete(false)
                             }
                         }
@@ -561,18 +560,18 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
             val layout = itemView.findViewById<ConstraintLayout>(R.id.clComponent)!!
             val image = itemView.findViewById<ImageView>(R.id.ivComponent)!!
 
-            var clCpu: ConstraintLayout? = null
-            var clCooler: ConstraintLayout? = null
-            var clMotherboard: ConstraintLayout? = null
-            var clMemory: ConstraintLayout? = null
-            var clStorage: ConstraintLayout? = null
-            var clExtStorage: ConstraintLayout? = null
-            var clOptDrive: ConstraintLayout? = null
-            var clGraphicCard: ConstraintLayout? = null
-            var clSoundCard: ConstraintLayout? = null
-            var clPowerSupply: ConstraintLayout? = null
-            var clCase: ConstraintLayout? = null
-            var clOpSystem: ConstraintLayout? = null
+            private var clCpu: ConstraintLayout? = null
+            private var clCooler: ConstraintLayout? = null
+            private var clMotherboard: ConstraintLayout? = null
+            private var clMemory: ConstraintLayout? = null
+            private var clStorage: ConstraintLayout? = null
+            private var clExtStorage: ConstraintLayout? = null
+            private var clOptDrive: ConstraintLayout? = null
+            private var clGraphicCard: ConstraintLayout? = null
+            private var clSoundCard: ConstraintLayout? = null
+            private var clPowerSupply: ConstraintLayout? = null
+            private var clCase: ConstraintLayout? = null
+            private var clOpSystem: ConstraintLayout? = null
 
             fun span() {
                 Window.determineSpan(
@@ -639,19 +638,47 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
             fun onClick(view: View) {
                 view.setOnClickListener {
                     TransitionManager.beginDelayedTransition(clCompile)
-                    when (view.id) {
-                        clCpu?.id -> { rvComponent.adapter = Recycler(context, Compiler.cpuList, 7, 0) }
-                        clCooler?.id -> { rvComponent.adapter = Recycler(context, Compiler.coolerList, 7, 1) }
-                        clMotherboard?.id -> { rvComponent.adapter = Recycler(context, Compiler.motherboardList, 7, 2) }
-                        clMemory?.id -> { rvComponent.adapter = Recycler(context, Compiler.memoryList, 7, 3) }
-                        clStorage?.id -> { rvComponent.adapter = Recycler(context, Compiler.storageList, 7, 4) }
-                        clExtStorage?.id -> { rvComponent.adapter = Recycler(context, Compiler.extStorageList, 7, 5) }
-                        clOptDrive?.id -> { rvComponent.adapter = Recycler(context, Compiler.optDriveList, 7, 6) }
-                        clGraphicCard?.id -> { rvComponent.adapter = Recycler(context, Compiler.graphicCardList, 7, 7) }
-                        clSoundCard?.id -> { rvComponent.adapter = Recycler(context, Compiler.soundCardList, 7, 8) }
-                        clPowerSupply?.id -> { rvComponent.adapter = Recycler(context, Compiler.powerSupplyList, 7, 9) }
-                        clCase?.id -> { rvComponent.adapter = Recycler(context, Compiler.caseList, 7, 10) }
-                        clOpSystem?.id -> { rvComponent.adapter = Recycler(context, Compiler.opSystemList, 7, 11) }
+                    try {
+                        when (view.id) {
+                            clCpu?.id -> {
+                                rvComponent.adapter = Recycler(context, Compiler.cpuList, 7, 0)
+                            }
+                            clCooler?.id -> {
+                                rvComponent.adapter = Recycler(context, Compiler.coolerList, 7, 1)
+                            }
+                            clMotherboard?.id -> {
+                                rvComponent.adapter = Recycler(context, Compiler.motherboardList, 7, 2)
+                            }
+                            clMemory?.id -> {
+                                rvComponent.adapter = Recycler(context, Compiler.memoryList, 7, 3)
+                            }
+                            clStorage?.id -> {
+                                rvComponent.adapter = Recycler(context, Compiler.storageList, 7, 4)
+                            }
+                            clExtStorage?.id -> {
+                                rvComponent.adapter = Recycler(context, Compiler.extStorageList, 7, 5)
+                            }
+                            clOptDrive?.id -> {
+                                rvComponent.adapter = Recycler(context, Compiler.optDriveList, 7, 6)
+                            }
+                            clGraphicCard?.id -> {
+                                rvComponent.adapter = Recycler(context, Compiler.graphicCardList, 7, 7)
+                            }
+                            clSoundCard?.id -> {
+                                rvComponent.adapter = Recycler(context, Compiler.soundCardList, 7, 8)
+                            }
+                            clPowerSupply?.id -> {
+                                rvComponent.adapter = Recycler(context, Compiler.powerSupplyList, 7, 9)
+                            }
+                            clCase?.id -> {
+                                rvComponent.adapter = Recycler(context, Compiler.caseList, 7, 10)
+                            }
+                            clOpSystem?.id -> {
+                                rvComponent.adapter = Recycler(context, Compiler.opSystemList, 7, 11)
+                            }
+                        }
+                    } catch (e: IllegalStateException) {
+                        println("ComponentBarViewHolder IllegalStateException ${e.localizedMessage}")
                     }
                 }
             }
@@ -663,20 +690,20 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
             val layout = itemView.findViewById<ConstraintLayout>(R.id.clComponent)!!
             val image = itemView.findViewById<ImageView>(R.id.ivComponent)!!
             val title = itemView.findViewById<TextView>(R.id.tvComponent)!!
-            val paramA = itemView.findViewById<TextView>(R.id.tvComponentParamA)!!
-            val paramB = itemView.findViewById<TextView>(R.id.tvComponentParamB)!!
-            val paramC = itemView.findViewById<TextView>(R.id.tvComponentParamC)!!
-            val paramD = itemView.findViewById<TextView>(R.id.tvComponentParamD)!!
-            val paramE = itemView.findViewById<TextView>(R.id.tvComponentParamE)!!
-            val paramF = itemView.findViewById<TextView>(R.id.tvComponentParamF)!!
-            val price = itemView.findViewById<TextView>(R.id.tvComponentPrice)!!
+            private val paramA = itemView.findViewById<TextView>(R.id.tvComponentParamA)!!
+            private val paramB = itemView.findViewById<TextView>(R.id.tvComponentParamB)!!
+            private val paramC = itemView.findViewById<TextView>(R.id.tvComponentParamC)!!
+            private val paramD = itemView.findViewById<TextView>(R.id.tvComponentParamD)!!
+            private val paramE = itemView.findViewById<TextView>(R.id.tvComponentParamE)!!
+            private val paramF = itemView.findViewById<TextView>(R.id.tvComponentParamF)!!
+            private val price = itemView.findViewById<TextView>(R.id.tvComponentPrice)!!
 
             fun span() {
                 Window.determineSpan(context, layout, (context as Compile).windowManager, Window.orientation, 1) {}
             }
 
             fun bind(item: Any) {
-                when (subType) {
+                when (component) {
                     0 -> {
                         item as com.corespark.pccompiler.model.Component.CPU
                         image.setImageResource(item.image)
@@ -717,7 +744,7 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                         paramC.text = item.paramC
                         paramD.text = item.paramD
                         paramE.text = item.paramE
-                        paramF.text = item.paramF
+                        paramF.text = String.format("$%s/GB", item.paramF)
                         price.text = String.format("$%s", item.price)
                     }
                     4 -> {
@@ -730,7 +757,7 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                         paramC.text = item.paramC
                         paramD.text = item.paramD
                         paramE.text = item.paramE
-                        paramF.text = item.paramF
+                        paramF.text = String.format("$%s/GB", item.paramF)
                         price.text = String.format("$%s", item.price)
                     }
                     5 -> {
@@ -740,7 +767,7 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                         title.text = String.format("%s %s", item.manufaturer, item.component)
                         paramA.text = item.paramA
                         paramB.text = item.paramB
-                        paramC.text = item.paramC
+                        paramC.text = String.format("$%s/GB", item.paramC)
                         price.text = String.format("$%s", item.price)
                     }
                     6 -> {
@@ -822,31 +849,54 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                 for (param in params) param.visibility = View.GONE
             }
 
+            fun visibility(view: View) {
+                when (component) {
+                    0, 1, 5 -> {
+                        if (!view.isSelected) {
+                            paramA.visibility = View.VISIBLE
+                            paramB.visibility = View.VISIBLE
+                            paramC.visibility = View.VISIBLE
+                        } else {
+                            paramA.visibility = View.GONE
+                            paramB.visibility = View.GONE
+                            paramC.visibility = View.GONE
+                        }
+                    }
+                    2, 3, 4, 6, 7, 8, 9, 10 -> {
+                        if (!view.isSelected) {
+                            paramA.visibility = View.VISIBLE
+                            paramB.visibility = View.VISIBLE
+                            paramC.visibility = View.VISIBLE
+                            paramD.visibility = View.VISIBLE
+                            paramE.visibility = View.VISIBLE
+                            paramF.visibility = View.VISIBLE
+                        } else {
+                            paramA.visibility = View.GONE
+                            paramB.visibility = View.GONE
+                            paramC.visibility = View.GONE
+                            paramD.visibility = View.GONE
+                            paramE.visibility = View.GONE
+                            paramF.visibility = View.GONE
+                        }
+                    }
+                }
+            }
+
             fun expand() {
-                when (subType) {
+                when (component) {
                     0, 1, 5 -> {
                         layout.setOnClickListener {
                             if (!it.isSelected) {
                                 TransitionManager.beginDelayedTransition(parent)
-                                paramA.visibility = View.VISIBLE
-                                paramB.visibility = View.VISIBLE
-                                paramC.visibility = View.VISIBLE
-                                Constraint.set.clone(layout)
-                                Constraint.set.clear(image.id, ConstraintSet.BOTTOM)
-                                Constraint.set.connect(paramA.id, ConstraintSet.BOTTOM, layout.id, ConstraintSet.BOTTOM, 16)
-                                Constraint.set.applyTo(layout)
+                                visibility(it)
+                                Constraint.set(layout, layout, paramA)
                                 rvComponent.scrollToPosition(adapterPosition)
                                 title.setSingleLine(false)
                                 it.isSelected = !it.isSelected
                             } else {
                                 TransitionManager.beginDelayedTransition(parent)
-                                paramA.visibility = View.GONE
-                                paramB.visibility = View.GONE
-                                paramC.visibility = View.GONE
-                                Constraint.set.clone(layout)
-                                Constraint.set.clear(paramA.id, ConstraintSet.BOTTOM)
-                                Constraint.set.connect(image.id, ConstraintSet.BOTTOM, layout.id, ConstraintSet.BOTTOM, 16)
-                                Constraint.set.applyTo(layout)
+                                visibility(it)
+                                Constraint.set(layout, layout, paramA)
                                 rvComponent.scrollToPosition(adapterPosition)
                                 title.setSingleLine(true)
                                 it.isSelected = !it.isSelected
@@ -857,27 +907,15 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                         layout.setOnClickListener {
                             if (!it.isSelected) {
                                 TransitionManager.beginDelayedTransition(parent)
-                                paramA.visibility = View.VISIBLE
-                                paramB.visibility = View.VISIBLE
-                                paramC.visibility = View.VISIBLE
-                                paramD.visibility = View.VISIBLE
-                                Constraint.set.clone(layout)
-                                Constraint.set.clear(image.id, ConstraintSet.BOTTOM)
-                                Constraint.set.connect(paramD.id, ConstraintSet.BOTTOM, layout.id, ConstraintSet.BOTTOM, 16)
-                                Constraint.set.applyTo(layout)
+                                visibility(it)
+                                Constraint.set(layout, layout, paramD)
                                 rvComponent.scrollToPosition(adapterPosition)
                                 title.setSingleLine(false)
                                 it.isSelected = !it.isSelected
                             } else {
                                 TransitionManager.beginDelayedTransition(parent)
-                                paramA.visibility = View.GONE
-                                paramB.visibility = View.GONE
-                                paramC.visibility = View.GONE
-                                paramD.visibility = View.GONE
-                                Constraint.set.clone(layout)
-                                Constraint.set.clear(paramD.id, ConstraintSet.BOTTOM)
-                                Constraint.set.connect(image.id, ConstraintSet.BOTTOM, layout.id, ConstraintSet.BOTTOM, 16)
-                                Constraint.set.applyTo(layout)
+                                visibility(it)
+                                Constraint.set(layout, layout, paramD)
                                 rvComponent.scrollToPosition(adapterPosition)
                                 title.setSingleLine(true)
                                 it.isSelected = !it.isSelected

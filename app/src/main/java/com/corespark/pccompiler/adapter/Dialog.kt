@@ -35,7 +35,7 @@ class Dialog(val context: Context, val type: Int) {
     inner class Workspace {
 
         val clWorkspace = (context as com.corespark.pccompiler.activity.Workspace).clWorkspace!!
-        val clActionCompile = clWorkspace.rvActionBar.findViewById<ConstraintLayout>(R.id.clActionCompile)
+        val clActionCompile = clWorkspace.rvActionBar.findViewById<ConstraintLayout>(R.id.clActionCompile)!!
 
         inner class Compilation {
 

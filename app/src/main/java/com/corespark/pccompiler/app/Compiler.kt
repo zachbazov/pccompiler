@@ -1,7 +1,7 @@
 package com.corespark.pccompiler.app
 
 import android.app.Application
-import com.corespark.pccompiler.model.Component
+import com.corespark.pccompiler.R
 import com.corespark.pccompiler.utility.Color
 import com.parse.Parse.initialize
 
@@ -17,7 +17,6 @@ class Compiler : Application() {
 
     companion object {
         lateinit var preferences: SharedPreferences
-        lateinit var queries: Query
         lateinit var colors: Color
 
         val cpuList = mutableListOf<Any>()
@@ -42,29 +41,18 @@ class Compiler : Application() {
         preferences = SharedPreferences(applicationContext)
         colors = Color(applicationContext)
 
-        queries = Query(0)
-        queries.retrieve("CPU", cpuList)
-        queries = Query(1)
-        queries.retrieve("Cooler", coolerList)
-        queries = Query(2)
-        queries.retrieve("Motherboard", motherboardList)
-        queries = Query(3)
-        queries.retrieve("Memory", memoryList)
-        queries = Query(4)
-        queries.retrieve("Storage", storageList)
-        queries = Query(5)
-        queries.retrieve("ExternalStorage", extStorageList)
-        queries = Query(6)
-        queries.retrieve("OpticalDrive", optDriveList)
-        queries = Query(7)
-        queries.retrieve("GraphicCard", graphicCardList)
-        queries = Query(8)
-        queries.retrieve("SoundCard", soundCardList)
-        queries = Query(9)
-        queries.retrieve("PowerSupply", powerSupplyList)
-        queries = Query(10)
-        queries.retrieve("Case", caseList)
-        queries = Query(11)
-        queries.retrieve("OS", opSystemList)
+        val query = Query()
+        query.retrieve(applicationContext, getString(R.string.table_cpu), cpuList, 0)
+        query.retrieve(applicationContext, getString(R.string.table_cooler), coolerList, 1)
+        query.retrieve(applicationContext, getString(R.string.table_motherboard), motherboardList, 2)
+        query.retrieve(applicationContext, getString(R.string.table_memory), memoryList, 3)
+        query.retrieve(applicationContext, getString(R.string.table_storage), storageList, 4)
+        query.retrieve(applicationContext, getString(R.string.table_external_storage), extStorageList, 5)
+        query.retrieve(applicationContext, getString(R.string.table_optical_drive), optDriveList, 6)
+        query.retrieve(applicationContext, getString(R.string.table_graphic_card), graphicCardList, 7)
+        query.retrieve(applicationContext, getString(R.string.table_sound_card), soundCardList, 8)
+        query.retrieve(applicationContext, getString(R.string.table_power_supply), powerSupplyList, 9)
+        query.retrieve(applicationContext, getString(R.string.table_case), caseList, 10)
+        query.retrieve(applicationContext, getString(R.string.table_operating_system), opSystemList, 11)
     }
 }

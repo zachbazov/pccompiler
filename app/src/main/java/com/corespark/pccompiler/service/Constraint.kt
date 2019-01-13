@@ -160,6 +160,19 @@ object Constraint {
                     Constraint.set.applyTo(parentLayout)
                 }
             }
+            clComponent -> {
+                if (!applyTo.isSelected) {
+                    Constraint.set.clone(parentLayout)
+                    Constraint.set.clear(ivComponent, ConstraintSet.BOTTOM)
+                    Constraint.set.connect(view.id, ConstraintSet.BOTTOM, parentLayout.id, ConstraintSet.BOTTOM, 16)
+                    Constraint.set.applyTo(parentLayout)
+                } else {
+                    Constraint.set.clone(parentLayout)
+                    Constraint.set.clear(view.id, ConstraintSet.BOTTOM)
+                    Constraint.set.connect(ivComponent, ConstraintSet.BOTTOM, parentLayout.id, ConstraintSet.BOTTOM, 16)
+                    Constraint.set.applyTo(parentLayout)
+                }
+            }
         }
     }
 }
