@@ -136,40 +136,40 @@ object Constraint {
             bgTransparent -> {
                 Constraint.set.clone(parentLayout)
                 Constraint.set.connect(bgTransparent, ConstraintSet.TOP, clFragActionBar, ConstraintSet.TOP)
-                Constraint.set.connect(bgTransparent, ConstraintSet.BOTTOM, clWorkspace, ConstraintSet.BOTTOM)
-                Constraint.set.connect(bgTransparent, ConstraintSet.START, clWorkspace, ConstraintSet.START)
-                Constraint.set.connect(bgTransparent, ConstraintSet.END, clWorkspace, ConstraintSet.END)
+                Constraint.set.connect(bgTransparent, ConstraintSet.BOTTOM, clWorkspaceParent, ConstraintSet.BOTTOM)
+                Constraint.set.connect(bgTransparent, ConstraintSet.START, clWorkspaceParent, ConstraintSet.START)
+                Constraint.set.connect(bgTransparent, ConstraintSet.END, clWorkspaceParent, ConstraintSet.END)
                 Constraint.set.applyTo(parentLayout)
             }
-            cvDialogCompile -> {
+            cvDialogParent -> {
                 Constraint.set.clone(parentLayout)
-                Constraint.set.connect(cvDialogCompile, ConstraintSet.TOP, clFragActionBar, ConstraintSet.TOP)
-                Constraint.set.connect(cvDialogCompile, ConstraintSet.BOTTOM, clWorkspace, ConstraintSet.BOTTOM)
-                Constraint.set.connect(cvDialogCompile, ConstraintSet.START, clWorkspace, ConstraintSet.START)
-                Constraint.set.connect(cvDialogCompile, ConstraintSet.END, clWorkspace, ConstraintSet.END)
+                Constraint.set.connect(cvDialogParent, ConstraintSet.TOP, clFragActionBar, ConstraintSet.TOP)
+                Constraint.set.connect(cvDialogParent, ConstraintSet.BOTTOM, clWorkspaceParent, ConstraintSet.BOTTOM)
+                Constraint.set.connect(cvDialogParent, ConstraintSet.START, clWorkspaceParent, ConstraintSet.START)
+                Constraint.set.connect(cvDialogParent, ConstraintSet.END, clWorkspaceParent, ConstraintSet.END)
                 Constraint.set.applyTo(parentLayout)
             }
-            etDialogCompile -> {
+            etDialog -> {
                 if (!view.isSelected) {
                     Constraint.set.clone(parentLayout)
-                    Constraint.set.connect(etDialogCompile, ConstraintSet.BOTTOM, clDialogCompile, ConstraintSet.BOTTOM, 32)
+                    Constraint.set.connect(etDialog, ConstraintSet.BOTTOM, clDialog, ConstraintSet.BOTTOM, 32)
                     Constraint.set.applyTo(parentLayout)
                 } else {
                     Constraint.set.clone(parentLayout)
-                    Constraint.set.clear(etDialogCompile, ConstraintSet.BOTTOM)
+                    Constraint.set.clear(etDialog, ConstraintSet.BOTTOM)
                     Constraint.set.applyTo(parentLayout)
                 }
             }
-            clComponent -> {
+            clComponentItem -> {
                 if (!applyTo.isSelected) {
                     Constraint.set.clone(parentLayout)
-                    Constraint.set.clear(ivComponent, ConstraintSet.BOTTOM)
+                    Constraint.set.clear(ivComponentItem, ConstraintSet.BOTTOM)
                     Constraint.set.connect(view.id, ConstraintSet.BOTTOM, parentLayout.id, ConstraintSet.BOTTOM, 16)
                     Constraint.set.applyTo(parentLayout)
                 } else {
                     Constraint.set.clone(parentLayout)
                     Constraint.set.clear(view.id, ConstraintSet.BOTTOM)
-                    Constraint.set.connect(ivComponent, ConstraintSet.BOTTOM, parentLayout.id, ConstraintSet.BOTTOM, 16)
+                    Constraint.set.connect(ivComponentItem, ConstraintSet.BOTTOM, parentLayout.id, ConstraintSet.BOTTOM, 16)
                     Constraint.set.applyTo(parentLayout)
                 }
             }

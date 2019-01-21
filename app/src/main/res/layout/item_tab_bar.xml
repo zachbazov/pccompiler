@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout android:id="@+id/clTabBarParent"
+<android.support.constraint.ConstraintLayout android:id="@+id/clTabBarItemParent"
                                              android:layout_width="wrap_content"
                                              android:layout_height="wrap_content"
                                              xmlns:android="http://schemas.android.com/apk/res/android"
                                              xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.constraint.ConstraintLayout android:id="@+id/clTabBar"
+    <android.support.constraint.ConstraintLayout android:id="@+id/clTabBarItem"
                                                  android:layout_width="wrap_content"
                                                  android:layout_height="@dimen/_60dp"
                                                  app:layout_constraintStart_toStartOf="parent"
@@ -13,7 +13,7 @@
                                                  app:layout_constraintBottom_toBottomOf="parent"
                                                  app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageView android:id="@+id/ivTabBar"
+        <ImageView android:id="@+id/ivTabBarItem"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:contentDescription="@string/cd_tab"
@@ -24,7 +24,7 @@
 
     </android.support.constraint.ConstraintLayout>
 
-    <View android:id="@+id/dvTabBar"
+    <View android:id="@+id/dvTabBarItem"
           android:layout_width="1dp"
           android:layout_height="0dp"
           android:background="?android:attr/listDivider"

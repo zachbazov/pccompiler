@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout android:id="@+id/clCompilationParent"
+<android.support.constraint.ConstraintLayout android:id="@+id/clCompilationItemParent"
                                              android:layout_width="wrap_content"
                                              android:layout_height="wrap_content"
                                              tools:context=".activity.Workspace"
@@ -7,7 +7,7 @@
                                              xmlns:tools="http://schemas.android.com/tools"
                                              xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.constraint.ConstraintLayout android:id="@+id/clCompilation"
+    <android.support.constraint.ConstraintLayout android:id="@+id/clCompilationItem"
                                                  android:layout_width="wrap_content"
                                                  android:layout_height="wrap_content"
                                                  app:layout_constraintTop_toTopOf="parent"
@@ -15,7 +15,7 @@
                                                  app:layout_constraintBottom_toBottomOf="parent"
                                                  app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageView android:id="@+id/ivCompilation"
+        <ImageView android:id="@+id/ivCompilationItem"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:layout_marginStart="@dimen/_16dp"
@@ -24,26 +24,14 @@
                    app:layout_constraintStart_toStartOf="parent"
                    app:layout_constraintTop_toTopOf="parent"/>
 
-        <TextView android:id="@+id/tvCompilation"
+        <TextView android:id="@+id/tvCompilationItem"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginStart="@dimen/_8dp"
                   android:textSize="@dimen/_18sp"
-                  app:layout_constraintStart_toEndOf="@+id/ivCompilation"
-                  app:layout_constraintBottom_toBottomOf="@+id/ivCompilation"
-                  app:layout_constraintTop_toTopOf="@+id/ivCompilation"/>
-
-        <View android:id="@+id/dvCompilation"
-              android:layout_width="0dp"
-              android:layout_height="1dp"
-              android:layout_marginStart="@dimen/_8dp"
-              android:layout_marginEnd="@dimen/_8dp"
-              android:layout_marginTop="@dimen/_16dp"
-              android:background="?android:attr/listDivider"
-              app:layout_constraintBottom_toBottomOf="parent"
-              app:layout_constraintTop_toBottomOf="@+id/tvCompilation"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"/>
+                  app:layout_constraintStart_toEndOf="@+id/ivCompilationItem"
+                  app:layout_constraintBottom_toBottomOf="@+id/ivCompilationItem"
+                  app:layout_constraintTop_toTopOf="@+id/ivCompilationItem"/>
 
     </android.support.constraint.ConstraintLayout>
 

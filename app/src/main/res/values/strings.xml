@@ -125,4 +125,5 @@
     <string name="cd_cart_bar">Cart Bar Button</string>
     <string name="cd_close">Close Button</string>
     <string name="cd_return">Return Button</string>
+    <string name="cd_more">More Options Button</string>
 </resources>

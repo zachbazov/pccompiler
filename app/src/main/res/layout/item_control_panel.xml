@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout android:id="@+id/clControlPanel"
+<android.support.constraint.ConstraintLayout android:id="@+id/clControlPanelItemParent"
                                              android:layout_width="wrap_content"
                                              android:layout_height="wrap_content"
                                              xmlns:android="http://schemas.android.com/apk/res/android"
                                              xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView android:id="@+id/ivControlPanel"
+    <ImageView android:id="@+id/ivControlPanelItem"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_marginStart="@dimen/_16dp"
@@ -14,15 +14,15 @@
                app:layout_constraintStart_toStartOf="parent"
                app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <TextView android:id="@+id/tvControlPanel"
+    <TextView android:id="@+id/tvControlPanelItem"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginStart="@dimen/_8dp"
-              app:layout_constraintStart_toEndOf="@+id/ivControlPanel"
-              app:layout_constraintTop_toTopOf="@+id/ivControlPanel"
-              app:layout_constraintBottom_toBottomOf="@+id/ivControlPanel"/>
+              app:layout_constraintStart_toEndOf="@+id/ivControlPanelItem"
+              app:layout_constraintTop_toTopOf="@+id/ivControlPanelItem"
+              app:layout_constraintBottom_toBottomOf="@+id/ivControlPanelItem"/>
 
-    <View android:id="@+id/dvControlPanel"
+    <View android:id="@+id/dvControlPanelItem"
           android:layout_width="0dp"
           android:layout_height="1dp"
           android:layout_marginTop="@dimen/_16dp"
@@ -32,6 +32,6 @@
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/ivControlPanel"/>
+          app:layout_constraintTop_toBottomOf="@+id/ivControlPanelItem"/>
 
 </android.support.constraint.ConstraintLayout>

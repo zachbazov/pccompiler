@@ -14,12 +14,10 @@ import com.corespark.pccompiler.activity.Compile
 import com.corespark.pccompiler.activity.Workspace
 import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.model.*
-import com.corespark.pccompiler.service.Constraint
-import com.corespark.pccompiler.service.Intent
-import com.corespark.pccompiler.service.Parameter
-import com.corespark.pccompiler.service.Window
+import com.corespark.pccompiler.service.*
 import kotlinx.android.synthetic.main.activity_compile.*
 import kotlinx.android.synthetic.main.activity_workspace.*
+import kotlinx.android.synthetic.main.activity_workspace.view.*
 
 
 /**
@@ -31,6 +29,8 @@ import kotlinx.android.synthetic.main.activity_workspace.*
  */
 class Recycler(val context: Context, private val list: MutableList<Any>, val type: Int, val component: Int)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    lateinit var dialog: Dialog
 
     override fun getItemCount() = list.size
 
@@ -114,7 +114,9 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                 val item = list[position]
                 holder as Compilation.CompilationViewHolder
                 holder.span()
-                holder.bind(holder, item as Bar.Compilation, position)
+                holder.mapId(position)
+                holder.bind(item as Bar.Compilation)
+                Algorithm.style(holder.layout, position)
             }
             5 -> {
                 val item = list[position]
@@ -126,22 +128,20 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                 val item = list[position]
                 holder as Component.ComponentBarViewHolder
                 holder.span()
-                holder.mapId(position)
                 holder.bind(item as Bar.Component)
-                holder.onClick(holder.layout)
+                holder.onClick(holder.layout, position)
             }
             7 -> {
                 val item = list[position]
                 holder as Component.ComponentViewHolder
                 holder.span()
                 holder.bind(item)
-                holder.style(position)
-                holder.customize()
-                holder.expand()
+                Algorithm.style(holder.layout, position)
             }
             else -> {
                 val item = list[position]
                 holder as EmptyViewHolder
+                holder.span()
                 holder.bind(item as Bar.Empty)
             }
         }
@@ -149,36 +149,22 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
 
     inner class TabBar {
 
+        val clWorkspace = (context as Workspace).clWorkspaceParent!!
+
         var clTabWorkspace: ConstraintLayout? = null
         var clTabCart: ConstraintLayout? = null
         var ivTabWorkspace: ImageView? = null
         var ivTabCart: ImageView? = null
 
-        val clWorkspace = (context as Workspace).clWorkspace!!
-        val clTabParent = (context as Workspace).clFragTabBar!!
-        val clFragActionBar = (context as Workspace).clFragActionBar!!
-        val clFragControlBar = (context as Workspace).clFragControlBar!!
-        val clFragWorkspace = (context as Workspace).clFragWorkspace!!
-        val clFragCart = (context as Workspace).clFragCart!!
-        val ivTracker = (context as Workspace).ivTracker!!
-        val clFragTitle = (context as Workspace).clFragTitle!!
-        val tvWorkspaceTitle = (context as Workspace).tvWorkspaceTitle!!
-        val tvCartTitle = (context as Workspace).tvCartTitle!!
-
         inner class TabBarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            val parent = itemView.findViewById<ConstraintLayout>(R.id.clTabBarParent)!!
-            val layout = itemView.findViewById<ConstraintLayout>(R.id.clTabBar)!!
-            val image = itemView.findViewById<ImageView>(R.id.ivTabBar)!!
-            val divider = itemView.findViewById<View>(R.id.dvTabBar)!!
+            val parent = itemView.findViewById<ConstraintLayout>(R.id.clTabBarItemParent)!!
+            val layout = itemView.findViewById<ConstraintLayout>(R.id.clTabBarItem)!!
+            val image = itemView.findViewById<ImageView>(R.id.ivTabBarItem)!!
+            val divider = itemView.findViewById<View>(R.id.dvTabBarItem)!!
 
             fun span() {
-                try {
-                    Window.determineSpan(
-                        context, layout, (context as Workspace).windowManager, Window.orientation, list.size) {}
-                } catch (e: IllegalStateException) {
-                    println(e.localizedMessage)
-                }
+                Window.determineSpan(context, layout, (context as Workspace).windowManager, Window.orientation, list.size) {}
             }
 
             fun mapId(position: Int) {
@@ -203,8 +189,8 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
             }
 
             fun customize(position: Int) {
-                tvWorkspaceTitle.text = context.getString(R.string.text_my_compilations)
-                tvCartTitle.text = context.getString(R.string.text_my_cart)
+                clWorkspace.tvWorkspaceTitle.text = context.getString(R.string.text_my_compilations)
+                clWorkspace.tvCartTitle.text = context.getString(R.string.text_my_cart)
                 when (position) {
                     0 -> {
                         ivTabWorkspace!!.setImageResource(R.drawable.ic_workspace_active)
@@ -219,31 +205,20 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
             }
 
             fun onClick(view: View) {
-                when (view.id) {
-                    clTabWorkspace?.id -> {
-                        try {
-                            view.setOnClickListener {
-                                TransitionManager.beginDelayedTransition(clWorkspace)
-                                Constraint.set(clTabWorkspace!!, clTabParent, ivTracker)
-                                Constraint.set(clTabWorkspace!!, clWorkspace, clFragWorkspace)
-                                Constraint.set(clTabWorkspace!!, clWorkspace) {}
-                                Constraint.set(clTabWorkspace!!, clFragTitle, tvWorkspaceTitle)
-                            }
-                        } catch (e: IllegalStateException) {
-                            println(e.localizedMessage)
+                view.setOnClickListener {
+                    TransitionManager.beginDelayedTransition(clWorkspace)
+                    when (view.id) {
+                        clTabWorkspace?.id -> {
+                            Constraint.set(clTabWorkspace!!, clWorkspace.clFragTabBar, clWorkspace.ivTracker)
+                            Constraint.set(clTabWorkspace!!, clWorkspace, clWorkspace.clFragWorkspace)
+                            Constraint.set(clTabWorkspace!!, clWorkspace) {}
+                            Constraint.set(clTabWorkspace!!, clWorkspace.clFragTitle, clWorkspace.tvWorkspaceTitle)
                         }
-                    }
-                    clTabCart?.id -> {
-                        try {
-                            view.setOnClickListener {
-                                TransitionManager.beginDelayedTransition(clWorkspace)
-                                Constraint.set(clTabCart!!, clTabParent, ivTracker)
-                                Constraint.set(clTabCart!!, clWorkspace, clFragCart)
-                                Constraint.set(clTabCart!!, clWorkspace) {}
-                                Constraint.set(clTabCart!!, clFragTitle, tvCartTitle)
-                            }
-                        } catch (e: IllegalStateException) {
-                            println(e.localizedMessage)
+                        clTabCart?.id -> {
+                            Constraint.set(clTabCart!!, clWorkspace.clFragTabBar, clWorkspace.ivTracker)
+                            Constraint.set(clTabCart!!, clWorkspace, clWorkspace.clFragCart)
+                            Constraint.set(clTabCart!!, clWorkspace) {}
+                            Constraint.set(clTabCart!!, clWorkspace.clFragTitle, clWorkspace.tvCartTitle)
                         }
                     }
                 }
@@ -253,17 +228,13 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
 
     inner class ActionBarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val layout = itemView.findViewById<ConstraintLayout>(R.id.clActionBarParent)!!
-        val image = itemView.findViewById<ImageView>(R.id.ivActionBar)!!
-        val title = itemView.findViewById<TextView>(R.id.tvActionBar)!!
-        val divider = itemView.findViewById<View>(R.id.dvActionBar)!!
+        val layout = itemView.findViewById<ConstraintLayout>(R.id.clActionBarItemParent)!!
+        val image = itemView.findViewById<ImageView>(R.id.ivActionBarItem)!!
+        val title = itemView.findViewById<TextView>(R.id.tvActionBarItem)!!
+        val divider = itemView.findViewById<View>(R.id.dvActionBarItem)!!
 
         fun span() {
-            try {
-                Window.determineSpan(context, layout, (context as Workspace).windowManager, Window.orientation, list.size) {}
-            } catch (e: IllegalStateException) {
-                println(e.localizedMessage)
-            }
+            Window.determineSpan(context, layout, (context as Workspace).windowManager, Window.orientation, list.size) {}
         }
 
         fun bind(item: Bar.Action) {
@@ -329,7 +300,7 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                         activate(image, 0)
                     }
                     R.id.clActionCompile -> {
-                        val dialog = Dialog(context, 0)
+                        dialog = Dialog(context, 0)
                         dialog.Workspace().Compilation().create()
                     }
                 }
@@ -339,17 +310,13 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
 
     inner class ControlBarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val layout = itemView.findViewById<ConstraintLayout>(R.id.clControlBarParent)!!
-        val image = itemView.findViewById<ImageView>(R.id.ivControlBar)!!
-        val title = itemView.findViewById<TextView>(R.id.tvControlBar)!!
-        val divider = itemView.findViewById<View>(R.id.dvControlBar)!!
+        val layout = itemView.findViewById<ConstraintLayout>(R.id.clControlBarItemParent)!!
+        val image = itemView.findViewById<ImageView>(R.id.ivControlBarItem)!!
+        val title = itemView.findViewById<TextView>(R.id.tvControlBarItem)!!
+        val divider = itemView.findViewById<View>(R.id.dvControlBarItem)!!
 
         fun span() {
-            try {
-                Window.determineSpan(context, layout, (context as Workspace).windowManager, Window.orientation, list.size) {}
-            } catch (e: IllegalStateException) {
-                println(e.localizedMessage)
-            }
+            Window.determineSpan(context, layout, (context as Workspace).windowManager, Window.orientation, list.size) {}
         }
 
         fun bind(item: Bar.Control) {
@@ -376,31 +343,25 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
 
     inner class ControlPanel {
 
-        val clWorkspace = (context as Workspace).clWorkspace!!
+        val clWorkspace = (context as Workspace).clWorkspaceParent!!
 
         fun constraint(view: View) {
             TransitionManager.beginDelayedTransition(clWorkspace)
             Constraint.set(view, clWorkspace) {
-                if (it) {
-                    Compilation().clCompilationBar00?.isClickable = false
-                    view.isSelected = !view.isSelected
-                } else {
-                    Compilation().clCompilationBar00?.isClickable = true
-                    view.isSelected = !view.isSelected
-                }
+                if (it) Compilation().activate(view, it)
+                else Compilation().activate(view, it)
             }
         }
 
         inner class ControlPanelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            val layout = itemView.findViewById<ConstraintLayout>(R.id.clControlPanel)!!
-            val image = itemView.findViewById<ImageView>(R.id.ivControlPanel)!!
-            val title = itemView.findViewById<TextView>(R.id.tvControlPanel)!!
-            val divider = itemView.findViewById<View>(R.id.dvControlPanel)!!
+            val layout = itemView.findViewById<ConstraintLayout>(R.id.clControlPanelItemParent)!!
+            val image = itemView.findViewById<ImageView>(R.id.ivControlPanelItem)!!
+            val title = itemView.findViewById<TextView>(R.id.tvControlPanelItem)!!
+            val divider = itemView.findViewById<View>(R.id.dvControlPanelItem)!!
 
             fun span() {
-                Window.determineSpan(
-                    context, divider, (context as Workspace).windowManager, Window.orientation, list.size) {}
+                Window.determineSpan(context, divider, (context as Workspace).windowManager, Window.orientation, list.size) {}
             }
 
             fun bind(item: Panel.ControlPanel) {
@@ -410,6 +371,9 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
 
             fun mapId(position: Int) {
                 when (position) {
+                    0 -> {
+
+                    }
                     1 -> {
                         layout.id = R.id.clControlPanelLogout
                     }
@@ -418,7 +382,9 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
 
             fun customize(position: Int) {
                 when (position) {
-                    0 -> {}
+                    0 -> {
+
+                    }
                     1 -> {
                         divider.visibility = View.INVISIBLE
                         image.setImageResource(R.drawable.ic_logout_active)
@@ -427,9 +393,9 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
             }
 
             fun onClick(view: View) {
-                when (view.id) {
-                    R.id.clControlPanelLogout -> {
-                        view.setOnClickListener {
+                view.setOnClickListener {
+                    when (view.id) {
+                        R.id.clControlPanelLogout -> {
                             com.corespark.pccompiler.service.Auth.logOut(context) { complete ->
                                 if (complete) {
                                     Intent.launch(context, R.layout.activity_auth) {}
@@ -448,99 +414,59 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
         var clCompilationBar00: ConstraintLayout? = null
         var clCompilationBar01: ConstraintLayout? = null
 
+        fun activate(view: View, clickable: Boolean) {
+            if (clickable) {
+                clCompilationBar00?.isClickable = false
+                view.isSelected = !view.isSelected
+            } else {
+                clCompilationBar00?.isClickable = true
+                view.isSelected = !view.isSelected
+            }
+        }
+
         inner class CompilationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            private val layout = itemView.findViewById<ConstraintLayout>(R.id.clCompilation)!!
-            val image = itemView.findViewById<ImageView>(R.id.ivCompilation)!!
-            val title = itemView.findViewById<TextView>(R.id.tvCompilation)!!
+            val layout = itemView.findViewById<ConstraintLayout>(R.id.clCompilationItemParent)!!
+            val image = itemView.findViewById<ImageView>(R.id.ivCompilationItem)!!
+            val title = itemView.findViewById<TextView>(R.id.tvCompilationItem)!!
 
             fun span() {
-                try {
-                    Window.determineSpan(context, layout, (context as Workspace).windowManager, Window.orientation, 1) {}
-                } catch (e: IllegalStateException) {
-                    println(e.localizedMessage)
-                }
+                Window.determineSpan(context, layout, (context as Workspace).windowManager, Window.orientation, 1) {}
             }
 
-            fun bind(holder: CompilationViewHolder, item: Bar.Compilation, position: Int) {
-                image.setImageResource(item.image)
-                title.text = item.title
-                Parameter.set(image, 64)
-
+            fun mapId(position: Int) {
                 when (position) {
                     0 -> {
                         if (clCompilationBar00 == null) {
-                            clCompilationBar00 = holder.layout
+                            clCompilationBar00 = layout
                             clCompilationBar00?.id = R.id.cvCompilation0
-                        }
-                        onClick(clCompilationBar00!!) {
-                            if (it) {
-                                clCompilationBar00?.setBackgroundColor(Compiler.colors.colorAccent)
-                                clCompilationBar01?.setBackgroundColor(Compiler.colors.colorCloud)
-                            } else {
-                                clCompilationBar00?.setBackgroundColor(Compiler.colors.colorCloud)
-                            }
                         }
                     }
                     1 -> {
                         if (clCompilationBar01 == null) {
-                            clCompilationBar01 = holder.layout
+                            clCompilationBar01 = layout
                             clCompilationBar01?.id = R.id.cvCompilation1
-                        }
-                        onClick(clCompilationBar01!!) {
-                            if (it) {
-                                clCompilationBar01?.setBackgroundColor(Compiler.colors.colorAccent)
-                                clCompilationBar00?.setBackgroundColor(Compiler.colors.colorCloud)
-                            } else {
-                                clCompilationBar01?.setBackgroundColor(Compiler.colors.colorCloud)
-                            }
                         }
                     }
                 }
             }
 
-            fun onClick(view: View, complete: (Boolean) -> Unit) {
-                view.setOnClickListener {
-                    when (view.id) {
-                        R.id.cvCompilation0 -> {
-                            if (!it.isSelected) {
-                                clCompilationBar00?.isSelected = true
-                                clCompilationBar01?.isSelected = false
-                                complete(true)
-                            } else {
-                                clCompilationBar00?.isSelected = false
-                                complete(false)
-                            }
-                        }
-                        R.id.cvCompilation1 -> {
-                            if (!it.isSelected) {
-                                clCompilationBar00?.isSelected = false
-                                clCompilationBar01?.isSelected = true
-                                complete(true)
-                            } else {
-                                clCompilationBar01?.isSelected = false
-                                complete(false)
-                            }
-                        }
-                    }
-                }
+            fun bind(item: Bar.Compilation) {
+                image.setImageResource(item.image)
+                title.text = item.title
             }
         }
     }
 
     inner class CartBarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val layout = itemView.findViewById<ConstraintLayout>(R.id.clCartBar)!!
-        val image = itemView.findViewById<ImageView>(R.id.ivCartBar)!!
-        val title = itemView.findViewById<TextView>(R.id.tvComponentCartBar)!!
-        private val price = itemView.findViewById<TextView>(R.id.tvPriceCartBar)!!
+        val layout = itemView.findViewById<ConstraintLayout>(R.id.clCartBarItemParent)!!
+        val image = itemView.findViewById<ImageView>(R.id.ivCartBarItem)!!
+        val title = itemView.findViewById<TextView>(R.id.tvCartBarItemComponent)!!
+        private val price = itemView.findViewById<TextView>(R.id.tvCartBarItemPrice)!!
 
         fun span() {
-            try {
-                Window.determineSpan(context, layout, (context as Compile).windowManager, Window.orientation, 1) {}
-            } catch (e: IllegalStateException) {
-                println(e.localizedMessage)
-            }
+            Window.determineSpan(context, layout, (context as Compile).windowManager, Window.orientation, 1) {}
         }
 
         fun bind(item: Bar.Cart) {
@@ -552,281 +478,174 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
 
     inner class Component {
 
-        val clCompile = (context as Compile).clCompile!!
+        val clCompile = (context as Compile).clCompileParent!!
+        val rvComponentBar = (context as Compile).rvComponentBar!!
         val rvComponent = (context as Compile).rvComponent!!
 
         inner class ComponentBarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            val layout = itemView.findViewById<ConstraintLayout>(R.id.clComponent)!!
-            val image = itemView.findViewById<ImageView>(R.id.ivComponent)!!
-
-            private var clCpu: ConstraintLayout? = null
-            private var clCooler: ConstraintLayout? = null
-            private var clMotherboard: ConstraintLayout? = null
-            private var clMemory: ConstraintLayout? = null
-            private var clStorage: ConstraintLayout? = null
-            private var clExtStorage: ConstraintLayout? = null
-            private var clOptDrive: ConstraintLayout? = null
-            private var clGraphicCard: ConstraintLayout? = null
-            private var clSoundCard: ConstraintLayout? = null
-            private var clPowerSupply: ConstraintLayout? = null
-            private var clCase: ConstraintLayout? = null
-            private var clOpSystem: ConstraintLayout? = null
+            val layout = itemView.findViewById<ConstraintLayout>(R.id.clComponentBarItemParent)!!
+            val image = itemView.findViewById<ImageView>(R.id.ivComponentBarItem)!!
 
             fun span() {
                 Window.determineSpan(
-                    context, layout, (context as Compile).windowManager, Window.orientation, list.size/2) {}
-            }
-
-            fun mapId(position: Int) {
-                when (position) {
-                    0 -> {
-                        clCpu = layout
-                        clCpu?.id = R.id.clComponentBarCpu
-                    }
-                    2 -> {
-                        clCooler = layout
-                        clCooler?.id = R.id.clComponentBarCooler
-                    }
-                    4 -> {
-                        clMotherboard = layout
-                        clMotherboard?.id = R.id.clComponentBarMotherboard
-                    }
-                    6 -> {
-                        clMemory = layout
-                        clMemory?.id = R.id.clComponentBarMemory
-                    }
-                    8 -> {
-                        clStorage = layout
-                        clStorage?.id = R.id.clComponentBarStorage
-                    }
-                    10 -> {
-                        clExtStorage = layout
-                        clExtStorage?.id = R.id.clComponentBarExtStorage
-                    }
-                    1 -> {
-                        clOptDrive = layout
-                        clOptDrive?.id = R.id.clComponentBarOptDrive
-                    }
-                    3 -> {
-                        clGraphicCard = layout
-                        clGraphicCard?.id = R.id.clComponentBarGraphicCard
-                    }
-                    5 -> {
-                        clSoundCard = layout
-                        clSoundCard?.id = R.id.clComponentBarSoundCard
-                    }
-                    7 -> {
-                        clPowerSupply = layout
-                        clPowerSupply?.id = R.id.clComponentBarPowerSupply
-                    }
-                    9 -> {
-                        clCase = layout
-                        clCase?.id = R.id.clComponentBarCase
-                    }
-                    11 -> {
-                        clOpSystem = layout
-                        clOpSystem?.id = R.id.clComponentBarOpSystem
-                    }
-                }
+                    context, layout, (context as Compile).windowManager, Window.orientation, list.size / 2) {}
             }
 
             fun bind(item: Bar.Component) {
                 image.setImageResource(item.image)
+                rvComponentBar.layoutManager?.getChildAt(0)?.setBackgroundColor(Compiler.colors.colorAccent)
             }
 
-            fun onClick(view: View) {
+            fun onClick(view: View, position: Int) {
                 view.setOnClickListener {
                     TransitionManager.beginDelayedTransition(clCompile)
-                    try {
-                        when (view.id) {
-                            clCpu?.id -> {
-                                rvComponent.adapter = Recycler(context, Compiler.cpuList, 7, 0)
-                            }
-                            clCooler?.id -> {
-                                rvComponent.adapter = Recycler(context, Compiler.coolerList, 7, 1)
-                            }
-                            clMotherboard?.id -> {
-                                rvComponent.adapter = Recycler(context, Compiler.motherboardList, 7, 2)
-                            }
-                            clMemory?.id -> {
-                                rvComponent.adapter = Recycler(context, Compiler.memoryList, 7, 3)
-                            }
-                            clStorage?.id -> {
-                                rvComponent.adapter = Recycler(context, Compiler.storageList, 7, 4)
-                            }
-                            clExtStorage?.id -> {
-                                rvComponent.adapter = Recycler(context, Compiler.extStorageList, 7, 5)
-                            }
-                            clOptDrive?.id -> {
-                                rvComponent.adapter = Recycler(context, Compiler.optDriveList, 7, 6)
-                            }
-                            clGraphicCard?.id -> {
-                                rvComponent.adapter = Recycler(context, Compiler.graphicCardList, 7, 7)
-                            }
-                            clSoundCard?.id -> {
-                                rvComponent.adapter = Recycler(context, Compiler.soundCardList, 7, 8)
-                            }
-                            clPowerSupply?.id -> {
-                                rvComponent.adapter = Recycler(context, Compiler.powerSupplyList, 7, 9)
-                            }
-                            clCase?.id -> {
-                                rvComponent.adapter = Recycler(context, Compiler.caseList, 7, 10)
-                            }
-                            clOpSystem?.id -> {
-                                rvComponent.adapter = Recycler(context, Compiler.opSystemList, 7, 11)
-                            }
-                        }
-                    } catch (e: IllegalStateException) {
-                        println("ComponentBarViewHolder IllegalStateException ${e.localizedMessage}")
-                    }
+                    Algorithm.focus(rvComponentBar, position)
+                    rvComponent.adapter = Recycler(context, Compiler.componentsList[position], 7, position)
                 }
             }
         }
 
         inner class ComponentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            val parent = itemView.findViewById<ConstraintLayout>(R.id.clComponentParent)!!
-            val layout = itemView.findViewById<ConstraintLayout>(R.id.clComponent)!!
-            val image = itemView.findViewById<ImageView>(R.id.ivComponent)!!
-            val title = itemView.findViewById<TextView>(R.id.tvComponent)!!
-            private val paramA = itemView.findViewById<TextView>(R.id.tvComponentParamA)!!
-            private val paramB = itemView.findViewById<TextView>(R.id.tvComponentParamB)!!
-            private val paramC = itemView.findViewById<TextView>(R.id.tvComponentParamC)!!
-            private val paramD = itemView.findViewById<TextView>(R.id.tvComponentParamD)!!
-            private val paramE = itemView.findViewById<TextView>(R.id.tvComponentParamE)!!
-            private val paramF = itemView.findViewById<TextView>(R.id.tvComponentParamF)!!
-            private val price = itemView.findViewById<TextView>(R.id.tvComponentPrice)!!
+            val parent = itemView.findViewById<ConstraintLayout>(R.id.clComponentItemParent)!!
+            val layout = itemView.findViewById<ConstraintLayout>(R.id.clComponentItem)!!
+            val image = itemView.findViewById<ImageView>(R.id.ivComponentItem)!!
+            val title = itemView.findViewById<TextView>(R.id.tvComponentItem)!!
+            val more = itemView.findViewById<ImageView>(R.id.ivComponentItemMore)!!
+            private val price = itemView.findViewById<TextView>(R.id.tvComponentItemPrice)!!
 
             fun span() {
                 Window.determineSpan(context, layout, (context as Compile).windowManager, Window.orientation, 1) {}
+                Window.determineSpan(context, title, context.windowManager, Window.orientation, 2) {}
             }
 
             fun bind(item: Any) {
+                more.setImageResource(R.drawable.ic_more_active)
                 when (component) {
                     0 -> {
                         item as com.corespark.pccompiler.model.Component.CPU
                         image.setImageResource(item.image)
                         Parameter.set(image, 48)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-                        paramA.text = String.format("%s Core", item.paramA)
-                        paramB.text = item.paramB
-                        paramC.text = item.paramC
+//                        paramA.text = String.format("%s Core", item.paramA)
+//                        paramB.text = item.paramB
+//                        paramC.text = item.paramC
                         price.text = String.format("$%s", item.price)
                     }
                     1 -> {
-                        item as com.corespark.pccompiler.model.Component.Cooler
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
-                        title.text = String.format("%s %s", item.manufaturer, item.component)
-                        paramA.text = item.paramA
-                        paramB.text = item.paramB
-                        price.text = String.format("$%s", item.price)
-                    }
-                    2 -> {
-                        item as com.corespark.pccompiler.model.Component.Motherboard
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
-                        title.text = String.format("%s %s", item.manufaturer, item.component)
-                        paramA.text = item.paramA
-                        paramB.text = item.paramB
-                        paramC.text = String.format("%s Slot", item.paramC)
-                        paramD.text = item.paramD
-                        price.text = String.format("$%s", item.price)
-                    }
-                    3 -> {
-                        item as com.corespark.pccompiler.model.Component.Memory
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
-                        title.text = String.format("%s %s", item.manufaturer, item.component)
-                        paramA.text = item.paramA
-                        paramB.text = item.paramB
-                        paramC.text = item.paramC
-                        paramD.text = item.paramD
-                        paramE.text = item.paramE
-                        paramF.text = String.format("$%s/GB", item.paramF)
-                        price.text = String.format("$%s", item.price)
-                    }
-                    4 -> {
-                        item as com.corespark.pccompiler.model.Component.Storage
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
-                        title.text = String.format("%s %s", item.manufaturer, item.component)
-                        paramA.text = item.paramA
-                        paramB.text = item.paramB
-                        paramC.text = item.paramC
-                        paramD.text = item.paramD
-                        paramE.text = item.paramE
-                        paramF.text = String.format("$%s/GB", item.paramF)
-                        price.text = String.format("$%s", item.price)
-                    }
-                    5 -> {
-                        item as com.corespark.pccompiler.model.Component.ExternalStorage
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
-                        title.text = String.format("%s %s", item.manufaturer, item.component)
-                        paramA.text = item.paramA
-                        paramB.text = item.paramB
-                        paramC.text = String.format("$%s/GB", item.paramC)
-                        price.text = String.format("$%s", item.price)
-                    }
-                    6 -> {
                         item as com.corespark.pccompiler.model.Component.OpticalDrive
                         image.setImageResource(item.image)
                         Parameter.set(image, 48)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-                        paramA.text = item.paramA
-                        paramB.text = item.paramB
-                        paramC.text = item.paramC
-                        paramD.text = item.paramD
-                        paramE.text = item.paramE
-                        paramF.text = item.paramF
+//                        paramA.text = item.paramA
+//                        paramB.text = item.paramB
+//                        paramC.text = item.paramC
+//                        paramD.text = item.paramD
+//                        paramE.text = item.paramE
+//                        paramF.text = item.paramF
                         price.text = String.format("$%s", item.price)
                     }
-                    7 -> {
+                    2 -> {
+                        item as com.corespark.pccompiler.model.Component.Cooler
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+//                        paramA.text = item.paramA
+//                        paramB.text = item.paramB
+                        price.text = String.format("$%s", item.price)
+                    }
+                    3 -> {
                         item as com.corespark.pccompiler.model.Component.GraphicCard
                         image.setImageResource(item.image)
                         Parameter.set(image, 48)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-                        paramA.text = item.paramA
-                        paramB.text = item.paramB
-                        paramC.text = item.paramC
-                        paramD.text = item.paramD
+//                        paramA.text = item.paramA
+//                        paramB.text = item.paramB
+//                        paramC.text = item.paramC
+//                        paramD.text = item.paramD
                         price.text = String.format("$%s", item.price)
                     }
-                    8 -> {
+                    4 -> {
+                        item as com.corespark.pccompiler.model.Component.Motherboard
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+//                        paramA.text = item.paramA
+//                        paramB.text = item.paramB
+//                        paramC.text = String.format("%s Slot", item.paramC)
+//                        paramD.text = item.paramD
+                        price.text = String.format("$%s", item.price)
+                    }
+                    5 -> {
                         item as com.corespark.pccompiler.model.Component.SoundCard
                         image.setImageResource(item.image)
                         Parameter.set(image, 48)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-                        paramA.text = item.paramA
-                        paramB.text = item.paramB
-                        paramC.text = item.paramC
-                        paramD.text = item.paramD
-                        paramE.text = item.paramE
+//                        paramA.text = item.paramA
+//                        paramB.text = item.paramB
+//                        paramC.text = item.paramC
+//                        paramD.text = item.paramD
+//                        paramE.text = item.paramE
                         price.text = String.format("$%s", item.price)
                     }
-                    9 -> {
+                    6 -> {
+                        item as com.corespark.pccompiler.model.Component.Memory
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+//                        paramA.text = item.paramA
+//                        paramB.text = item.paramB
+//                        paramC.text = item.paramC
+//                        paramD.text = item.paramD
+//                        paramE.text = item.paramE
+//                        paramF.text = String.format("$%s/GB", item.paramF)
+                        price.text = String.format("$%s", item.price)
+                    }
+                    7 -> {
                         item as com.corespark.pccompiler.model.Component.PowerSupply
                         image.setImageResource(item.image)
                         Parameter.set(image, 48)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-                        paramA.text = item.paramA
-                        paramB.text = item.paramB
-                        paramC.text = item.paramC
-                        paramD.text = item.paramD
-                        paramE.text = item.paramE
+//                        paramA.text = item.paramA
+//                        paramB.text = item.paramB
+//                        paramC.text = item.paramC
+//                        paramD.text = item.paramD
+//                        paramE.text = item.paramE
                         price.text = String.format("$%s", item.price)
                     }
-                    10 -> {
+                    8 -> {
+                        item as com.corespark.pccompiler.model.Component.Storage
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+//                        paramA.text = item.paramA
+//                        paramB.text = item.paramB
+//                        paramC.text = item.paramC
+//                        paramD.text = item.paramD
+//                        paramE.text = item.paramE
+//                        paramF.text = String.format("$%s/GB", item.paramF)
+                        price.text = String.format("$%s", item.price)
+                    }
+                    9 -> {
                         item as com.corespark.pccompiler.model.Component.Case
                         image.setImageResource(item.image)
                         Parameter.set(image, 48)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-                        paramA.text = item.paramA
-                        paramB.text = item.paramB
-                        paramC.text = item.paramC
-                        paramD.text = item.paramD
+//                        paramA.text = item.paramA
+//                        paramB.text = item.paramB
+//                        paramC.text = item.paramC
+//                        paramD.text = item.paramD
+                        price.text = String.format("$%s", item.price)
+                    }
+                    10 -> {
+                        item as com.corespark.pccompiler.model.Component.ExternalStorage
+                        image.setImageResource(item.image)
+                        Parameter.set(image, 48)
+                        title.text = String.format("%s %s", item.manufaturer, item.component)
+//                        paramA.text = item.paramA
+//                        paramB.text = item.paramB
+//                        paramC.text = String.format("$%s/GB", item.paramC)
                         price.text = String.format("$%s", item.price)
                     }
                     11 -> {
@@ -838,104 +657,21 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                     }
                 }
             }
-
-            fun style(position: Int) {
-                if (position % 2 == 0) layout.setBackgroundColor(Compiler.colors.colorGray)
-                else layout.setBackgroundColor(Compiler.colors.colorWhite)
-            }
-
-            fun customize() {
-                val params = arrayOf(paramA, paramB, paramC, paramD, paramE, paramF)
-                for (param in params) param.visibility = View.GONE
-            }
-
-            fun visibility(view: View) {
-                when (component) {
-                    0, 1, 5 -> {
-                        if (!view.isSelected) {
-                            paramA.visibility = View.VISIBLE
-                            paramB.visibility = View.VISIBLE
-                            paramC.visibility = View.VISIBLE
-                        } else {
-                            paramA.visibility = View.GONE
-                            paramB.visibility = View.GONE
-                            paramC.visibility = View.GONE
-                        }
-                    }
-                    2, 3, 4, 6, 7, 8, 9, 10 -> {
-                        if (!view.isSelected) {
-                            paramA.visibility = View.VISIBLE
-                            paramB.visibility = View.VISIBLE
-                            paramC.visibility = View.VISIBLE
-                            paramD.visibility = View.VISIBLE
-                            paramE.visibility = View.VISIBLE
-                            paramF.visibility = View.VISIBLE
-                        } else {
-                            paramA.visibility = View.GONE
-                            paramB.visibility = View.GONE
-                            paramC.visibility = View.GONE
-                            paramD.visibility = View.GONE
-                            paramE.visibility = View.GONE
-                            paramF.visibility = View.GONE
-                        }
-                    }
-                }
-            }
-
-            fun expand() {
-                when (component) {
-                    0, 1, 5 -> {
-                        layout.setOnClickListener {
-                            if (!it.isSelected) {
-                                TransitionManager.beginDelayedTransition(parent)
-                                visibility(it)
-                                Constraint.set(layout, layout, paramA)
-                                rvComponent.scrollToPosition(adapterPosition)
-                                title.setSingleLine(false)
-                                it.isSelected = !it.isSelected
-                            } else {
-                                TransitionManager.beginDelayedTransition(parent)
-                                visibility(it)
-                                Constraint.set(layout, layout, paramA)
-                                rvComponent.scrollToPosition(adapterPosition)
-                                title.setSingleLine(true)
-                                it.isSelected = !it.isSelected
-                            }
-                        }
-                    }
-                    2, 3, 4, 6, 7, 8, 9, 10 -> {
-                        layout.setOnClickListener {
-                            if (!it.isSelected) {
-                                TransitionManager.beginDelayedTransition(parent)
-                                visibility(it)
-                                Constraint.set(layout, layout, paramD)
-                                rvComponent.scrollToPosition(adapterPosition)
-                                title.setSingleLine(false)
-                                it.isSelected = !it.isSelected
-                            } else {
-                                TransitionManager.beginDelayedTransition(parent)
-                                visibility(it)
-                                Constraint.set(layout, layout, paramD)
-                                rvComponent.scrollToPosition(adapterPosition)
-                                title.setSingleLine(true)
-                                it.isSelected = !it.isSelected
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 
     inner class EmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val parent = itemView.findViewById<ConstraintLayout>(R.id.clCompilationEmptyParent)!!
-        private val layout = itemView.findViewById<ConstraintLayout>(R.id.clCompilationEmpty)!!
-        val image = itemView.findViewById<ImageView>(R.id.ivCompilationEmpty)!!
-        val title = itemView.findViewById<TextView>(R.id.tvCompilationEmpty)!!
+        val parent = itemView.findViewById<ConstraintLayout>(R.id.clItemEmptyParent)!!
+        val layout = itemView.findViewById<ConstraintLayout>(R.id.clItemEmpty)!!
+        val image = itemView.findViewById<ImageView>(R.id.ivItemEmpty)!!
+        val title = itemView.findViewById<TextView>(R.id.tvItemEmpty)!!
+
+        fun span() {
+            Window.determineSpan(context, layout, (context as Workspace).windowManager, Window.orientation, list.size) {}
+        }
 
         fun bind(item: Bar.Empty) {
-            layout.layoutParams.width = Window.measureMultiDeviceDensity(Window.widthPx, 1)
             image.setImageResource(item.image)
             title.text = item.title
         }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout android:id="@+id/clComponent"
+<android.support.constraint.ConstraintLayout android:id="@+id/clComponentBarItemParent"
                                              android:layout_width="wrap_content"
                                              android:layout_height="wrap_content"
                                              xmlns:android="http://schemas.android.com/apk/res/android"
                                              xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.CardView android:id="@+id/cvComponent"
+    <android.support.v7.widget.CardView android:id="@+id/cvComponentBarItem"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         app:cardPreventCornerOverlap="true"
@@ -15,7 +15,7 @@
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageView android:id="@+id/ivComponent"
+        <ImageView android:id="@+id/ivComponentBarItem"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:layout_marginTop="@dimen/_8dp"

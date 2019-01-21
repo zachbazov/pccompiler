@@ -57,14 +57,14 @@ class Auth : AppCompatActivity() {
         when (view.id) {
             tvAuthSignIn.id -> {
                 view.setOnClickListener {
-                    TransitionManager.beginDelayedTransition(clAuth)
-                    Constraint.set(view, clAuth) {}
+                    TransitionManager.beginDelayedTransition(clAuthParent)
+                    Constraint.set(view, clAuthParent) {}
                 }
             }
             tvAuthSignUp.id -> {
                 view.setOnClickListener {
-                    TransitionManager.beginDelayedTransition(clAuth)
-                    Constraint.set(view, clAuth) {}
+                    TransitionManager.beginDelayedTransition(clAuthParent)
+                    Constraint.set(view, clAuthParent) {}
                 }
             }
             btnAuthSignIn.id -> {
@@ -93,8 +93,8 @@ class Auth : AppCompatActivity() {
                             Snackbar.make(view, getString(R.string.auth_sign_up_success), Snackbar.LENGTH_LONG).show()
                             clearInput(view)
                             Window.hideKeyboard(this)
-                            TransitionManager.beginDelayedTransition(clAuth)
-                            Constraint.set(tvAuthSignIn, clAuth) {}
+                            TransitionManager.beginDelayedTransition(clAuthParent)
+                            Constraint.set(tvAuthSignIn, clAuthParent) {}
                         } else {
                             Snackbar.make(view, getString(R.string.auth_sign_up_failure), Snackbar.LENGTH_LONG).show()
                             clearInput(view)

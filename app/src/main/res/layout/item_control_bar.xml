@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout android:id="@+id/clControlBarParent"
+<android.support.constraint.ConstraintLayout android:id="@+id/clControlBarItemParent"
                                              android:layout_width="wrap_content"
                                              android:layout_height="wrap_content"
                                              xmlns:android="http://schemas.android.com/apk/res/android"
                                              xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView android:id="@+id/ivControlBar"
+    <ImageView android:id="@+id/ivControlBarItem"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_marginTop="@dimen/_8dp"
@@ -14,16 +14,16 @@
                app:layout_constraintStart_toStartOf="parent"
                app:layout_constraintEnd_toEndOf="parent"/>
 
-    <TextView android:id="@+id/tvControlBar"
+    <TextView android:id="@+id/tvControlBarItem"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginBottom="@dimen/_8dp"
-              app:layout_constraintTop_toBottomOf="@+id/ivControlBar"
-              app:layout_constraintStart_toStartOf="@+id/ivControlBar"
-              app:layout_constraintEnd_toEndOf="@+id/ivControlBar"
+              app:layout_constraintTop_toBottomOf="@+id/ivControlBarItem"
+              app:layout_constraintStart_toStartOf="@+id/ivControlBarItem"
+              app:layout_constraintEnd_toEndOf="@+id/ivControlBarItem"
               app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <View android:id="@+id/dvControlBar"
+    <View android:id="@+id/dvControlBarItem"
           android:layout_width="1dp"
           android:layout_height="0dp"
           android:background="?android:attr/listDivider"

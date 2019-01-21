@@ -31,6 +31,10 @@ class Compiler : Application() {
         val powerSupplyList = mutableListOf<Any>()
         val caseList = mutableListOf<Any>()
         val opSystemList = mutableListOf<Any>()
+
+        val componentsList = arrayOf(
+            cpuList, optDriveList, coolerList, graphicCardList, motherboardList, soundCardList, memoryList,
+            powerSupplyList, storageList, caseList, extStorageList, opSystemList)
     }
 
     override fun onCreate() {

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout android:id="@+id/clCartBarParent"
+<android.support.constraint.ConstraintLayout android:id="@+id/clCartBarItemParent"
                                              android:layout_width="wrap_content"
                                              android:layout_height="wrap_content"
                                              xmlns:android="http://schemas.android.com/apk/res/android"
                                              xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.constraint.ConstraintLayout android:id="@+id/clCartBar"
+    <android.support.constraint.ConstraintLayout android:id="@+id/clCartBarItem"
                                                  android:layout_width="wrap_content"
                                                  android:layout_height="wrap_content"
                                                  app:layout_constraintTop_toTopOf="parent"
@@ -13,7 +13,7 @@
                                                  app:layout_constraintStart_toStartOf="parent"
                                                  app:layout_constraintEnd_toEndOf="parent" >
 
-        <ImageView android:id="@+id/ivCartBar"
+        <ImageView android:id="@+id/ivCartBarItem"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:layout_marginStart="@dimen/_8dp"
@@ -24,15 +24,15 @@
                    app:layout_constraintTop_toTopOf="parent"
                    app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <TextView android:id="@+id/tvComponentCartBar"
+        <TextView android:id="@+id/tvCartBarItemComponent"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginStart="@dimen/_8dp"
-                  app:layout_constraintTop_toTopOf="@+id/ivCartBar"
-                  app:layout_constraintBottom_toBottomOf="@+id/ivCartBar"
-                  app:layout_constraintStart_toEndOf="@+id/ivCartBar"/>
+                  app:layout_constraintTop_toTopOf="@+id/ivCartBarItem"
+                  app:layout_constraintBottom_toBottomOf="@+id/ivCartBarItem"
+                  app:layout_constraintStart_toEndOf="@+id/ivCartBarItem"/>
 
-        <TextView android:id="@+id/tvPriceCartBar"
+        <TextView android:id="@+id/tvCartBarItemPrice"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginTop="@dimen/_8dp"
@@ -40,18 +40,7 @@
                   android:layout_marginEnd="@dimen/_8dp"
                   app:layout_constraintEnd_toEndOf="parent"
                   app:layout_constraintTop_toTopOf="parent"
-                  app:layout_constraintBottom_toTopOf="@+id/dvCartBar"/>
-
-        <View android:id="@+id/dvCartBar"
-              android:layout_width="0dp"
-              android:layout_height="1dp"
-              android:background="?android:attr/listDivider"
-              android:layout_marginTop="@dimen/_16dp"
-              android:layout_marginStart="@dimen/_8dp"
-              android:layout_marginEnd="@dimen/_8dp"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintTop_toBottomOf="@+id/ivCartBar"/>
+                  app:layout_constraintBottom_toTopOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
 

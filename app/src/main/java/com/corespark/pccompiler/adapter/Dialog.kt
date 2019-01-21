@@ -34,18 +34,18 @@ class Dialog(val context: Context, val type: Int) {
 
     inner class Workspace {
 
-        val clWorkspace = (context as com.corespark.pccompiler.activity.Workspace).clWorkspace!!
+        val clWorkspace = (context as com.corespark.pccompiler.activity.Workspace).clWorkspaceParent!!
         val clActionCompile = clWorkspace.rvActionBar.findViewById<ConstraintLayout>(R.id.clActionCompile)!!
 
         inner class Compilation {
 
             val bgTransparent = ConstraintLayout(context)
-            val layout = LayoutInflater.from(context).inflate(R.layout.dialog_compile, clWorkspace, false)!!
-            val clDialog = layout.findViewById<ConstraintLayout>(R.id.clDialogCompile)!!
-            private val ivDialog = layout.findViewById<ImageView>(R.id.ivDialogCompile)!!
-            private val tvDialog = layout.findViewById<TextView>(R.id.tvDialogCompile)!!
-            val etDialog = layout.findViewById<EditText>(R.id.etDialogCompile)!!
-            val btnDialog = layout.findViewById<Button>(R.id.btnDialogCompile)!!
+            val layout = LayoutInflater.from(context).inflate(R.layout.dialog_primary, clWorkspace, false)!!
+            val clDialog = layout.findViewById<ConstraintLayout>(R.id.clDialog)!!
+            private val ivDialog = layout.findViewById<ImageView>(R.id.ivDialog)!!
+            private val tvDialog = layout.findViewById<TextView>(R.id.tvDialog)!!
+            val etDialog = layout.findViewById<EditText>(R.id.etDialog)!!
+            val btnDialog = layout.findViewById<Button>(R.id.btnDialog)!!
 
             fun create() {
                 if (!clActionCompile.isSelected) {
