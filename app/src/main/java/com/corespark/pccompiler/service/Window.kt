@@ -27,7 +27,7 @@ object Window : Tab, Bar {
     var density = 0f
     private var densityDpi = 0
     private var dpi = 0
-    var widthPx = 0
+    private var widthPx = 0
     private var heightPx = 0
     private var widthDp = 0f
     private var heightDp = 0f
@@ -50,7 +50,7 @@ object Window : Tab, Bar {
         return orientation as Int
     }
 
-    fun measureMultiDeviceDensity(width: Int, divide: Int) : Int {
+    private fun measureMultiDeviceDensity(width: Int, divide: Int) : Int {
         when (Window.metrics.density) {
             0.75f -> { dividedWidthPx = (width / divide) }
             1f -> { dividedWidthPx = (width / divide) }

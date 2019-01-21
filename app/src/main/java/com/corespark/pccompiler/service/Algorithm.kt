@@ -1,9 +1,7 @@
 package com.corespark.pccompiler.service
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.corespark.pccompiler.adapter.Recycler
 import com.corespark.pccompiler.app.Compiler
 
 

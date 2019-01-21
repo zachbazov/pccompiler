@@ -343,7 +343,7 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
 
     inner class ControlPanel {
 
-        val clWorkspace = (context as Workspace).clWorkspaceParent!!
+        private val clWorkspace = (context as Workspace).clWorkspaceParent!!
 
         fun constraint(view: View) {
             TransitionManager.beginDelayedTransition(clWorkspace)
