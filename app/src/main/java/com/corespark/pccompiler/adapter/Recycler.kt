@@ -285,7 +285,7 @@ class Recycler(
                     }
                     R.id.clActionCompile -> {
                         dialog = Dialog(context, null)
-                        dialog.Workspace().Compilation().build()
+                        dialog.Workspace().Prelim().build()
                     }
                 }
             }

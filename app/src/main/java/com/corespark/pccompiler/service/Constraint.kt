@@ -141,22 +141,22 @@ object Constraint {
                 Constraint.set.connect(bgTransparent, ConstraintSet.END, clWorkspaceParent, ConstraintSet.END)
                 Constraint.set.applyTo(parentLayout)
             }
-            cvDialogWorkspaceParent -> {
+            cvPrelimParent -> {
                 Constraint.set.clone(parentLayout)
-                Constraint.set.connect(cvDialogWorkspaceParent, ConstraintSet.TOP, clFragActionBar, ConstraintSet.TOP)
-                Constraint.set.connect(cvDialogWorkspaceParent, ConstraintSet.BOTTOM, clWorkspaceParent, ConstraintSet.BOTTOM)
-                Constraint.set.connect(cvDialogWorkspaceParent, ConstraintSet.START, clWorkspaceParent, ConstraintSet.START)
-                Constraint.set.connect(cvDialogWorkspaceParent, ConstraintSet.END, clWorkspaceParent, ConstraintSet.END)
+                Constraint.set.connect(cvPrelimParent, ConstraintSet.TOP, clFragActionBar, ConstraintSet.TOP)
+                Constraint.set.connect(cvPrelimParent, ConstraintSet.BOTTOM, clWorkspaceParent, ConstraintSet.BOTTOM)
+                Constraint.set.connect(cvPrelimParent, ConstraintSet.START, clWorkspaceParent, ConstraintSet.START)
+                Constraint.set.connect(cvPrelimParent, ConstraintSet.END, clWorkspaceParent, ConstraintSet.END)
                 Constraint.set.applyTo(parentLayout)
             }
-            etDialogWorkspace -> {
+            etPrelim -> {
                 if (!view.isSelected) {
                     Constraint.set.clone(parentLayout)
-                    Constraint.set.connect(etDialogWorkspace, ConstraintSet.BOTTOM, clDialogWorkspace, ConstraintSet.BOTTOM, 32)
+                    Constraint.set.connect(etPrelim, ConstraintSet.BOTTOM, clPrelim, ConstraintSet.BOTTOM, 32)
                     Constraint.set.applyTo(parentLayout)
                 } else {
                     Constraint.set.clone(parentLayout)
-                    Constraint.set.clear(etDialogWorkspace, ConstraintSet.BOTTOM)
+                    Constraint.set.clear(etPrelim, ConstraintSet.BOTTOM)
                     Constraint.set.applyTo(parentLayout)
                 }
             }

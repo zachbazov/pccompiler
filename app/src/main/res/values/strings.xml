@@ -112,7 +112,26 @@
     <string name="key_internal">internal</string>
     <string name="key_operating_system">operatingsystem</string>
 
-    <!-- Dialog Keys -->
+    <!-- Dialog Types & Keys -->
+    <string name="dialog_overview">OVERVIEW</string>
+    <string name="dialog_parameter">Parameter</string>
+    <string name="dialog_description">Description</string>
+    <string name="dialog_add">ADD</string>
+    <string name="dialog_remove">REMOVE</string>
+
+    <string name="type_cpu">CPU</string>
+    <string name="type_cooler">Cooler</string>
+    <string name="type_motherboard">Motherboard</string>
+    <string name="type_memory">Memory</string>
+    <string name="type_storage">Storage</string>
+    <string name="type_external_storage">External Storage</string>
+    <string name="type_optical_drive">Optical Drive</string>
+    <string name="type_graphic_card">Graphic Card</string>
+    <string name="type_sound_card">Sound Card</string>
+    <string name="type_power_supply">Power Supply</string>
+    <string name="type_case">Case</string>
+    <string name="type_os">Operating System</string>
+
     <string name="dialog_core">Core</string>
     <string name="dialog_speed">Speed</string>
     <string name="dialog_tdp">TDP</string>
@@ -165,4 +184,5 @@
     <string name="cd_close">Close Button</string>
     <string name="cd_return">Return Button</string>
     <string name="cd_more">More Options Button</string>
+    <string name="cd_overview">Component Overview</string>
 </resources>
