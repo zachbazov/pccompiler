@@ -112,6 +112,45 @@
     <string name="key_internal">internal</string>
     <string name="key_operating_system">operatingsystem</string>
 
+    <!-- Dialog Keys -->
+    <string name="dialog_core">Core</string>
+    <string name="dialog_speed">Speed</string>
+    <string name="dialog_tdp">TDP</string>
+    <string name="dialog_rpm">RPM</string>
+    <string name="dialog_noise">Noise</string>
+    <string name="dialog_socket_cpu">Socket / CPU</string>
+    <string name="dialog_form_factor">Form Factor</string>
+    <string name="dialog_ram_slots">Ram Slots</string>
+    <string name="dialog_max_ram">Max RAM</string>
+    <string name="dialog_type">Type</string>
+    <string name="dialog_modules">Modules</string>
+    <string name="dialog_cas">CAS</string>
+    <string name="dialog_size">Size</string>
+    <string name="dialog_gb_price">GB Price</string>
+    <string name="dialog_series">Series</string>
+    <string name="dialog_form">Form</string>
+    <string name="dialog_cache">Cache</string>
+    <string name="dialog_capacity">Capacity</string>
+    <string name="dialog_bd">BD</string>
+    <string name="dialog_cd">CD</string>
+    <string name="dialog_dvd">DVD</string>
+    <string name="dialog_bd_write">BD Write</string>
+    <string name="dialog_cd_write">CD Write</string>
+    <string name="dialog_dvd_write">DVD Write</string>
+    <string name="dialog_memory">Memory</string>
+    <string name="dialog_chipset">Chipset</string>
+    <string name="dialog_core_clock">Core Clock</string>
+    <string name="dialog_bits">Bits</string>
+    <string name="dialog_snr">SNR</string>
+    <string name="dialog_channels">Channels</string>
+    <string name="dialog_rate">Rate</string>
+    <string name="dialog_efficiency">Efficiency</string>
+    <string name="dialog_modular">Modular</string>
+    <string name="dialog_watts">Watts</string>
+    <string name="dialog_external">External</string>
+    <string name="dialog_internal">Internal</string>
+    <string name="dialog_power_supply">Power Supply</string>
+
     <!-- ContentDescription -->
     <string name="cd_app_logo">App Logo</string>
     <string name="cd_app_title">App Title</string>

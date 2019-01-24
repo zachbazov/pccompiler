@@ -18,15 +18,15 @@
 
         <activity android:name=".activity.Auth"
                   android:windowSoftInputMode="stateAlwaysHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+
         </activity>
         <activity android:name=".activity.Workspace"
                   android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity android:name=".activity.Compile">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
 
         <meta-data

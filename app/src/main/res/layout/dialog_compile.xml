@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                                    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/cvDialogCompileParent" app:cardUseCompatPadding="true"
+                                    android:layout_marginEnd="@dimen/_16dp" android:layout_marginStart="@dimen/_16dp">
+
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/clDialogCompile">
+
+        <TextView
+                android:text="Overview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDialogCompileOverview" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" android:textStyle="bold" android:textAllCaps="true"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" app:srcCompat="@drawable/ic_close_transparent_gray_24dp"
+                android:id="@+id/ivDialogCompileClose"
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toTopOf="@+id/tvDialogCompileOverview"
+                app:layout_constraintBottom_toBottomOf="@+id/tvDialogCompileOverview"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" app:srcCompat="@mipmap/ic_cpu"
+                android:id="@+id/ivDialogCompile"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/tvDialogCompile"/>
+        <View
+                android:id="@+id/dvDialogCompile"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/tvDialogCompileOverview"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" android:layout_marginTop="8dp"/>
+        <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDialogCompile"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintTop_toBottomOf="@+id/dvDialogCompile"
+                android:layout_marginTop="16dp"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:divider="?android:attr/listDivider"
+                android:showDividers="middle"
+                android:layout_height="wrap_content" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/ivDialogCompile" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/border" android:id="@+id/llDialogCompileParent">
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:divider="?android:attr/listDivider"
+                    android:showDividers="middle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:layout_weight="2"
+                    android:id="@+id/llDialogCompileParameter">
+                <TextView
+                        android:text="Parameter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/tvDialogCompileParameter"
+                        android:textAlignment="center" android:paddingBottom="@dimen/_8dp"
+                        android:paddingTop="@dimen/_8dp" android:textStyle="bold" android:textAllCaps="false"/>
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/tvDialogCompileParamA"
+                        android:textAlignment="center" android:paddingBottom="@dimen/_8dp"
+                        android:paddingTop="@dimen/_8dp"/>
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/tvDialogCompileParamB"
+                        android:textAlignment="center" android:paddingBottom="@dimen/_8dp"
+                        android:paddingTop="@dimen/_8dp"/>
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/tvDialogCompileParamC"
+                        android:textAlignment="center" android:paddingBottom="@dimen/_8dp"
+                        android:paddingTop="@dimen/_8dp"/>
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/tvDialogCompileParamD"
+                        android:textAlignment="center" android:paddingBottom="@dimen/_8dp"
+                        android:paddingTop="@dimen/_8dp"/>
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/tvDialogCompileParamE"
+                        android:textAlignment="center" android:paddingBottom="@dimen/_8dp"
+                        android:paddingTop="@dimen/_8dp"/>
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/tvDialogCompileParamF"
+                        android:textAlignment="center" android:paddingBottom="@dimen/_8dp"
+                        android:paddingTop="@dimen/_8dp"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:divider="?android:attr/listDivider"
+                    android:showDividers="middle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:layout_weight="1"
+                    android:id="@+id/llDialogCompileDescription">
+                <TextView
+                        android:text="Description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/tvDialogCompileDescription"
+                        android:textAlignment="center" android:paddingBottom="@dimen/_8dp"
+                        android:paddingTop="@dimen/_8dp" android:textStyle="bold" android:textAllCaps="false"/>
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/tvDialogCompileDescA"
+                        android:paddingBottom="@dimen/_8dp" android:paddingTop="@dimen/_8dp"
+                        android:textAlignment="textStart" android:paddingStart="@dimen/_8dp"
+                        android:paddingEnd="@dimen/_8dp"/>
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/tvDialogCompileDescB"
+                        android:paddingBottom="@dimen/_8dp" android:paddingTop="@dimen/_8dp"
+                        android:textAlignment="textStart" android:paddingStart="@dimen/_8dp"
+                        android:paddingEnd="@dimen/_8dp"/>
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/tvDialogCompileDescC"
+                        android:paddingBottom="@dimen/_8dp" android:paddingTop="@dimen/_8dp"
+                        android:textAlignment="textStart" android:paddingStart="@dimen/_8dp"
+                        android:paddingEnd="@dimen/_8dp"/>
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/tvDialogCompileDescD"
+                        android:paddingBottom="@dimen/_8dp" android:paddingTop="@dimen/_8dp"
+                        android:textAlignment="textStart" android:paddingStart="@dimen/_8dp"
+                        android:paddingEnd="@dimen/_8dp"/>
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/tvDialogCompileDescE"
+                        android:paddingBottom="@dimen/_8dp" android:paddingTop="@dimen/_8dp"
+                        android:textAlignment="textStart" android:paddingStart="@dimen/_8dp"
+                        android:paddingEnd="@dimen/_8dp"/>
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/tvDialogCompileDescF"
+                        android:paddingBottom="@dimen/_8dp" android:paddingTop="@dimen/_8dp"
+                        android:textAlignment="textStart" android:paddingStart="@dimen/_8dp"
+                        android:paddingEnd="@dimen/_8dp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDialogCompilePrice" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp" app:layout_constraintTop_toBottomOf="@+id/llDialogCompileParent"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/tvDialogCompilePrice" android:id="@+id/llDialogCompileAction">
+            <ToggleButton
+                    android:text="ToggleButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/tbDialogCompile"
+                    android:layout_weight="1"/>
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

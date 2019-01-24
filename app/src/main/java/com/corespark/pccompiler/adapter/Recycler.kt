@@ -27,8 +27,12 @@ import kotlinx.android.synthetic.main.activity_workspace.view.*
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
-class Recycler(val context: Context, private val list: MutableList<Any>, val type: Int, val component: Int)
-    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class Recycler(
+    val context: Context,
+    private val list: MutableList<Any>,
+    val type: Int,
+    val component: Int
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     lateinit var dialog: Dialog
 
@@ -38,45 +42,32 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
         val holder: RecyclerView.ViewHolder
         val infalter = LayoutInflater.from(context)
         when (type) {
-            0 -> {
-                holder = TabBar().TabBarViewHolder(infalter.inflate(R.layout.item_tab_bar, container, false))
-            }
-            1 -> {
-                holder = ActionBarViewHolder(infalter.inflate(R.layout.item_action_bar, container, false))
-            }
-            2 -> {
-                holder = ControlBarViewHolder(infalter.inflate(R.layout.item_control_bar, container, false))
-            }
-            3 -> {
-                holder = ControlPanel().ControlPanelViewHolder(
-                    infalter.inflate(R.layout.item_control_panel, container, false))
-            }
-            4 -> {
-                holder = Compilation().CompilationViewHolder(
-                    infalter.inflate(R.layout.item_compilation_bar, container, false))
-            }
-            5 -> {
-                holder = CartBarViewHolder(infalter.inflate(R.layout.item_cart_bar, container, false))
-            }
-            6 -> {
-                holder = Component().ComponentBarViewHolder(
-                    infalter.inflate(R.layout.item_component_bar, container, false))
-            }
-            7 -> {
-                holder = Component().ComponentViewHolder(
-                    infalter.inflate(R.layout.item_component, container, false))
-            }
-            else -> {
-                holder = EmptyViewHolder(infalter.inflate(R.layout.item_empty, container, false))
-            }
+            0 -> holder = TabBar().TabBarViewHolder(
+                infalter.inflate(R.layout.item_tab_bar, container, false))
+            1 -> holder = ActionBarViewHolder(
+                infalter.inflate(R.layout.item_action_bar, container, false))
+            2 -> holder = ControlBarViewHolder(
+                infalter.inflate(R.layout.item_control_bar, container, false))
+            3 -> holder = ControlPanel().ControlPanelViewHolder(
+                infalter.inflate(R.layout.item_control_panel, container, false))
+            4 -> holder = Compilation().CompilationViewHolder(
+                infalter.inflate(R.layout.item_compilation_bar, container, false))
+            5 -> holder = CartBarViewHolder(
+                infalter.inflate(R.layout.item_cart_bar, container, false))
+            6 -> holder = Component().ComponentBarViewHolder(
+                infalter.inflate(R.layout.item_component_bar, container, false))
+            7 -> holder = Component().ComponentViewHolder(
+                infalter.inflate(R.layout.item_component, container, false))
+            else -> holder = EmptyViewHolder(
+                infalter.inflate(R.layout.item_empty, container, false))
         }
         return holder
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = list[position]
         when (type) {
             0 -> {
-                val item = list[position]
                 holder as TabBar.TabBarViewHolder
                 holder.span()
                 holder.mapId(position)
@@ -85,7 +76,6 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                 holder.onClick(holder.layout)
             }
             1 -> {
-                val item = list[position]
                 holder as ActionBarViewHolder
                 holder.span()
                 holder.bind(item as Bar.Action)
@@ -95,14 +85,12 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                 holder.onClick(holder.layout)
             }
             2 -> {
-                val item = list[position]
                 holder as ControlBarViewHolder
                 holder.span()
                 holder.bind(item as Bar.Control)
                 holder.activate(holder.image, position)
             }
             3 -> {
-                val item = list[position]
                 holder as ControlPanel.ControlPanelViewHolder
                 holder.span()
                 holder.bind(item as Panel.ControlPanel)
@@ -111,7 +99,6 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                 holder.onClick(holder.layout)
             }
             4 -> {
-                val item = list[position]
                 holder as Compilation.CompilationViewHolder
                 holder.span()
                 holder.mapId(position)
@@ -119,27 +106,24 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                 Algorithm.style(holder.layout, position)
             }
             5 -> {
-                val item = list[position]
                 holder as CartBarViewHolder
                 holder.span()
                 holder.bind(item as Bar.Cart)
             }
             6 -> {
-                val item = list[position]
                 holder as Component.ComponentBarViewHolder
                 holder.span()
                 holder.bind(item as Bar.Component)
                 holder.onClick(holder.layout, position)
             }
             7 -> {
-                val item = list[position]
                 holder as Component.ComponentViewHolder
                 holder.span()
-                holder.bind(item)
+                holder.bind(item as com.corespark.pccompiler.model.Component)
                 Algorithm.style(holder.layout, position)
+                holder.onClick(holder.more)
             }
             else -> {
-                val item = list[position]
                 holder as EmptyViewHolder
                 holder.span()
                 holder.bind(item as Bar.Empty)
@@ -300,8 +284,8 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                         activate(image, 0)
                     }
                     R.id.clActionCompile -> {
-                        dialog = Dialog(context, 0)
-                        dialog.Workspace().Compilation().create()
+                        dialog = Dialog(context, null)
+                        dialog.Workspace().Compilation().build()
                     }
                 }
             }
@@ -501,7 +485,8 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                 view.setOnClickListener {
                     TransitionManager.beginDelayedTransition(clCompile)
                     Algorithm.focus(rvComponentBar, position)
-                    rvComponent.adapter = Recycler(context, Compiler.componentsList[position], 7, position)
+                    val list = Compiler.componentsList[position]
+                    rvComponent.adapter = Recycler(context, list, 7, position)
                 }
             }
         }
@@ -520,141 +505,78 @@ class Recycler(val context: Context, private val list: MutableList<Any>, val typ
                 Window.determineSpan(context, title, context.windowManager, Window.orientation, 2) {}
             }
 
-            fun bind(item: Any) {
+            fun bind(item: com.corespark.pccompiler.model.Component) {
+                Parameter.set(image, 48)
                 more.setImageResource(R.drawable.ic_more_active)
                 when (component) {
                     0 -> {
-                        item as com.corespark.pccompiler.model.Component.CPU
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
+                        image.setImageResource(R.mipmap.ic_cpu)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-//                        paramA.text = String.format("%s Core", item.paramA)
-//                        paramB.text = item.paramB
-//                        paramC.text = item.paramC
                         price.text = String.format("$%s", item.price)
                     }
                     1 -> {
-                        item as com.corespark.pccompiler.model.Component.OpticalDrive
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
+                        image.setImageResource(R.mipmap.ic_optdrive)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-//                        paramA.text = item.paramA
-//                        paramB.text = item.paramB
-//                        paramC.text = item.paramC
-//                        paramD.text = item.paramD
-//                        paramE.text = item.paramE
-//                        paramF.text = item.paramF
                         price.text = String.format("$%s", item.price)
                     }
                     2 -> {
-                        item as com.corespark.pccompiler.model.Component.Cooler
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
+                        image.setImageResource(R.mipmap.ic_cooler)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-//                        paramA.text = item.paramA
-//                        paramB.text = item.paramB
                         price.text = String.format("$%s", item.price)
                     }
                     3 -> {
-                        item as com.corespark.pccompiler.model.Component.GraphicCard
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
+                        image.setImageResource(R.mipmap.ic_graphiccard)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-//                        paramA.text = item.paramA
-//                        paramB.text = item.paramB
-//                        paramC.text = item.paramC
-//                        paramD.text = item.paramD
                         price.text = String.format("$%s", item.price)
                     }
                     4 -> {
-                        item as com.corespark.pccompiler.model.Component.Motherboard
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
+                        image.setImageResource(R.mipmap.ic_motherboard)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-//                        paramA.text = item.paramA
-//                        paramB.text = item.paramB
-//                        paramC.text = String.format("%s Slot", item.paramC)
-//                        paramD.text = item.paramD
                         price.text = String.format("$%s", item.price)
                     }
                     5 -> {
-                        item as com.corespark.pccompiler.model.Component.SoundCard
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
+                        image.setImageResource(R.mipmap.ic_soundcard)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-//                        paramA.text = item.paramA
-//                        paramB.text = item.paramB
-//                        paramC.text = item.paramC
-//                        paramD.text = item.paramD
-//                        paramE.text = item.paramE
                         price.text = String.format("$%s", item.price)
                     }
                     6 -> {
-                        item as com.corespark.pccompiler.model.Component.Memory
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
+                        image.setImageResource(R.mipmap.ic_memory)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-//                        paramA.text = item.paramA
-//                        paramB.text = item.paramB
-//                        paramC.text = item.paramC
-//                        paramD.text = item.paramD
-//                        paramE.text = item.paramE
-//                        paramF.text = String.format("$%s/GB", item.paramF)
                         price.text = String.format("$%s", item.price)
                     }
                     7 -> {
-                        item as com.corespark.pccompiler.model.Component.PowerSupply
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
+                        image.setImageResource(R.mipmap.ic_powersupply)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-//                        paramA.text = item.paramA
-//                        paramB.text = item.paramB
-//                        paramC.text = item.paramC
-//                        paramD.text = item.paramD
-//                        paramE.text = item.paramE
                         price.text = String.format("$%s", item.price)
                     }
                     8 -> {
-                        item as com.corespark.pccompiler.model.Component.Storage
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
+                        image.setImageResource(R.mipmap.ic_storage)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-//                        paramA.text = item.paramA
-//                        paramB.text = item.paramB
-//                        paramC.text = item.paramC
-//                        paramD.text = item.paramD
-//                        paramE.text = item.paramE
-//                        paramF.text = String.format("$%s/GB", item.paramF)
                         price.text = String.format("$%s", item.price)
                     }
                     9 -> {
-                        item as com.corespark.pccompiler.model.Component.Case
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
+                        image.setImageResource(R.mipmap.ic_case)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-//                        paramA.text = item.paramA
-//                        paramB.text = item.paramB
-//                        paramC.text = item.paramC
-//                        paramD.text = item.paramD
                         price.text = String.format("$%s", item.price)
                     }
                     10 -> {
-                        item as com.corespark.pccompiler.model.Component.ExternalStorage
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
+                        image.setImageResource(R.mipmap.ic_extstorage)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
-//                        paramA.text = item.paramA
-//                        paramB.text = item.paramB
-//                        paramC.text = String.format("$%s/GB", item.paramC)
                         price.text = String.format("$%s", item.price)
                     }
                     11 -> {
-                        item as com.corespark.pccompiler.model.Component.OperatingSystem
-                        image.setImageResource(item.image)
-                        Parameter.set(image, 48)
+                        image.setImageResource(R.mipmap.ic_opsystem)
                         title.text = String.format("%s %s", item.manufaturer, item.component)
                         price.text = String.format("$%s", item.price)
                     }
+                }
+            }
+
+            fun onClick(view: View) {
+                view.setOnClickListener {
+                    val item = list[adapterPosition]
+                    dialog = Dialog(context, item as com.corespark.pccompiler.model.Component?)
+                    dialog.Compile().Overview().build(component)
                 }
             }
         }
