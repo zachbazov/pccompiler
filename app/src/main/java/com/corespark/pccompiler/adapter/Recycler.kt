@@ -114,6 +114,7 @@ class Recycler(
                 holder as Component.ComponentBarViewHolder
                 holder.span()
                 holder.bind(item as Bar.Component)
+                holder.customize()
                 holder.onClick(holder.layout, position)
             }
             7 -> {
@@ -478,6 +479,9 @@ class Recycler(
 
             fun bind(item: Bar.Component) {
                 image.setImageResource(item.image)
+            }
+
+            fun customize() {
                 rvComponentBar.layoutManager?.getChildAt(0)?.setBackgroundColor(Compiler.colors.colorAccent)
             }
 

@@ -63,27 +63,22 @@ class Workspace : AppCompatActivity() {
             }
             rvCompilationBar.id -> {
                 Bar.Compilation.addEmpty(this)
-                if (Bar.Compilation.list.size > 0) {
-                    rvCompilationBar.adapter = Recycler(this, Bar.Compilation.list, 4, 0)
-                } else {
-                    rvCompilationBar.adapter = Recycler(this, Bar.Compilation.empty, 8, 0)
-                }
+                if (Bar.Compilation.list.size > 0) rvCompilationBar.adapter = Recycler(this, Bar.Compilation.list, 4, 0)
+                else rvCompilationBar.adapter = Recycler(this, Bar.Compilation.empty, 8, 0)
             }
             rvCartBar.id -> {
                 Bar.Cart.addEmpty(this)
-                if (Bar.Cart.list.size > 0) {
-                    rvCartBar.adapter = Recycler(this, Bar.Cart.list, 5, 0)
-                } else {
-                    rvCartBar.adapter = Recycler(this, Bar.Cart.empty, 8, 0)
-                }
+                if (Bar.Cart.list.size > 0) rvCartBar.adapter = Recycler(this, Bar.Cart.list, 5, 0)
+                else rvCartBar.adapter = Recycler(this, Bar.Cart.empty, 8, 0)
             }
         }
     }
 
     private val onChannelAuth = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: android.content.Intent?) {
-            if (Compiler.preferences.isLoggedIn) {
+            if (Compiler.preferences.isAuthenticated) {
                 User.username = Compiler.preferences.username
+                User.password = Compiler.preferences.password
             }
         }
     }

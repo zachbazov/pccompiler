@@ -17,6 +17,7 @@ import com.parse.ParseUser
 object Auth {
 
     private var user = User
+    var parseUser: ParseUser? = null
 
     fun signIn(username: String, password: String, complete: (Boolean) -> Unit) {
         ParseUser.logInInBackground(username, password) { parseUser, _ ->
@@ -29,9 +30,10 @@ object Auth {
                 user.updatedAt = parseUser.updatedAt
                 user.isEmailVerified = parseUser.isNew
                 user.isAuthenticated = parseUser.isAuthenticated
-                user.isAuthenticated = true
+                this.parseUser = parseUser
                 Compiler.preferences.username = user.username
-                Compiler.preferences.isLoggedIn = true
+                Compiler.preferences.password = user.password
+                Compiler.preferences.isAuthenticated = true
                 complete(true)
             } else {
                 ParseUser.logOut()
@@ -54,8 +56,16 @@ object Auth {
         }
     }
 
+    fun verify() {
+        ParseUser.logInInBackground(Compiler.preferences.username, Compiler.preferences.password) { parseUser, _ ->
+            if (parseUser != null) this.parseUser = parseUser
+            else ParseUser.logOut()
+        }
+    }
+
     fun auth(context: Context, complete: (Boolean) -> Unit) {
-        if (Compiler.preferences.isLoggedIn) {
+        if (Compiler.preferences.isAuthenticated) {
+            verify()
             Intent.launch(context, R.layout.activity_workspace) {}
             complete(true)
         }
@@ -65,7 +75,7 @@ object Auth {
         ParseUser.logOutInBackground {
             if (it == null) {
                 Compiler.preferences.username = context.getString(R.string.app_blank)
-                Compiler.preferences.isLoggedIn = false
+                Compiler.preferences.isAuthenticated = false
                 Auth.user = User
                 complete(true)
             }

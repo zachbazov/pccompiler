@@ -18,10 +18,9 @@ import kotlinx.android.synthetic.main.activity_workspace.*
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.ViewGroup
+import com.corespark.pccompiler.model.Compilation
 import com.corespark.pccompiler.model.Component
 import com.corespark.pccompiler.service.Intent
-import com.corespark.pccompiler.service.Intent.intent
-import com.corespark.pccompiler.utility.KEY_COMPILATION_TITLE
 import kotlinx.android.synthetic.main.activity_compile.*
 import kotlinx.android.synthetic.main.activity_compile.view.*
 import kotlinx.android.synthetic.main.activity_workspace.view.*
@@ -68,7 +67,7 @@ class Dialog(val context: Context, val item: Component?) {
                 clWorkspace.addView(layout)
             }
 
-            private fun customize() {
+            fun customize() {
                 bgTransparent.id = R.id.bgTransparent
                 bgTransparent.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
                 bgTransparent.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
@@ -92,8 +91,8 @@ class Dialog(val context: Context, val item: Component?) {
 
             private fun listener(view: View) {
                 when (view.id) {
-                    ivPrelim.id -> {
-                        ivPrelim.setOnClickListener {
+                    ivPrelim.id, layout.id -> {
+                        view.setOnClickListener {
                             TransitionManager.beginDelayedTransition(clWorkspace)
                             clWorkspace.removeView(layout)
                             clWorkspace.removeView(bgTransparent)
@@ -102,7 +101,7 @@ class Dialog(val context: Context, val item: Component?) {
                         }
                     }
                     etPrelim.id -> {
-                        etPrelim.addTextChangedListener(object : TextWatcher {
+                        (view as EditText).addTextChangedListener(object : TextWatcher {
                             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                                 if (!etPrelim.isSelected) {
                                     etPrelim.isSelected = true
@@ -122,11 +121,12 @@ class Dialog(val context: Context, val item: Component?) {
                         })
                     }
                     btnPrelim.id -> {
-                        btnPrelim.setOnClickListener {
+                        view.setOnClickListener {
                             it.isEnabled = false
                             val compilationTitle = etPrelim.text.toString()
                             Intent.launch(context, R.layout.activity_compile) {
-                                intent.putExtra(KEY_COMPILATION_TITLE, compilationTitle)
+                                //intent.putExtra(KEY_COMPILATION_TITLE, compilationTitle)
+                                Compilation.title = compilationTitle
                             }
                             Intent.finish(context)
                         }
@@ -177,7 +177,7 @@ class Dialog(val context: Context, val item: Component?) {
                     clCompile.addView(layout)
                     customize(component)
                     constraint()
-                    listener()
+                    listener(component)
                 }
             }
 
@@ -191,6 +191,7 @@ class Dialog(val context: Context, val item: Component?) {
                 ivClose.setImageResource(R.drawable.ic_close_transparent_gray_24dp)
                 tvParameter.text = context.getString(R.string.dialog_parameter)
                 tvDescription.text = context.getString(R.string.dialog_description)
+                tbAction.text = context.getString(R.string.dialog_add)
                 tbAction.textOff = context.getString(R.string.dialog_add)
                 tbAction.textOn = context.getString(R.string.dialog_remove)
                 when (component) {
@@ -413,6 +414,7 @@ class Dialog(val context: Context, val item: Component?) {
                         llDescription.removeView(tvDescF)
                     }
                 }
+                Compilation.updateComponent(context, tbAction, component, item)
             }
 
             fun constraint() {
@@ -428,7 +430,7 @@ class Dialog(val context: Context, val item: Component?) {
                 Constraint.set.applyTo(clCompile)
             }
 
-            fun listener() {
+            fun listener(component: Int) {
                 bgTransparent.setOnClickListener {
                     TransitionManager.beginDelayedTransition(clCompile)
                     clCompile.removeView(layout)
@@ -445,7 +447,11 @@ class Dialog(val context: Context, val item: Component?) {
 
                 }
                 tbAction.setOnClickListener {
-
+                    if (tbAction.isChecked) {
+                        Compilation.assignComponent(component, item)
+                    } else {
+                        Compilation.deassignComponent(component)
+                    }
                 }
             }
         }

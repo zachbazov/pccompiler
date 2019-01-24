@@ -47,6 +47,7 @@
     <string name="text_compilation">Compilation</string>
     <string name="text_title">Title…</string>
     <string name="text_create">CREATE</string>
+    <string name="text_replace">REPLACE</string>
 
     <!-- Parse Keys -->
     <string name="table_cpu">CPU</string>
