@@ -144,7 +144,8 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
             private val image = itemView.findViewById<ImageView>(R.id.ivTabBarItem)!!
             private val divider = itemView.findViewById<View>(R.id.dvTabBarItem)!!
 
-            fun span() = Window.span(context, layout, (context as Workspace).windowManager, Window.orientation, list.size) {}
+            fun span() = com.corespark.pccompiler.service.View.span(
+                context, layout, (context as Workspace).windowManager, com.corespark.pccompiler.service.View.orientation, list.size) {}
 
             fun mapId(position: Int) {
                 when (position) {
@@ -210,7 +211,8 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
         private val title = itemView.findViewById<TextView>(R.id.tvActionBarItem)!!
         private val divider = itemView.findViewById<View>(R.id.dvActionBarItem)!!
 
-        fun span() = Window.span(context, layout, (context as Workspace).windowManager, Window.orientation, list.size) {}
+        fun span() = com.corespark.pccompiler.service.View.span(
+            context, layout, (context as Workspace).windowManager, com.corespark.pccompiler.service.View.orientation, list.size) {}
 
         fun bind(item: Bar.Action) {
             image.setImageResource(item.image)
@@ -272,7 +274,8 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
         val image = itemView.findViewById<ImageView>(R.id.ivControlBarItem)!!
         private val title = itemView.findViewById<TextView>(R.id.tvControlBarItem)!!
 
-        fun span() = Window.span(context, layout, (context as Workspace).windowManager, Window.orientation, list.size) {}
+        fun span() = com.corespark.pccompiler.service.View.span(
+            context, layout, (context as Workspace).windowManager, com.corespark.pccompiler.service.View.orientation, list.size) {}
 
         fun bind(item: Bar.Control) {
             image.setImageResource(item.image)
@@ -307,7 +310,8 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
             private val title = itemView.findViewById<TextView>(R.id.tvControlPanelItem)!!
             private val divider = itemView.findViewById<View>(R.id.dvControlPanelItem)!!
 
-            fun span() = Window.span(context, divider, (context as Workspace).windowManager, Window.orientation, list.size) {}
+            fun span() = com.corespark.pccompiler.service.View.span(
+                context, divider, (context as Workspace).windowManager, com.corespark.pccompiler.service.View.orientation, list.size) {}
 
             fun bind(item: Panel.ControlPanel) {
                 image.setImageResource(item.image)
@@ -365,7 +369,8 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
             private val image = itemView.findViewById<ImageView>(R.id.ivCompilationItem)!!
             private val title = itemView.findViewById<TextView>(R.id.tvCompilationItem)!!
 
-            fun span() = Window.span(context, layout, (context as Workspace).windowManager, Window.orientation, 1) {}
+            fun span() = com.corespark.pccompiler.service.View.span(
+                context, layout, (context as Workspace).windowManager, com.corespark.pccompiler.service.View.orientation, 1) {}
 
             fun mapId(position: Int) {
                 when (position) {
@@ -394,7 +399,8 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
         private val title = itemView.findViewById<TextView>(R.id.tvCartBarItemComponent)!!
         private val price = itemView.findViewById<TextView>(R.id.tvCartBarItemPrice)!!
 
-        fun span() = Window.span(context, layout, (context as Compile).windowManager, Window.orientation, 1) {}
+        fun span() = com.corespark.pccompiler.service.View.span(
+            context, layout, (context as Compile).windowManager, com.corespark.pccompiler.service.View.orientation, 1) {}
 
         fun bind(item: Bar.Cart) {
             image.setImageResource(item.image)
@@ -414,7 +420,9 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
             val layout = itemView.findViewById<ConstraintLayout>(R.id.clComponentBarItemParent)!!
             private val image = itemView.findViewById<ImageView>(R.id.ivComponentBarItem)!!
 
-            fun span() = Window.span(context, layout, (context as Compile).windowManager, Window.orientation, list.size/2) {}
+            fun span() = com.corespark.pccompiler.service.View.span(
+                context, layout, (context as Compile).windowManager,
+                com.corespark.pccompiler.service.View.orientation, list.size/2) {}
 
             fun bind(item: Bar.Component) = image.setImageResource(item.image)
 
@@ -440,8 +448,10 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
             private val price = itemView.findViewById<TextView>(R.id.tvComponentItemPrice)!!
 
             fun span() {
-                Window.span(context, layout, (context as Compile).windowManager, Window.orientation, 1) {}
-                Window.span(context, title, context.windowManager, Window.orientation, 2) {}
+                com.corespark.pccompiler.service.View.span(
+                    context, layout, (context as Compile).windowManager, com.corespark.pccompiler.service.View.orientation, 1) {}
+                com.corespark.pccompiler.service.View.span(
+                    context, title, context.windowManager, com.corespark.pccompiler.service.View.orientation, 2) {}
             }
 
             fun bind(item: com.corespark.pccompiler.model.Component) {
@@ -465,7 +475,8 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
         private val image = itemView.findViewById<ImageView>(R.id.ivItemEmpty)!!
         private val title = itemView.findViewById<TextView>(R.id.tvItemEmpty)!!
 
-        fun span() = Window.span(context, layout, (context as Workspace).windowManager, Window.orientation, list.size) {}
+        fun span() = com.corespark.pccompiler.service.View.span(
+            context, layout, (context as Workspace).windowManager, com.corespark.pccompiler.service.View.orientation, list.size) {}
 
         fun bind(item: Bar.Empty) {
             image.setImageResource(item.image)

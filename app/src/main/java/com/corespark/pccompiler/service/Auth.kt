@@ -4,6 +4,7 @@ import android.content.Context
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.model.User
+import com.parse.ParseException
 import com.parse.ParseUser
 
 
@@ -54,9 +55,11 @@ object Auth {
     }
 
     private fun verify() = ParseUser.logInInBackground(Compiler.preferences.username, Compiler.preferences.password)
-    { parseUser, _ ->
-        if (parseUser != null) this.parseUser = parseUser
-        else ParseUser.logOut()
+    { parseUser, e ->
+        try {
+            if (parseUser != null) this.parseUser = parseUser
+            else ParseUser.logOut()
+        } catch (ex: ParseException) {}
     }
 
     fun auth(context: Context, complete: (Boolean) -> Unit) {

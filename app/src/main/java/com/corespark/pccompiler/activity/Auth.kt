@@ -7,10 +7,8 @@ import android.transition.TransitionManager
 import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.model.User
+import com.corespark.pccompiler.service.*
 import com.corespark.pccompiler.service.Auth
-import com.corespark.pccompiler.service.Constraint
-import com.corespark.pccompiler.service.Window
-import com.corespark.pccompiler.service.Intent
 import kotlinx.android.synthetic.main.activity_auth.*
 
 
@@ -27,7 +25,7 @@ class Auth : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
-        Window.measure(windowManager, Window.metrics)
+        com.corespark.pccompiler.service.View.measure(windowManager, com.corespark.pccompiler.service.View.metrics)
 
         Auth.auth(this) { if (it) finish() }
 
@@ -72,7 +70,7 @@ class Auth : AppCompatActivity() {
                 } else {
                     Snackbar.make(view, getString(R.string.auth_incorrect_credentials), Snackbar.LENGTH_SHORT).show()
                     clearInput(view)
-                    Window.hideKeyboard(this)
+                    Input.hideKeyboard(this)
                 }
             }
         }
@@ -84,13 +82,13 @@ class Auth : AppCompatActivity() {
                 if (complete) {
                     Snackbar.make(view, getString(R.string.auth_sign_up_success), Snackbar.LENGTH_LONG).show()
                     clearInput(view)
-                    Window.hideKeyboard(this)
+                    Input.hideKeyboard(this)
                     TransitionManager.beginDelayedTransition(clAuthParent)
                     Constraint.set(tvAuthSignIn, clAuthParent) {}
                 } else {
                     Snackbar.make(view, getString(R.string.auth_sign_up_failure), Snackbar.LENGTH_LONG).show()
                     clearInput(view)
-                    Window.hideKeyboard(this)
+                    Input.hideKeyboard(this)
                 }
             }
         }

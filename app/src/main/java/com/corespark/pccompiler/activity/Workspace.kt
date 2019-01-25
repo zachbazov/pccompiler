@@ -37,7 +37,8 @@ class Workspace : AppCompatActivity() {
     }
 
     private fun customize() {
-        Window.span(this, ivTracker, windowManager, Window.orientation, 2) {}
+        com.corespark.pccompiler.service.View.span(
+            this, ivTracker, windowManager, com.corespark.pccompiler.service.View.orientation, 2) {}
 
         val adapters = arrayOf(rvTabBar, rvActionBar, rvControlBar, rvCompilationBar, rvCartBar, rvControlPanel)
         for (adapter in adapters) setAdapter(adapter)

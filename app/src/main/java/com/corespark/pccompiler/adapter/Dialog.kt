@@ -5,7 +5,6 @@ import android.support.constraint.ConstraintLayout
 import android.support.constraint.ConstraintSet
 import android.transition.TransitionManager
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -13,18 +12,19 @@ import android.widget.TextView
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.service.Constraint
-import com.corespark.pccompiler.service.Window
-import kotlinx.android.synthetic.main.activity_workspace.*
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.ViewGroup
 import com.corespark.pccompiler.model.Compilation
 import com.corespark.pccompiler.model.Component
 import com.corespark.pccompiler.service.Algorithm
+import com.corespark.pccompiler.service.Input
 import com.corespark.pccompiler.service.Intent
+import kotlinx.android.synthetic.main.activity_workspace.*
+import kotlinx.android.synthetic.main.activity_workspace.view.*
 import kotlinx.android.synthetic.main.activity_compile.*
 import kotlinx.android.synthetic.main.activity_compile.view.*
-import kotlinx.android.synthetic.main.activity_workspace.view.*
 import kotlinx.android.synthetic.main.dialog_overview.view.*
 
 
@@ -37,7 +37,7 @@ import kotlinx.android.synthetic.main.dialog_overview.view.*
  */
 class Dialog(val context: Context) {
 
-    val bgTransparent = ConstraintLayout(context)
+    val background = ConstraintLayout(context)
 
     inner class Workspace {
 
@@ -62,17 +62,17 @@ class Dialog(val context: Context) {
                 }
             }
 
-            private fun instantiate() {
+            fun instantiate() {
                 TransitionManager.beginDelayedTransition(clWorkspace)
-                clWorkspace.addView(bgTransparent)
+                clWorkspace.addView(background)
                 clWorkspace.addView(layout)
             }
 
-            private fun customize() {
-                bgTransparent.id = R.id.bgTransparent
-                bgTransparent.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-                bgTransparent.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-                bgTransparent.setBackgroundColor(Compiler.colors.colorTransparentBlack)
+            fun customize() {
+                background.id = R.id.bgTransparent
+                background.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+                background.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+                background.setBackgroundColor(Compiler.colors.colorTransparentBlack)
 
                 ivPrelim.setImageResource(R.drawable.ic_close_transparent_gray_24dp)
                 tvPrelim.text = context.getString(R.string.text_compilation)
@@ -85,18 +85,18 @@ class Dialog(val context: Context) {
             }
 
             fun constraint() {
-                Constraint.set(bgTransparent, clWorkspace, bgTransparent)
+                Constraint.set(background, clWorkspace, background)
                 Constraint.set(layout, clWorkspace, layout)
                 Constraint.set(etPrelim, clPrelim, etPrelim)
             }
 
-            private fun listener(view: View) = when (view.id) {
+            fun listener(view: View) = when (view.id) {
                 clWorkspace.id, ivPrelim.id -> view.setOnClickListener {
                     TransitionManager.beginDelayedTransition(clWorkspace)
                     clWorkspace.removeView(layout)
-                    clWorkspace.removeView(bgTransparent)
+                    clWorkspace.removeView(background)
                     clActionCompile.isSelected = false
-                    Window.hideKeyboard(context)
+                    Input.hideKeyboard(context)
                 }
                 etPrelim.id -> (view as EditText).addTextChangedListener(object : TextWatcher {
                     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -162,20 +162,23 @@ class Dialog(val context: Context) {
             fun build(component: Int, item: Component) {
                 if (!ivMore.isSelected) {
                     ivMore.isSelected = true
-                    TransitionManager.beginDelayedTransition(clCompile)
-                    clCompile.addView(bgTransparent)
-                    clCompile.addView(layout)
+                    instantiate()
                     customize(component, item)
                     constraint()
-                    listener(component, item)
                 }
             }
 
+            fun instantiate() {
+                TransitionManager.beginDelayedTransition(clCompile)
+                clCompile.addView(background)
+                clCompile.addView(layout)
+            }
+
             private fun customize(component: Int, item: Component) {
-                bgTransparent.id = R.id.bgTransparent
-                bgTransparent.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-                bgTransparent.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-                bgTransparent.setBackgroundColor(Compiler.colors.colorTransparentBlack)
+                background.id = R.id.bgTransparent
+                background.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+                background.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+                background.setBackgroundColor(Compiler.colors.colorTransparentBlack)
 
                 tvOverview.text = context.getString(R.string.dialog_overview)
                 ivClose.setImageResource(R.drawable.ic_close_transparent_gray_24dp)
@@ -184,6 +187,7 @@ class Dialog(val context: Context) {
                 tbAction.text = context.getString(R.string.dialog_add)
                 tbAction.textOff = context.getString(R.string.dialog_add)
                 tbAction.textOn = context.getString(R.string.dialog_remove)
+
                 when (component) {
                     0 -> {
                         ivComponent.setImageResource(R.mipmap.ic_cpu)
@@ -404,15 +408,19 @@ class Dialog(val context: Context) {
                         llDescription.removeView(tvDescF)
                     }
                 }
+
                 Compilation.updateComponent(context, tbAction, component, item)
+
+                val listeners = arrayOf(background, ivClose, layout, tbAction)
+                for (listener in listeners) listener(listener, component, item)
             }
 
             fun constraint() {
                 Constraint.set.clone(clCompile)
-                Constraint.set.connect(bgTransparent.id, ConstraintSet.TOP, clCompile.id, ConstraintSet.TOP)
-                Constraint.set.connect(bgTransparent.id, ConstraintSet.START, clCompile.id, ConstraintSet.START)
-                Constraint.set.connect(bgTransparent.id, ConstraintSet.END, clCompile.id, ConstraintSet.END)
-                Constraint.set.connect(bgTransparent.id, ConstraintSet.BOTTOM, clCompile.id, ConstraintSet.BOTTOM)
+                Constraint.set.connect(background.id, ConstraintSet.TOP, clCompile.id, ConstraintSet.TOP)
+                Constraint.set.connect(background.id, ConstraintSet.START, clCompile.id, ConstraintSet.START)
+                Constraint.set.connect(background.id, ConstraintSet.END, clCompile.id, ConstraintSet.END)
+                Constraint.set.connect(background.id, ConstraintSet.BOTTOM, clCompile.id, ConstraintSet.BOTTOM)
                 Constraint.set.connect(layout.id, ConstraintSet.TOP, clCompile.id, ConstraintSet.TOP)
                 Constraint.set.connect(layout.id, ConstraintSet.START, clCompile.id, ConstraintSet.START)
                 Constraint.set.connect(layout.id, ConstraintSet.END, clCompile.id, ConstraintSet.END)
@@ -420,23 +428,21 @@ class Dialog(val context: Context) {
                 Constraint.set.applyTo(clCompile)
             }
 
-            private fun listener(component: Int, item: Component?) {
-                bgTransparent.setOnClickListener {
+            private fun listener(view: View, component: Int, item: Component?) = when (view) {
+                background -> view.setOnClickListener {
                     TransitionManager.beginDelayedTransition(clCompile)
                     clCompile.removeView(layout)
-                    clCompile.removeView(bgTransparent)
+                    clCompile.removeView(background)
                     ivMore.isSelected = false
                 }
-                ivClose.setOnClickListener {
+                ivClose -> view.setOnClickListener {
                     TransitionManager.beginDelayedTransition(clCompile)
                     clCompile.removeView(layout)
-                    clCompile.removeView(bgTransparent)
+                    clCompile.removeView(background)
                     ivMore.isSelected = false
                 }
-                layout.setOnClickListener {
-
-                }
-                tbAction.setOnClickListener {
+                layout -> layout.setOnClickListener {}
+                else -> view.setOnClickListener {
                     if (tbAction.isChecked) {
                         Compilation.assignComponent(component, item)
                         Algorithm.selection(clCompile, tbAction, component)
