@@ -24,7 +24,7 @@ object Window : Tab, Bar {
 
     var orientation: Int? = null
 
-    var density = 0f
+    private var density = 0f
     private var densityDpi = 0
     private var dpi = 0
     private var widthPx = 0
@@ -52,18 +52,18 @@ object Window : Tab, Bar {
 
     private fun measureMultiDeviceDensity(width: Int, divide: Int) : Int {
         when (Window.metrics.density) {
-            0.75f -> { dividedWidthPx = (width / divide) }
-            1f -> { dividedWidthPx = (width / divide) }
-            1.5f -> { dividedWidthPx = (width / divide) }
-            2f -> { dividedWidthPx = (width / divide) }
-            2.625f -> { dividedWidthPx = (width / divide) }
-            3f -> { dividedWidthPx = (width / divide) }
-            3.5f -> { dividedWidthPx = (width / divide) }
+            0.75f -> dividedWidthPx = (width / divide)
+            1f -> dividedWidthPx = (width / divide)
+            1.5f -> dividedWidthPx = (width / divide)
+            2f -> dividedWidthPx = (width / divide)
+            2.625f -> dividedWidthPx = (width / divide)
+            3f -> dividedWidthPx = (width / divide)
+            3.5f -> dividedWidthPx = (width / divide)
         }
         return dividedWidthPx
     }
 
-    override fun determineSpan(
+    override fun span(
         context: Context, view: View, manager: WindowManager, orientation: Int?, span: Int, complete: (Boolean) -> Unit
     ) {
         Window.determineLayoutMode(context)
@@ -82,8 +82,7 @@ object Window : Tab, Bar {
 
     fun hideKeyboard(context: Context) {
         val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        if (inputManager.isActive) {
+        if (inputManager.isActive)
             inputManager.hideSoftInputFromWindow((context as Activity).currentFocus?.applicationWindowToken, 0)
-        }
     }
 }

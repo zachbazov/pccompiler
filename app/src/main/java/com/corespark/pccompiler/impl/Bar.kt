@@ -14,7 +14,5 @@ import android.view.WindowManager
  */
 interface Bar {
 
-    fun determineSpan(
-        context: Context, view: View, manager: WindowManager, orientation: Int?, span: Int, complete: (Boolean) -> Unit
-    )
+    fun span(context: Context, view: View, manager: WindowManager, orientation: Int?, span: Int, complete: (Boolean) -> Unit)
 }

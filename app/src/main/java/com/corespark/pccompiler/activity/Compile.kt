@@ -9,7 +9,6 @@ import com.corespark.pccompiler.adapter.Recycler
 import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.model.Bar
 import com.corespark.pccompiler.model.Compilation
-import com.corespark.pccompiler.model.User
 import com.corespark.pccompiler.service.Auth
 import com.corespark.pccompiler.service.Intent
 import kotlinx.android.synthetic.main.activity_compile.*
@@ -43,26 +42,23 @@ class Compile : AppCompatActivity() {
         for (click in clicks) onClick(click)
     }
 
-    private fun setAdapter(view: View) {
-        when (view.id) {
-            rvComponentBar.id -> {
-                Bar.Component.add()
-                rvComponentBar.adapter = Recycler(this, Bar.Component.list, 6, 0)
-            }
-            rvComponent.id -> {
-                rvComponent.adapter = Recycler(this, Compiler.cpuList, 7, 0)
-                rvComponent.setHasFixedSize(true)
-            }
+    private fun setAdapter(view: View) = when (view.id) {
+        rvComponentBar.id -> {
+            Bar.Component.add()
+            rvComponentBar.adapter = Recycler(this, Bar.Component.list, 6, null)
+        }
+        else -> {
+            rvComponent.adapter = Recycler(this, Compiler.cpuList, 7, 0)
+            rvComponent.setHasFixedSize(true)
         }
     }
 
-    private fun onClick(view: View) {
-        when (view.id) {
-            clReturn.id -> view.setOnClickListener {
-                Intent.launch(this, activity_workspace) {}
-                Intent.finish(this)
-            }
+    private fun onClick(view: View) = when (view.id) {
+        clReturn.id -> view.setOnClickListener {
+            Intent.launch(this, activity_workspace) {}
+            Intent.finish(this)
         }
+        else -> {}
     }
 }
 

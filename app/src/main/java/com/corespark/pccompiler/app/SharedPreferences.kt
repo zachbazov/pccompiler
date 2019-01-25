@@ -16,20 +16,20 @@ import com.corespark.pccompiler.utility.KEY_USRENAME
  */
 class SharedPreferences(context: Context) {
 
-    private val fileName = context.getString(R.string.key_shared_preferences_file)
-    private val sharedPreferences = context.getSharedPreferences(fileName, 0)!!
+    private val file = context.getString(R.string.key_shared_preferences_file)
+    private val sharedPreferences = context.getSharedPreferences(file, 0)!!
 
-    var isAuthenticated: Boolean
+    var isAuthenticated
         get() = sharedPreferences.getBoolean(KEY_IS_AUTHENTICATED, false)
         set(value) = sharedPreferences.edit().putBoolean(KEY_IS_AUTHENTICATED, value)
             .apply()
 
-    var username: String
+    var username
         get() = sharedPreferences.getString(KEY_USRENAME, "")!!
         set(value) = sharedPreferences.edit().putString(KEY_USRENAME, value)
             .apply()
 
-    var password: String
+    var password
         get() = sharedPreferences.getString(KEY_PASSWORD, "")!!
         set(value) = sharedPreferences.edit().putString(KEY_PASSWORD, value)
             .apply()

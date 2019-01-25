@@ -18,19 +18,19 @@ object Compilation {
 
     var id: String? = null
     var title: String? = null
-    var user: ParseUser? = null
-    var cpu: Component? = null
-    var cooler: Component? = null
-    var motherboard: Component? = null
-    var memory: Component? = null
-    var storage: Component? = null
-    var extStorage: Component? = null
-    var optDrive: Component? = null
-    var graphicCard: Component? = null
-    var soundCard: Component? = null
-    var powerSupply: Component? = null
-    var case: Component? = null
-    var opSystem: Component? = null
+    private var user: ParseUser? = null
+    private var cpu: Component? = null
+    private var cooler: Component? = null
+    private var motherboard: Component? = null
+    private var memory: Component? = null
+    private var storage: Component? = null
+    private var extStorage: Component? = null
+    private var optDrive: Component? = null
+    private var graphicCard: Component? = null
+    private var soundCard: Component? = null
+    private var powerSupply: Component? = null
+    private var case: Component? = null
+    private var opSystem: Component? = null
 
     fun assignCompilation(user: ParseUser, title: String?) {
         this.user = user

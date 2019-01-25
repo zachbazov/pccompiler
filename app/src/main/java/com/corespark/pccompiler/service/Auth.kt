@@ -48,19 +48,15 @@ object Auth {
         user.email = email
         user.setPassword(password)
         user.signUpInBackground {
-            if (it == null) {
-                complete(true)
-            } else {
-                complete(false)
-            }
+            if (it == null) complete(true)
+            else complete(false)
         }
     }
 
-    fun verify() {
-        ParseUser.logInInBackground(Compiler.preferences.username, Compiler.preferences.password) { parseUser, _ ->
-            if (parseUser != null) this.parseUser = parseUser
-            else ParseUser.logOut()
-        }
+    private fun verify() = ParseUser.logInInBackground(Compiler.preferences.username, Compiler.preferences.password)
+    { parseUser, _ ->
+        if (parseUser != null) this.parseUser = parseUser
+        else ParseUser.logOut()
     }
 
     fun auth(context: Context, complete: (Boolean) -> Unit) {

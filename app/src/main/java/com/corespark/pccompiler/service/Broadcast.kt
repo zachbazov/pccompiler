@@ -25,7 +25,5 @@ object Broadcast {
         LocalBroadcastManager.getInstance(context).sendBroadcast(broadcast)
     }
 
-    fun abort(context: Context, channel: BroadcastReceiver) {
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(channel)
-    }
+    fun abort(context: Context, channel: BroadcastReceiver) = LocalBroadcastManager.getInstance(context).unregisterReceiver(channel)
 }

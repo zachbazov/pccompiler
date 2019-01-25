@@ -53,62 +53,58 @@ class Auth : AppCompatActivity() {
         for (click in clicks) onClick(click)
     }
 
-    private fun onClick(view: View) {
-        when (view.id) {
-            tvAuthSignIn.id -> view.setOnClickListener {
-                TransitionManager.beginDelayedTransition(clAuthParent)
-                Constraint.set(view, clAuthParent) {}
-            }
-            tvAuthSignUp.id -> view.setOnClickListener {
-                TransitionManager.beginDelayedTransition(clAuthParent)
-                Constraint.set(view, clAuthParent) {}
-            }
-            btnAuthSignIn.id -> view.setOnClickListener {
-                User.username = etAuthSignInUsername.text.toString()
-                User.password = etAuthSignInPassword.text.toString()
-                Auth.signIn(User.username, User.password) { complete ->
-                    if (complete) {
-                        Intent.launch(this, R.layout.activity_workspace) {}
-                        Intent.finish(this)
-                    } else {
-                        Snackbar.make(view, getString(R.string.auth_incorrect_credentials), Snackbar.LENGTH_SHORT).show()
-                        clearInput(view)
-                        Window.hideKeyboard(this)
-                    }
+    private fun onClick(view: View) = when (view.id) {
+        tvAuthSignIn.id -> view.setOnClickListener {
+            TransitionManager.beginDelayedTransition(clAuthParent)
+            Constraint.set(view, clAuthParent) {}
+        }
+        tvAuthSignUp.id -> view.setOnClickListener {
+            TransitionManager.beginDelayedTransition(clAuthParent)
+            Constraint.set(view, clAuthParent) {}
+        }
+        btnAuthSignIn.id -> view.setOnClickListener {
+            User.username = etAuthSignInUsername.text.toString()
+            User.password = etAuthSignInPassword.text.toString()
+            Auth.signIn(User.username, User.password) { complete ->
+                if (complete) {
+                    Intent.launch(this, R.layout.activity_workspace) {}
+                    Intent.finish(this)
+                } else {
+                    Snackbar.make(view, getString(R.string.auth_incorrect_credentials), Snackbar.LENGTH_SHORT).show()
+                    clearInput(view)
+                    Window.hideKeyboard(this)
                 }
             }
-            btnAuthSignUp.id -> view.setOnClickListener {
-                User.username = etAuthSignUpUsername.text.toString()
-                User.email = etAuthSignUpEmail.text.toString()
-                User.password = etAuthSignUpPassword.text.toString()
-                Auth.signUp(User.username, User.email, User.password) { complete ->
-                    if (complete) {
-                        Snackbar.make(view, getString(R.string.auth_sign_up_success), Snackbar.LENGTH_LONG).show()
-                        clearInput(view)
-                        Window.hideKeyboard(this)
-                        TransitionManager.beginDelayedTransition(clAuthParent)
-                        Constraint.set(tvAuthSignIn, clAuthParent) {}
-                    } else {
-                        Snackbar.make(view, getString(R.string.auth_sign_up_failure), Snackbar.LENGTH_LONG).show()
-                        clearInput(view)
-                        Window.hideKeyboard(this)
-                    }
+        }
+        else -> view.setOnClickListener {
+            User.username = etAuthSignUpUsername.text.toString()
+            User.email = etAuthSignUpEmail.text.toString()
+            User.password = etAuthSignUpPassword.text.toString()
+            Auth.signUp(User.username, User.email, User.password) { complete ->
+                if (complete) {
+                    Snackbar.make(view, getString(R.string.auth_sign_up_success), Snackbar.LENGTH_LONG).show()
+                    clearInput(view)
+                    Window.hideKeyboard(this)
+                    TransitionManager.beginDelayedTransition(clAuthParent)
+                    Constraint.set(tvAuthSignIn, clAuthParent) {}
+                } else {
+                    Snackbar.make(view, getString(R.string.auth_sign_up_failure), Snackbar.LENGTH_LONG).show()
+                    clearInput(view)
+                    Window.hideKeyboard(this)
                 }
             }
         }
     }
 
-    private fun clearInput(view: View) {
-        when (view.id) {
-            btnAuthSignIn.id -> {
-                etAuthSignInUsername.text.clear()
-                etAuthSignInPassword.text.clear()
-            }
-            btnAuthSignUp.id -> {
-                etAuthSignUpUsername.text.clear()
-                etAuthSignUpEmail.text.clear()
-                etAuthSignUpPassword.text.clear()
-            }
+    private fun clearInput(view: View) = when (view.id) {
+        btnAuthSignIn.id -> {
+            etAuthSignInUsername.text.clear()
+            etAuthSignInPassword.text.clear()
+        }
+        else -> {
+            etAuthSignUpUsername.text.clear()
+            etAuthSignUpEmail.text.clear()
+            etAuthSignUpPassword.text.clear()
         }
     }
 }

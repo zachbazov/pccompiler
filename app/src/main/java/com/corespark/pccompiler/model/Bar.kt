@@ -64,9 +64,8 @@ object Bar {
             val empty = mutableListOf<Any>()
 
             fun addEmpty(context: Context) {
-                if (empty.size < 1) {
+                if (empty.size < 1)
                     empty.add(0, Empty(R.drawable.ic_pccompiler_inactive, context.getString(R.string.text_no_compilations)))
-                }
             }
         }
     }
@@ -78,9 +77,8 @@ object Bar {
             val empty = mutableListOf<Any>()
 
             fun addEmpty(context: Context) {
-                if (Cart.empty.size < 1) {
+                if (Cart.empty.size < 1)
                     Cart.empty.add(0, Empty(R.drawable.ic_pccompiler_inactive, context.getString(R.string.text_no_components)))
-                }
             }
         }
     }

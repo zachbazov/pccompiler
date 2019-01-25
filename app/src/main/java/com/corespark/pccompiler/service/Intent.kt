@@ -18,28 +18,20 @@ import com.corespark.pccompiler.activity.Workspace
  */
 object Intent {
 
-    lateinit var intent: Intent
+    private lateinit var intent: Intent
 
     fun launch(context: Context, resId: Int, pipe: (Boolean) -> Unit) : Intent {
         when (resId) {
-            activity_auth -> {
-                intent = Intent(context, Auth::class.java)
-            }
-            activity_workspace -> {
-                intent = Intent(context, Workspace::class.java)
-            }
-            activity_compile -> {
-                intent = Intent(context, Compile::class.java)
-            }
+            activity_auth -> intent = Intent(context, Auth::class.java)
+            activity_workspace -> intent = Intent(context, Workspace::class.java)
+            activity_compile -> intent = Intent(context, Compile::class.java)
         }
         pipe(true)
         context.startActivity(intent)
         return intent
     }
 
-    fun finish(context: Context) {
-        (context as Activity).finish()
-    }
+    fun finish(context: Context) = (context as Activity).finish()
 }
 
 

@@ -20,6 +20,7 @@ import android.text.TextWatcher
 import android.view.ViewGroup
 import com.corespark.pccompiler.model.Compilation
 import com.corespark.pccompiler.model.Component
+import com.corespark.pccompiler.service.Algorithm
 import com.corespark.pccompiler.service.Intent
 import kotlinx.android.synthetic.main.activity_compile.*
 import kotlinx.android.synthetic.main.activity_compile.view.*
@@ -34,7 +35,7 @@ import kotlinx.android.synthetic.main.dialog_overview.view.*
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
-class Dialog(val context: Context, val item: Component?) {
+class Dialog(val context: Context) {
 
     val bgTransparent = ConstraintLayout(context)
 
@@ -61,13 +62,13 @@ class Dialog(val context: Context, val item: Component?) {
                 }
             }
 
-            fun instantiate() {
+            private fun instantiate() {
                 TransitionManager.beginDelayedTransition(clWorkspace)
                 clWorkspace.addView(bgTransparent)
                 clWorkspace.addView(layout)
             }
 
-            fun customize() {
+            private fun customize() {
                 bgTransparent.id = R.id.bgTransparent
                 bgTransparent.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
                 bgTransparent.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
@@ -79,8 +80,8 @@ class Dialog(val context: Context, val item: Component?) {
                 btnPrelim.text = context.getString(R.string.text_create)
                 btnPrelim.visibility = View.GONE
 
-                val views = arrayOf(ivPrelim, etPrelim, btnPrelim)
-                for (listener in views) listener(listener)
+                val views = arrayOf(clWorkspace, ivPrelim, etPrelim, btnPrelim)
+                for (view in views) listener(view)
             }
 
             fun constraint() {
@@ -89,48 +90,37 @@ class Dialog(val context: Context, val item: Component?) {
                 Constraint.set(etPrelim, clPrelim, etPrelim)
             }
 
-            private fun listener(view: View) {
-                when (view.id) {
-                    ivPrelim.id, layout.id -> {
-                        view.setOnClickListener {
-                            TransitionManager.beginDelayedTransition(clWorkspace)
-                            clWorkspace.removeView(layout)
-                            clWorkspace.removeView(bgTransparent)
-                            clActionCompile.isSelected = false
-                            Window.hideKeyboard(context)
+            private fun listener(view: View) = when (view.id) {
+                clWorkspace.id, ivPrelim.id -> view.setOnClickListener {
+                    TransitionManager.beginDelayedTransition(clWorkspace)
+                    clWorkspace.removeView(layout)
+                    clWorkspace.removeView(bgTransparent)
+                    clActionCompile.isSelected = false
+                    Window.hideKeyboard(context)
+                }
+                etPrelim.id -> (view as EditText).addTextChangedListener(object : TextWatcher {
+                    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                        if (!etPrelim.isSelected) {
+                            etPrelim.isSelected = true
+                            TransitionManager.beginDelayedTransition(layout as ViewGroup?)
+                            btnPrelim.visibility = View.VISIBLE
+                            Constraint.set(etPrelim, clPrelim, etPrelim)
+                        }
+                        if (count == 0) {
+                            etPrelim.isSelected = false
+                            TransitionManager.beginDelayedTransition(layout as ViewGroup?)
+                            btnPrelim.visibility = View.GONE
+                            Constraint.set(etPrelim, clPrelim, etPrelim)
                         }
                     }
-                    etPrelim.id -> {
-                        (view as EditText).addTextChangedListener(object : TextWatcher {
-                            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                                if (!etPrelim.isSelected) {
-                                    etPrelim.isSelected = true
-                                    TransitionManager.beginDelayedTransition(layout as ViewGroup?)
-                                    btnPrelim.visibility = View.VISIBLE
-                                    Constraint.set(etPrelim, clPrelim, etPrelim)
-                                }
-                                if (count == 0) {
-                                    etPrelim.isSelected = false
-                                    TransitionManager.beginDelayedTransition(layout as ViewGroup?)
-                                    btnPrelim.visibility = View.GONE
-                                    Constraint.set(etPrelim, clPrelim, etPrelim)
-                                }
-                            }
-                            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-                            override fun afterTextChanged(s: Editable) {}
-                        })
-                    }
-                    btnPrelim.id -> {
-                        view.setOnClickListener {
-                            it.isEnabled = false
-                            val compilationTitle = etPrelim.text.toString()
-                            Intent.launch(context, R.layout.activity_compile) {
-                                //intent.putExtra(KEY_COMPILATION_TITLE, compilationTitle)
-                                Compilation.title = compilationTitle
-                            }
-                            Intent.finish(context)
-                        }
-                    }
+                    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+                    override fun afterTextChanged(s: Editable) {}
+                })
+                else -> view.setOnClickListener {
+                    it.isEnabled = false
+                    val compilationTitle = etPrelim.text.toString()
+                    Intent.launch(context, R.layout.activity_compile) { Compilation.title = compilationTitle }
+                    Intent.finish(context)
                 }
             }
         }
@@ -145,43 +135,43 @@ class Dialog(val context: Context, val item: Component?) {
 
             val layout = LayoutInflater.from(context).inflate(R.layout.dialog_overview, clCompile, false)!!
 
-            val tvOverview = layout.tvOverview!!
-            val ivClose = layout.ivOverviewClose!!
-            val tvComponentType = layout.tvOverviewComponentType!!
-            val tvComponent = layout.tvOverviewComponent!!
-            val ivComponent = layout.ivOverview!!
-            val llParameter = layout.llOverviewParameter!!
-            val llDescription = layout.llOverviewDescription!!
-            val tvParameter = layout.tvOverviewParameter!!
-            val tvDescription = layout.tvOverviewDescription!!
-            val tvParamA = layout.tvOverviewParamA!!
-            val tvParamB = layout.tvOverviewParamB!!
-            val tvParamC = layout.tvOverviewParamC!!
-            val tvParamD = layout.tvOverviewParamD!!
-            val tvParamE = layout.tvOverviewParamE!!
-            val tvParamF = layout.tvOverviewParamF!!
-            val tvDescA = layout.tvOverviewDescA!!
-            val tvDescB = layout.tvOverviewDescB!!
-            val tvDescC = layout.tvOverviewDescC!!
-            val tvDescD = layout.tvOverviewDescD!!
-            val tvDescE = layout.tvOverviewDescE!!
-            val tvDescF = layout.tvOverviewDescF!!
-            val tvPrice = layout.tvOverviewPrice!!
-            val tbAction = layout.tbOverview!!
+            private val tvOverview = layout.tvOverview!!
+            private val ivClose = layout.ivOverviewClose!!
+            private val tvComponentType = layout.tvOverviewComponentType!!
+            private val tvComponent = layout.tvOverviewComponent!!
+            private val ivComponent = layout.ivOverview!!
+            private val llParameter = layout.llOverviewParameter!!
+            private val llDescription = layout.llOverviewDescription!!
+            private val tvParameter = layout.tvOverviewParameter!!
+            private val tvDescription = layout.tvOverviewDescription!!
+            private val tvParamA = layout.tvOverviewParamA!!
+            private val tvParamB = layout.tvOverviewParamB!!
+            private val tvParamC = layout.tvOverviewParamC!!
+            private val tvParamD = layout.tvOverviewParamD!!
+            private val tvParamE = layout.tvOverviewParamE!!
+            private val tvParamF = layout.tvOverviewParamF!!
+            private val tvDescA = layout.tvOverviewDescA!!
+            private val tvDescB = layout.tvOverviewDescB!!
+            private val tvDescC = layout.tvOverviewDescC!!
+            private val tvDescD = layout.tvOverviewDescD!!
+            private val tvDescE = layout.tvOverviewDescE!!
+            private val tvDescF = layout.tvOverviewDescF!!
+            private val tvPrice = layout.tvOverviewPrice!!
+            private val tbAction = layout.tbOverview!!
 
-            fun build(component: Int) {
+            fun build(component: Int, item: Component) {
                 if (!ivMore.isSelected) {
                     ivMore.isSelected = true
                     TransitionManager.beginDelayedTransition(clCompile)
                     clCompile.addView(bgTransparent)
                     clCompile.addView(layout)
-                    customize(component)
+                    customize(component, item)
                     constraint()
-                    listener(component)
+                    listener(component, item)
                 }
             }
 
-            fun customize(component: Int) {
+            private fun customize(component: Int, item: Component) {
                 bgTransparent.id = R.id.bgTransparent
                 bgTransparent.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
                 bgTransparent.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
@@ -198,7 +188,7 @@ class Dialog(val context: Context, val item: Component?) {
                     0 -> {
                         ivComponent.setImageResource(R.mipmap.ic_cpu)
                         tvComponentType.text = context.getString(R.string.type_cpu)
-                        tvComponent.text = String.format("%s %s", item!!.manufaturer, item.component)
+                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
                         tvParamA.text = context.getString(R.string.dialog_core)
                         tvParamB.text = context.getString(R.string.dialog_speed)
                         tvParamC.text = context.getString(R.string.dialog_tdp)
@@ -216,7 +206,7 @@ class Dialog(val context: Context, val item: Component?) {
                     1 -> {
                         ivComponent.setImageResource(R.mipmap.ic_optdrive)
                         tvComponentType.text = context.getString(R.string.type_optical_drive)
-                        tvComponent.text = String.format("%s %s", item!!.manufaturer, item.component)
+                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
                         tvParamA.text = context.getString(R.string.dialog_bd)
                         tvParamB.text = context.getString(R.string.dialog_cd)
                         tvParamC.text = context.getString(R.string.dialog_dvd)
@@ -234,7 +224,7 @@ class Dialog(val context: Context, val item: Component?) {
                     2 -> {
                         ivComponent.setImageResource(R.mipmap.ic_cooler)
                         tvComponentType.text = context.getString(R.string.type_cooler)
-                        tvComponent.text = String.format("%s %s", item!!.manufaturer, item.component)
+                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
                         tvParamA.text = context.getString(R.string.dialog_rpm)
                         tvParamB.text = context.getString(R.string.dialog_noise)
                         tvDescA.text = item.paramA
@@ -252,7 +242,7 @@ class Dialog(val context: Context, val item: Component?) {
                     3 -> {
                         ivComponent.setImageResource(R.mipmap.ic_graphiccard)
                         tvComponentType.text = context.getString(R.string.type_graphic_card)
-                        tvComponent.text = String.format("%s %s", item!!.manufaturer, item.component)
+                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
                         tvParamA.text = context.getString(R.string.dialog_series)
                         tvParamB.text = context.getString(R.string.dialog_chipset)
                         tvParamC.text = context.getString(R.string.dialog_memory)
@@ -270,7 +260,7 @@ class Dialog(val context: Context, val item: Component?) {
                     4 -> {
                         ivComponent.setImageResource(R.mipmap.ic_motherboard)
                         tvComponentType.text = context.getString(R.string.type_motherboard)
-                        tvComponent.text = String.format("%s %s", item!!.manufaturer, item.component)
+                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
                         tvParamA.text = context.getString(R.string.dialog_socket_cpu)
                         tvParamB.text = context.getString(R.string.dialog_form_factor)
                         tvParamC.text = context.getString(R.string.dialog_ram_slots)
@@ -288,7 +278,7 @@ class Dialog(val context: Context, val item: Component?) {
                     5 -> {
                         ivComponent.setImageResource(R.mipmap.ic_soundcard)
                         tvComponentType.text = context.getString(R.string.type_sound_card)
-                        tvComponent.text = String.format("%s %s", item!!.manufaturer, item.component)
+                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
                         tvParamA.text = context.getString(R.string.dialog_chipset)
                         tvParamB.text = context.getString(R.string.dialog_bits)
                         tvParamC.text = context.getString(R.string.dialog_snr)
@@ -306,7 +296,7 @@ class Dialog(val context: Context, val item: Component?) {
                     6 -> {
                         ivComponent.setImageResource(R.mipmap.ic_memory)
                         tvComponentType.text = context.getString(R.string.type_memory)
-                        tvComponent.text = String.format("%s %s", item!!.manufaturer, item.component)
+                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
                         tvParamA.text = context.getString(R.string.dialog_type)
                         tvParamB.text = context.getString(R.string.dialog_speed)
                         tvParamC.text = context.getString(R.string.dialog_modules)
@@ -324,7 +314,7 @@ class Dialog(val context: Context, val item: Component?) {
                     7 -> {
                         ivComponent.setImageResource(R.mipmap.ic_powersupply)
                         tvComponentType.text = context.getString(R.string.type_power_supply)
-                        tvComponent.text = String.format("%s %s", item!!.manufaturer, item.component)
+                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
                         tvParamA.text = context.getString(R.string.dialog_series)
                         tvParamB.text = context.getString(R.string.dialog_form)
                         tvParamC.text = context.getString(R.string.dialog_efficiency)
@@ -342,7 +332,7 @@ class Dialog(val context: Context, val item: Component?) {
                     8 -> {
                         ivComponent.setImageResource(R.mipmap.ic_storage)
                         tvComponentType.text = context.getString(R.string.type_storage)
-                        tvComponent.text = String.format("%s %s", item!!.manufaturer, item.component)
+                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
                         tvParamA.text = context.getString(R.string.dialog_series)
                         tvParamB.text = context.getString(R.string.dialog_form)
                         tvParamC.text = context.getString(R.string.dialog_type)
@@ -360,7 +350,7 @@ class Dialog(val context: Context, val item: Component?) {
                     9 -> {
                         ivComponent.setImageResource(R.mipmap.ic_case)
                         tvComponentType.text = context.getString(R.string.type_case)
-                        tvComponent.text = String.format("%s %s", item!!.manufaturer, item.component)
+                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
                         tvParamA.text = context.getString(R.string.dialog_type)
                         tvParamB.text = context.getString(R.string.dialog_external)
                         tvParamC.text = context.getString(R.string.dialog_internal)
@@ -378,7 +368,7 @@ class Dialog(val context: Context, val item: Component?) {
                     10 -> {
                         ivComponent.setImageResource(R.mipmap.ic_extstorage)
                         tvComponentType.text = context.getString(R.string.type_external_storage)
-                        tvComponent.text = String.format("%s %s", item!!.manufaturer, item.component)
+                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
                         tvParamA.text = context.getString(R.string.dialog_type)
                         tvParamB.text = context.getString(R.string.dialog_capacity)
                         tvParamC.text = context.getString(R.string.dialog_gb_price)
@@ -396,7 +386,7 @@ class Dialog(val context: Context, val item: Component?) {
                     11 -> {
                         ivComponent.setImageResource(R.mipmap.ic_opsystem)
                         tvComponentType.text = context.getString(R.string.type_os)
-                        tvComponent.text = String.format("%s %s", item!!.manufaturer, item.component)
+                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
                         tvPrice.text = String.format("$%s", item.price)
                         llParameter.removeView(tvParameter)
                         llDescription.removeView(tvDescription)
@@ -430,7 +420,7 @@ class Dialog(val context: Context, val item: Component?) {
                 Constraint.set.applyTo(clCompile)
             }
 
-            fun listener(component: Int) {
+            private fun listener(component: Int, item: Component?) {
                 bgTransparent.setOnClickListener {
                     TransitionManager.beginDelayedTransition(clCompile)
                     clCompile.removeView(layout)
@@ -449,8 +439,10 @@ class Dialog(val context: Context, val item: Component?) {
                 tbAction.setOnClickListener {
                     if (tbAction.isChecked) {
                         Compilation.assignComponent(component, item)
+                        Algorithm.selection(clCompile, tbAction, component)
                     } else {
                         Compilation.deassignComponent(component)
+                        Algorithm.selection(clCompile, tbAction, component)
                     }
                 }
             }

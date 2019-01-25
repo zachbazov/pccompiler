@@ -16,7 +16,7 @@ import com.parse.ParseQuery
  */
 class Query {
 
-    lateinit var query: ParseQuery<ParseObject>
+    private lateinit var query: ParseQuery<ParseObject>
 
     fun retrieve(context: Context, table: String, list: MutableList<Any>) {
         query = ParseQuery.getQuery<ParseObject>(table)
