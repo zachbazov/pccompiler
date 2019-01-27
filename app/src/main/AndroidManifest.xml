@@ -25,9 +25,7 @@
         </activity>
         <activity android:name=".activity.Workspace"
                   android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".activity.Compile">
-
-        </activity>
+        <activity android:name=".activity.Compile"/>
 
         <meta-data
                 android:name="com.parse.SERVER_URL"

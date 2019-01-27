@@ -1,4 +1,4 @@
-package com.corespark.pccompiler.app
+package com.corespark.pccompiler.database
 
 import android.content.Context
 import com.corespark.pccompiler.R

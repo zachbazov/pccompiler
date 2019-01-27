@@ -2,7 +2,6 @@ package com.corespark.pccompiler.adapter
 
 import android.content.Context
 import android.support.constraint.ConstraintLayout
-import android.support.constraint.ConstraintSet
 import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.widget.Button
@@ -11,16 +10,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Compiler
-import com.corespark.pccompiler.service.Constraint
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import com.corespark.pccompiler.model.Compilation
 import com.corespark.pccompiler.model.Component
-import com.corespark.pccompiler.service.Algorithm
-import com.corespark.pccompiler.service.Input
-import com.corespark.pccompiler.service.Intent
+import com.corespark.pccompiler.service.*
 import kotlinx.android.synthetic.main.activity_workspace.*
 import kotlinx.android.synthetic.main.activity_workspace.view.*
 import kotlinx.android.synthetic.main.activity_compile.*
@@ -58,17 +54,16 @@ class Dialog(val context: Context) {
                     clActionCompile.isSelected = true
                     instantiate()
                     customize()
-                    constraint()
                 }
             }
 
-            fun instantiate() {
+            private fun instantiate() {
                 TransitionManager.beginDelayedTransition(clWorkspace)
                 clWorkspace.addView(background)
                 clWorkspace.addView(layout)
             }
 
-            fun customize() {
+            private fun customize() {
                 background.id = R.id.bgTransparent
                 background.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
                 background.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
@@ -80,17 +75,15 @@ class Dialog(val context: Context) {
                 btnPrelim.text = context.getString(R.string.text_create)
                 btnPrelim.visibility = View.GONE
 
+                Constraint.set(background, clWorkspace, background)
+                Constraint.set(layout, clWorkspace, layout)
+                Constraint.set(etPrelim, clPrelim, etPrelim)
+
                 val views = arrayOf(clWorkspace, ivPrelim, etPrelim, btnPrelim)
                 for (view in views) listener(view)
             }
 
-            fun constraint() {
-                Constraint.set(background, clWorkspace, background)
-                Constraint.set(layout, clWorkspace, layout)
-                Constraint.set(etPrelim, clPrelim, etPrelim)
-            }
-
-            fun listener(view: View) = when (view.id) {
+            private fun listener(view: View) = when (view.id) {
                 clWorkspace.id, ivPrelim.id -> view.setOnClickListener {
                     TransitionManager.beginDelayedTransition(clWorkspace)
                     clWorkspace.removeView(layout)
@@ -157,24 +150,33 @@ class Dialog(val context: Context) {
             private val tvDescE = layout.tvOverviewDescE!!
             private val tvDescF = layout.tvOverviewDescF!!
             private val tvPrice = layout.tvOverviewPrice!!
-            private val tbAction = layout.tbOverview!!
+            private val btnAdd = layout.btnAdd!!
+            private val btnRemove = layout.btnRemove!!
+            private val btnReplace = layout.btnReplace!!
 
-            fun build(component: Int, item: Component) {
+            private val params = arrayOf(
+                ivComponent, tvComponentType, tvComponent,
+                tvParamA, tvParamB, tvParamC, tvParamD, tvParamE, tvParamF,
+                tvDescA, tvDescB, tvDescC, tvDescD, tvDescE, tvDescF,
+                tvPrice, llParameter, llDescription, tvParameter, tvDescription)
+
+            private val views = arrayOf(btnAdd, btnRemove, btnReplace)
+
+            fun build(componentType: Int, item: Component, rowPosition: Int, oldPosition: Int) {
                 if (!ivMore.isSelected) {
                     ivMore.isSelected = true
                     instantiate()
-                    customize(component, item)
-                    constraint()
+                    customize(componentType, item, rowPosition, oldPosition)
                 }
             }
 
-            fun instantiate() {
+            private fun instantiate() {
                 TransitionManager.beginDelayedTransition(clCompile)
                 clCompile.addView(background)
                 clCompile.addView(layout)
             }
 
-            private fun customize(component: Int, item: Component) {
+            private fun customize(componentType: Int, item: Component, rowPosition: Int, oldPosition: Int) {
                 background.id = R.id.bgTransparent
                 background.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
                 background.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
@@ -184,251 +186,23 @@ class Dialog(val context: Context) {
                 ivClose.setImageResource(R.drawable.ic_close_transparent_gray_24dp)
                 tvParameter.text = context.getString(R.string.dialog_parameter)
                 tvDescription.text = context.getString(R.string.dialog_description)
-                tbAction.text = context.getString(R.string.dialog_add)
-                tbAction.textOff = context.getString(R.string.dialog_add)
-                tbAction.textOn = context.getString(R.string.dialog_remove)
+                btnAdd.text = context.getString(R.string.dialog_add)
+                btnRemove.text = context.getString(R.string.dialog_remove)
+                btnReplace.text = context.getString(R.string.dialog_replace)
+                btnRemove.isEnabled = false
+                btnReplace.visibility = View.GONE
 
-                when (component) {
-                    0 -> {
-                        ivComponent.setImageResource(R.mipmap.ic_cpu)
-                        tvComponentType.text = context.getString(R.string.type_cpu)
-                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
-                        tvParamA.text = context.getString(R.string.dialog_core)
-                        tvParamB.text = context.getString(R.string.dialog_speed)
-                        tvParamC.text = context.getString(R.string.dialog_tdp)
-                        tvDescA.text = item.paramA
-                        tvDescB.text = item.paramB
-                        tvDescC.text = item.paramC
-                        tvPrice.text = String.format("$%s", item.price)
-                        llParameter.removeView(tvParamD)
-                        llParameter.removeView(tvParamE)
-                        llParameter.removeView(tvParamF)
-                        llDescription.removeView(tvDescD)
-                        llDescription.removeView(tvDescE)
-                        llDescription.removeView(tvDescF)
-                    }
-                    1 -> {
-                        ivComponent.setImageResource(R.mipmap.ic_optdrive)
-                        tvComponentType.text = context.getString(R.string.type_optical_drive)
-                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
-                        tvParamA.text = context.getString(R.string.dialog_bd)
-                        tvParamB.text = context.getString(R.string.dialog_cd)
-                        tvParamC.text = context.getString(R.string.dialog_dvd)
-                        tvParamD.text = context.getString(R.string.dialog_bd_write)
-                        tvParamE.text = context.getString(R.string.dialog_cd_write)
-                        tvParamF.text = context.getString(R.string.dialog_dvd_write)
-                        tvDescA.text = item.paramA
-                        tvDescB.text = item.paramB
-                        tvDescC.text = item.paramC
-                        tvDescD.text = item.paramD
-                        tvDescE.text = item.paramE
-                        tvDescF.text = item.paramF
-                        tvPrice.text = String.format("$%s", item.price)
-                    }
-                    2 -> {
-                        ivComponent.setImageResource(R.mipmap.ic_cooler)
-                        tvComponentType.text = context.getString(R.string.type_cooler)
-                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
-                        tvParamA.text = context.getString(R.string.dialog_rpm)
-                        tvParamB.text = context.getString(R.string.dialog_noise)
-                        tvDescA.text = item.paramA
-                        tvDescB.text = item.paramB
-                        tvPrice.text = String.format("$%s", item.price)
-                        llParameter.removeView(tvParamC)
-                        llParameter.removeView(tvParamD)
-                        llParameter.removeView(tvParamE)
-                        llParameter.removeView(tvParamF)
-                        llDescription.removeView(tvDescC)
-                        llDescription.removeView(tvDescD)
-                        llDescription.removeView(tvDescE)
-                        llDescription.removeView(tvDescF)
-                    }
-                    3 -> {
-                        ivComponent.setImageResource(R.mipmap.ic_graphiccard)
-                        tvComponentType.text = context.getString(R.string.type_graphic_card)
-                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
-                        tvParamA.text = context.getString(R.string.dialog_series)
-                        tvParamB.text = context.getString(R.string.dialog_chipset)
-                        tvParamC.text = context.getString(R.string.dialog_memory)
-                        tvParamD.text = context.getString(R.string.dialog_core_clock)
-                        tvDescA.text = item.paramA
-                        tvDescB.text = item.paramB
-                        tvDescC.text = item.paramC
-                        tvDescD.text = item.paramD
-                        tvPrice.text = String.format("$%s", item.price)
-                        llParameter.removeView(tvParamE)
-                        llParameter.removeView(tvParamF)
-                        llDescription.removeView(tvDescE)
-                        llDescription.removeView(tvDescF)
-                    }
-                    4 -> {
-                        ivComponent.setImageResource(R.mipmap.ic_motherboard)
-                        tvComponentType.text = context.getString(R.string.type_motherboard)
-                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
-                        tvParamA.text = context.getString(R.string.dialog_socket_cpu)
-                        tvParamB.text = context.getString(R.string.dialog_form_factor)
-                        tvParamC.text = context.getString(R.string.dialog_ram_slots)
-                        tvParamD.text = context.getString(R.string.dialog_max_ram)
-                        tvDescA.text = item.paramA
-                        tvDescB.text = item.paramB
-                        tvDescC.text = item.paramC
-                        tvDescD.text = item.paramD
-                        tvPrice.text = String.format("$%s", item.price)
-                        llParameter.removeView(tvParamE)
-                        llParameter.removeView(tvParamF)
-                        llDescription.removeView(tvDescE)
-                        llDescription.removeView(tvDescF)
-                    }
-                    5 -> {
-                        ivComponent.setImageResource(R.mipmap.ic_soundcard)
-                        tvComponentType.text = context.getString(R.string.type_sound_card)
-                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
-                        tvParamA.text = context.getString(R.string.dialog_chipset)
-                        tvParamB.text = context.getString(R.string.dialog_bits)
-                        tvParamC.text = context.getString(R.string.dialog_snr)
-                        tvParamD.text = context.getString(R.string.dialog_channels)
-                        tvParamE.text = context.getString(R.string.dialog_rate)
-                        tvDescA.text = item.paramA
-                        tvDescB.text = item.paramB
-                        tvDescC.text = item.paramC
-                        tvDescD.text = item.paramD
-                        tvDescE.text = item.paramE
-                        tvPrice.text = String.format("$%s", item.price)
-                        llParameter.removeView(tvParamF)
-                        llDescription.removeView(tvDescF)
-                    }
-                    6 -> {
-                        ivComponent.setImageResource(R.mipmap.ic_memory)
-                        tvComponentType.text = context.getString(R.string.type_memory)
-                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
-                        tvParamA.text = context.getString(R.string.dialog_type)
-                        tvParamB.text = context.getString(R.string.dialog_speed)
-                        tvParamC.text = context.getString(R.string.dialog_modules)
-                        tvParamD.text = context.getString(R.string.dialog_cas)
-                        tvParamE.text = context.getString(R.string.dialog_size)
-                        tvParamF.text = context.getString(R.string.dialog_gb_price)
-                        tvDescA.text = item.paramA
-                        tvDescB.text = item.paramB
-                        tvDescC.text = item.paramC
-                        tvDescD.text = item.paramD
-                        tvDescE.text = item.paramE
-                        tvDescF.text = String.format("$%s", item.paramF)
-                        tvPrice.text = String.format("$%s", item.price)
-                    }
-                    7 -> {
-                        ivComponent.setImageResource(R.mipmap.ic_powersupply)
-                        tvComponentType.text = context.getString(R.string.type_power_supply)
-                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
-                        tvParamA.text = context.getString(R.string.dialog_series)
-                        tvParamB.text = context.getString(R.string.dialog_form)
-                        tvParamC.text = context.getString(R.string.dialog_efficiency)
-                        tvParamD.text = context.getString(R.string.dialog_modular)
-                        tvParamE.text = context.getString(R.string.dialog_watts)
-                        tvDescA.text = item.paramA
-                        tvDescB.text = item.paramB
-                        tvDescC.text = item.paramC
-                        tvDescD.text = item.paramD
-                        tvDescE.text = item.paramE
-                        tvPrice.text = String.format("$%s", item.price)
-                        llParameter.removeView(tvParamF)
-                        llDescription.removeView(tvDescF)
-                    }
-                    8 -> {
-                        ivComponent.setImageResource(R.mipmap.ic_storage)
-                        tvComponentType.text = context.getString(R.string.type_storage)
-                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
-                        tvParamA.text = context.getString(R.string.dialog_series)
-                        tvParamB.text = context.getString(R.string.dialog_form)
-                        tvParamC.text = context.getString(R.string.dialog_type)
-                        tvParamD.text = context.getString(R.string.dialog_cache)
-                        tvParamE.text = context.getString(R.string.dialog_capacity)
-                        tvParamF.text = context.getString(R.string.dialog_gb_price)
-                        tvDescA.text = item.paramA
-                        tvDescB.text = item.paramB
-                        tvDescC.text = item.paramC
-                        tvDescD.text = item.paramD
-                        tvDescE.text = item.paramE
-                        tvDescF.text = String.format("$%s", item.paramF)
-                        tvPrice.text = String.format("$%s", item.price)
-                    }
-                    9 -> {
-                        ivComponent.setImageResource(R.mipmap.ic_case)
-                        tvComponentType.text = context.getString(R.string.type_case)
-                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
-                        tvParamA.text = context.getString(R.string.dialog_type)
-                        tvParamB.text = context.getString(R.string.dialog_external)
-                        tvParamC.text = context.getString(R.string.dialog_internal)
-                        tvParamD.text = context.getString(R.string.dialog_power_supply)
-                        tvDescA.text = item.paramA
-                        tvDescB.text = item.paramB
-                        tvDescC.text = item.paramC
-                        tvDescD.text = item.paramD
-                        tvPrice.text = String.format("$%s", item.price)
-                        llParameter.removeView(tvParamE)
-                        llParameter.removeView(tvParamF)
-                        llDescription.removeView(tvDescE)
-                        llDescription.removeView(tvDescF)
-                    }
-                    10 -> {
-                        ivComponent.setImageResource(R.mipmap.ic_extstorage)
-                        tvComponentType.text = context.getString(R.string.type_external_storage)
-                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
-                        tvParamA.text = context.getString(R.string.dialog_type)
-                        tvParamB.text = context.getString(R.string.dialog_capacity)
-                        tvParamC.text = context.getString(R.string.dialog_gb_price)
-                        tvDescA.text = item.paramA
-                        tvDescB.text = item.paramB
-                        tvDescC.text = String.format("$%s", item.paramC)
-                        tvPrice.text = String.format("$%s", item.price)
-                        llParameter.removeView(tvParamD)
-                        llParameter.removeView(tvParamE)
-                        llParameter.removeView(tvParamF)
-                        llDescription.removeView(tvDescD)
-                        llDescription.removeView(tvDescE)
-                        llDescription.removeView(tvDescF)
-                    }
-                    11 -> {
-                        ivComponent.setImageResource(R.mipmap.ic_opsystem)
-                        tvComponentType.text = context.getString(R.string.type_os)
-                        tvComponent.text = String.format("%s %s", item.manufaturer, item.component)
-                        tvPrice.text = String.format("$%s", item.price)
-                        llParameter.removeView(tvParameter)
-                        llDescription.removeView(tvDescription)
-                        llParameter.removeView(tvParamA)
-                        llParameter.removeView(tvParamB)
-                        llParameter.removeView(tvParamC)
-                        llParameter.removeView(tvParamD)
-                        llParameter.removeView(tvParamE)
-                        llParameter.removeView(tvParamF)
-                        llDescription.removeView(tvDescA)
-                        llDescription.removeView(tvDescB)
-                        llDescription.removeView(tvDescC)
-                        llDescription.removeView(tvDescD)
-                        llDescription.removeView(tvDescE)
-                        llDescription.removeView(tvDescF)
-                    }
-                }
+                Constraint.set(layout, clCompile) {}
+                DataBinding.componentInfo(context, item, componentType, params)
+                Algorithm.enableSelection(item, componentType, views)
 
-                Compilation.updateComponent(context, tbAction, component, item)
-
-                val listeners = arrayOf(background, ivClose, layout, tbAction)
-                for (listener in listeners) listener(listener, component, item)
+                val listeners = arrayOf(background, ivClose, layout, btnAdd, btnRemove, btnReplace)
+                for (listener in listeners) listener(listener, componentType, item, rowPosition, oldPosition)
             }
 
-            fun constraint() {
-                Constraint.set.clone(clCompile)
-                Constraint.set.connect(background.id, ConstraintSet.TOP, clCompile.id, ConstraintSet.TOP)
-                Constraint.set.connect(background.id, ConstraintSet.START, clCompile.id, ConstraintSet.START)
-                Constraint.set.connect(background.id, ConstraintSet.END, clCompile.id, ConstraintSet.END)
-                Constraint.set.connect(background.id, ConstraintSet.BOTTOM, clCompile.id, ConstraintSet.BOTTOM)
-                Constraint.set.connect(layout.id, ConstraintSet.TOP, clCompile.id, ConstraintSet.TOP)
-                Constraint.set.connect(layout.id, ConstraintSet.START, clCompile.id, ConstraintSet.START)
-                Constraint.set.connect(layout.id, ConstraintSet.END, clCompile.id, ConstraintSet.END)
-                Constraint.set.connect(layout.id, ConstraintSet.BOTTOM, clCompile.id, ConstraintSet.BOTTOM)
-                Constraint.set.applyTo(clCompile)
-            }
-
-            private fun listener(view: View, component: Int, item: Component?) = when (view) {
+            private fun listener(
+                view: View, componentType: Int, item: Component?, rowPosition: Int, oldPosition: Int
+            ) = when (view) {
                 background -> view.setOnClickListener {
                     TransitionManager.beginDelayedTransition(clCompile)
                     clCompile.removeView(layout)
@@ -442,14 +216,21 @@ class Dialog(val context: Context) {
                     ivMore.isSelected = false
                 }
                 layout -> layout.setOnClickListener {}
+                btnAdd -> view.setOnClickListener {
+                    Algorithm.mark(clCompile, btnAdd, componentType, rowPosition)
+                    Compilation.assignComponent(componentType, item)
+                    btnAdd.isEnabled = false
+                    btnRemove.isEnabled = true
+                }
+                btnRemove -> view.setOnClickListener {
+                    btnAdd.isEnabled = true
+                    btnRemove.isEnabled = false
+                    Compilation.deassignComponent(componentType)
+                    Algorithm.mark(clCompile, btnRemove, componentType, rowPosition)
+                }
                 else -> view.setOnClickListener {
-                    if (tbAction.isChecked) {
-                        Compilation.assignComponent(component, item)
-                        Algorithm.selection(clCompile, tbAction, component)
-                    } else {
-                        Compilation.deassignComponent(component)
-                        Algorithm.selection(clCompile, tbAction, component)
-                    }
+                    Compilation.assignComponent(componentType, item)
+                    Algorithm.replacePosition(clCompile, layout, componentType, rowPosition, oldPosition, views)
                 }
             }
         }

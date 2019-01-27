@@ -2,6 +2,7 @@ package com.corespark.pccompiler.app
 
 import android.app.Application
 import com.corespark.pccompiler.R
+import com.corespark.pccompiler.database.Query
 import com.corespark.pccompiler.utility.Color
 import com.parse.Parse.initialize
 
@@ -35,6 +36,25 @@ class Compiler : Application() {
         val componentsList = arrayOf(
             cpuList, optDriveList, coolerList, graphicCardList, motherboardList, soundCardList, memoryList,
             powerSupplyList, storageList, caseList, extStorageList, opSystemList)
+
+        private val cpuOldPositionList = mutableListOf<Int>()
+        private val coolerOldPositionList = mutableListOf<Int>()
+        private val motherboardOldPositionList = mutableListOf<Int>()
+        private val memoryOldPositionList = mutableListOf<Int>()
+        private val storageOldPositionList = mutableListOf<Int>()
+        private val extStorageOldPositionList = mutableListOf<Int>()
+        private val optDriveOldPositionList = mutableListOf<Int>()
+        private val graphicCardOldPositionList = mutableListOf<Int>()
+        private val soundCardOldPositionList = mutableListOf<Int>()
+        private val powerSupplyOldPositionList = mutableListOf<Int>()
+        private val caseOldPositionList = mutableListOf<Int>()
+        private val opSystemOldPositionList = mutableListOf<Int>()
+
+        val oldPositionsList = arrayOf(
+            cpuOldPositionList, optDriveOldPositionList, coolerOldPositionList, graphicCardOldPositionList,
+            motherboardOldPositionList, soundCardOldPositionList, memoryOldPositionList, powerSupplyOldPositionList,
+            storageOldPositionList, caseOldPositionList, extStorageOldPositionList, opSystemOldPositionList
+        )
     }
 
     override fun onCreate() {

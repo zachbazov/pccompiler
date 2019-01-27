@@ -58,7 +58,7 @@ object Constraint {
             Constraint.set.connect(clFragControlBar, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
             Constraint.set.applyTo(parentLayout)
         }
-        else -> if (!applyTo.isSelected) {
+        clFragControlPanel -> if (!applyTo.isSelected) {
             set.clone(parentLayout)
             set.clear(clFragControlPanel, ConstraintSet.END)
             set.connect(clFragControlPanel, ConstraintSet.START, parentLayout.id, ConstraintSet.START, 8)
@@ -71,6 +71,19 @@ object Constraint {
             set.connect(clFragControlPanel, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
             set.applyTo(parentLayout)
             complete(false)
+        }
+        else -> {
+            Constraint.set.clone(parentLayout)
+            Constraint.set.connect(bgTransparent, ConstraintSet.TOP, parentLayout.id, ConstraintSet.TOP)
+            Constraint.set.connect(bgTransparent, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
+            Constraint.set.connect(bgTransparent, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
+            Constraint.set.connect(bgTransparent, ConstraintSet.BOTTOM, parentLayout.id, ConstraintSet.BOTTOM)
+            Constraint.set.connect(applyTo.id, ConstraintSet.TOP, parentLayout.id, ConstraintSet.TOP)
+            Constraint.set.connect(applyTo.id, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
+            Constraint.set.connect(applyTo.id, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
+            Constraint.set.connect(applyTo.id, ConstraintSet.BOTTOM, parentLayout.id, ConstraintSet.BOTTOM)
+            Constraint.set.applyTo(parentLayout)
+            complete(true)
         }
     }
 

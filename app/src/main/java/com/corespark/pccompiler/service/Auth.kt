@@ -55,7 +55,7 @@ object Auth {
     }
 
     private fun verify() = ParseUser.logInInBackground(Compiler.preferences.username, Compiler.preferences.password)
-    { parseUser, e ->
+    { parseUser, _ ->
         try {
             if (parseUser != null) this.parseUser = parseUser
             else ParseUser.logOut()

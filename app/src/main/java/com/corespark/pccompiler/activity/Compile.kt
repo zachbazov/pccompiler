@@ -20,7 +20,7 @@ class Compile : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_compile)
 
-        Compilation.assignCompilation(Auth.parseUser!!, Compilation.title)
+        Compilation.assignCompilation(Auth.parseUser, Compilation.title)
 
         customize()
     }

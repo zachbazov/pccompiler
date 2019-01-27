@@ -47,7 +47,6 @@
     <string name="text_compilation">Compilation</string>
     <string name="text_title">Title…</string>
     <string name="text_create">CREATE</string>
-    <string name="text_replace">REPLACE</string>
 
     <!-- Parse Keys -->
     <string name="table_cpu">CPU</string>
@@ -119,6 +118,7 @@
     <string name="dialog_description">Description</string>
     <string name="dialog_add">ADD</string>
     <string name="dialog_remove">REMOVE</string>
+    <string name="dialog_replace">REPLACE</string>
 
     <string name="type_cpu">CPU</string>
     <string name="type_cooler">Cooler</string>
