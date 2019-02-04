@@ -12,10 +12,12 @@
     <item name="ivActionUser" type="id"/>
     <item name="ivActionCompile" type="id"/>
     <item name="tvActionUser" type="id"/>
+    <item name="clActionEdit" type="id"/>
     <item name="dvAction4" type="id"/>
 
     <item name="cvCompilation0" type="id"/>
     <item name="cvCompilation1" type="id"/>
+    <item name="cvCompilation2" type="id"/>
 
     <item name="clControlPanelLogout" type="id"/>
 

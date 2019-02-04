@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.activity_workspace.*
 import kotlinx.android.synthetic.main.activity_workspace.view.*
 import kotlinx.android.synthetic.main.activity_compile.*
 import kotlinx.android.synthetic.main.activity_compile.view.*
+import kotlinx.android.synthetic.main.dialog_alert.view.*
 import kotlinx.android.synthetic.main.dialog_overview.view.*
 
 
@@ -112,9 +113,34 @@ class Dialog(val context: Context) {
                 else -> view.setOnClickListener {
                     it.isEnabled = false
                     val compilationTitle = etPrelim.text.toString()
-                    Intent.launch(context, R.layout.activity_compile) { Compilation.title = compilationTitle }
+                    Intent.launch(context, R.layout.activity_compile) {
+                        Compilation.title = compilationTitle
+                        //Compilation.isRunning = true
+                        //Bar.Compilation.list.add(Bar.Compilation("", compilationTitle, R.mipmap.ic_pccompiler))
+                    }
                     Intent.finish(context)
+                    createCompilationObject()
                 }
+            }
+
+            private fun createCompilationObject() {
+//                compilation = ParseObject.create("Compilation")
+//                compilation.put("user", Auth.parseUser)
+//                println(Auth.parseUser!!.username)
+//                compilation.put("title", Compilation.title)
+//
+//                if (Compilation.cpu != null) {
+//                    val query = ParseQuery.getQuery<ParseObject>("CPU")
+//                    query.whereEqualTo("objectId", Compilation.cpu!!.id)
+//                    query.findInBackground { objects, e ->
+//                        if (e == null) {
+//                            for (obj in objects) {
+//                                compilation.put("cpu", obj)
+//                                compilation.saveInBackground()
+//                            }
+//                        }
+//                    }
+//                }
             }
         }
     }
@@ -194,7 +220,7 @@ class Dialog(val context: Context) {
 
                 Constraint.set(layout, clCompile) {}
                 DataBinding.componentInfo(context, item, componentType, params)
-                Algorithm.enableSelection(item, componentType, views)
+                GlobalFunction.enableSelection(item, componentType, views)
 
                 val listeners = arrayOf(background, ivClose, layout, btnAdd, btnRemove, btnReplace)
                 for (listener in listeners) listener(listener, componentType, item, rowPosition, oldPosition)
@@ -217,7 +243,7 @@ class Dialog(val context: Context) {
                 }
                 layout -> layout.setOnClickListener {}
                 btnAdd -> view.setOnClickListener {
-                    Algorithm.mark(clCompile, btnAdd, componentType, rowPosition)
+                    GlobalFunction.mark(clCompile, btnAdd, componentType, rowPosition)
                     Compilation.assignComponent(componentType, item)
                     btnAdd.isEnabled = false
                     btnRemove.isEnabled = true
@@ -226,11 +252,67 @@ class Dialog(val context: Context) {
                     btnAdd.isEnabled = true
                     btnRemove.isEnabled = false
                     Compilation.deassignComponent(componentType)
-                    Algorithm.mark(clCompile, btnRemove, componentType, rowPosition)
+                    GlobalFunction.mark(clCompile, btnRemove, componentType, rowPosition)
                 }
                 else -> view.setOnClickListener {
                     Compilation.assignComponent(componentType, item)
-                    Algorithm.replacePosition(clCompile, layout, componentType, rowPosition, oldPosition, views)
+                    GlobalFunction.replacePosition(clCompile, layout, componentType, rowPosition, oldPosition, views)
+                }
+            }
+        }
+
+        inner class Alert {
+
+            val layout = LayoutInflater.from(context).inflate(R.layout.dialog_alert, clCompile, false)!!
+
+            private val tvAlertTitle = layout.tvAlertTitle!!
+            private val ivAlertClose = layout.ivAlertClose!!
+            private val tvAlert = layout.tvAlert!!
+            private val btnAlert = layout.btnAlert!!
+
+            fun build() {
+                if (clCompile.clReturn.isSelected) {
+                    instantiate()
+                    customize()
+                }
+            }
+
+            private fun instantiate() {
+                TransitionManager.beginDelayedTransition(clCompile)
+                clCompile.addView(background)
+                clCompile.addView(layout)
+            }
+
+            private fun customize() {
+                background.id = R.id.bgTransparent
+                background.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+                background.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+                background.setBackgroundColor(Compiler.colors.colorTransparentBlack)
+
+                tvAlertTitle.text = "COMPILATION"
+                ivAlertClose.setImageResource(R.drawable.ic_close_transparent_gray_24dp)
+                tvAlert.text = "${Compilation.title} is running.\nYou can manage your compilation\nat any time."
+                btnAlert.text = "RETURN TO WORKSPACE"
+
+                Constraint.set(layout, clCompile) {}
+
+                val listeners = arrayOf(background, ivAlertClose, layout, btnAlert)
+                for (listener in listeners) listener(listener)
+            }
+
+            private fun listener(view: View) {
+                when (view) {
+                    background, ivAlertClose -> view.setOnClickListener {
+                        TransitionManager.beginDelayedTransition(clCompile)
+                        clCompile.removeView(layout)
+                        clCompile.removeView(background)
+                        clCompile.clReturn.isSelected = false
+                    }
+                    layout -> view.setOnClickListener {}
+                    btnAlert -> view.setOnClickListener {
+                        Intent.launch(context, R.layout.activity_workspace) {}
+                        Intent.finish(context)
+                    }
                 }
             }
         }

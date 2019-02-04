@@ -9,6 +9,7 @@ import com.corespark.pccompiler.R
 import com.corespark.pccompiler.model.User
 import com.corespark.pccompiler.service.*
 import com.corespark.pccompiler.service.Auth
+import com.corespark.pccompiler.service.View.measure
 import kotlinx.android.synthetic.main.activity_auth.*
 
 
@@ -25,7 +26,7 @@ class Auth : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
-        com.corespark.pccompiler.service.View.measure(windowManager, com.corespark.pccompiler.service.View.metrics)
+        measure(windowManager, com.corespark.pccompiler.service.View.metrics)
 
         Auth.auth(this) { if (it) finish() }
 

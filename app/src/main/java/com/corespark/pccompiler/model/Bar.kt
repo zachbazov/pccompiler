@@ -57,7 +57,7 @@ object Bar {
         }
     }
 
-    class Compilation(val id: Int, val title: String, val image: Int) {
+    class Compilation(val id: String, val title: String, val image: Int) {
 
         companion object {
             val list = mutableListOf<Any>()

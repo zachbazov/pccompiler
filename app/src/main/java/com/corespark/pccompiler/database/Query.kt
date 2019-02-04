@@ -2,7 +2,9 @@ package com.corespark.pccompiler.database
 
 import android.content.Context
 import com.corespark.pccompiler.R
+import com.corespark.pccompiler.model.Bar
 import com.corespark.pccompiler.model.Component
+import com.corespark.pccompiler.service.Auth
 import com.parse.ParseObject
 import com.parse.ParseQuery
 
@@ -18,7 +20,16 @@ class Query {
 
     private lateinit var query: ParseQuery<ParseObject>
 
-    fun retrieve(context: Context, table: String, list: MutableList<Any>) {
+    companion object {
+        lateinit var compilation00: ParseObject
+        lateinit var compilation01: ParseObject
+        lateinit var compilation02: ParseObject
+    }
+
+    lateinit var cpu: ParseObject
+    lateinit var cooler: ParseObject
+
+    fun retrieveComponents(context: Context, table: String, list: MutableList<Any>) {
         query = ParseQuery.getQuery<ParseObject>(table)
         query.findInBackground { objects, e ->
             if (e == null) for (obj in objects!!) when (table) {
@@ -190,6 +201,91 @@ class Query {
                         price = obj.get(context.getString(R.string.key_price)) as String
                     )
                 )
+            }
+        }
+    }
+
+    fun retrieveCompilations(context: Context) {
+        query = ParseQuery.getQuery<ParseObject>("Compilation")
+        query.whereEqualTo("user", Auth.parseUser)
+        query.include("Compilation")
+        val list: MutableList<ParseObject> = query.find()
+        val size = list.size - 1
+
+        for (i in 0..size) {
+            when (i) {
+                0 -> {
+                    compilation00 = list[i].fetchIfNeeded<ParseObject>()
+                    println(compilation00.get("title"))
+                }
+                1 -> {
+                    compilation01 = list[i].fetchIfNeeded<ParseObject>()
+                    println(compilation01.get("title"))
+                }
+                2 -> {
+                    compilation02 = list[i].fetchIfNeeded<ParseObject>()
+                    println(compilation02.get("title"))
+                }
+            }
+
+            when (i) {
+                0 -> {
+                    cpu = list[i].getParseObject("cpu").fetchIfNeeded()
+
+                    val cpu = Component(
+                        id = cpu.objectId,
+                        manufaturer = cpu.get(context.getString(R.string.key_manufacturer)) as String,
+                        component = cpu.get(context.getString(R.string.key_cpu)) as String,
+                        paramA = cpu.get(context.getString(R.string.key_core)) as String,
+                        paramB = cpu.get(context.getString(R.string.key_speed)) as String,
+                        paramC = cpu.get(context.getString(R.string.key_tdp)) as String,
+                        paramD = null,
+                        paramE = null,
+                        paramF = null,
+                        price = cpu.get(context.getString(R.string.key_price)) as String
+                    )
+                }
+                1 -> {
+                    cpu = list[i].getParseObject("cpu").fetchIfNeeded()
+
+                    val cpu = Component(
+                        id = cpu.objectId,
+                        manufaturer = cpu.get(context.getString(R.string.key_manufacturer)) as String,
+                        component = cpu.get(context.getString(R.string.key_cpu)) as String,
+                        paramA = cpu.get(context.getString(R.string.key_core)) as String,
+                        paramB = cpu.get(context.getString(R.string.key_speed)) as String,
+                        paramC = cpu.get(context.getString(R.string.key_tdp)) as String,
+                        paramD = null,
+                        paramE = null,
+                        paramF = null,
+                        price = cpu.get(context.getString(R.string.key_price)) as String
+                    )
+                }
+                2 -> {
+                    cpu = list[i].getParseObject("cpu").fetchIfNeeded()
+
+                    val cpu = Component(
+                        id = cpu.objectId,
+                        manufaturer = cpu.get(context.getString(R.string.key_manufacturer)) as String,
+                        component = cpu.get(context.getString(R.string.key_cpu)) as String,
+                        paramA = cpu.get(context.getString(R.string.key_core)) as String,
+                        paramB = cpu.get(context.getString(R.string.key_speed)) as String,
+                        paramC = cpu.get(context.getString(R.string.key_tdp)) as String,
+                        paramD = null,
+                        paramE = null,
+                        paramF = null,
+                        price = cpu.get(context.getString(R.string.key_price)) as String
+                    )
+                }
+            }
+
+            when (i) {
+                0 -> Bar.Compilation.list.add(i, Bar.Compilation(
+                    compilation00.objectId, compilation00.get("title").toString(), R.mipmap.ic_pccompiler))
+                1 -> Bar.Compilation.list.add(i, Bar.Compilation(
+                    compilation01.objectId, compilation01.get("title").toString(), R.mipmap.ic_pccompiler))
+                2 -> Bar.Compilation.list.add(i, Bar.Compilation(
+                    compilation02.objectId, compilation02.get("title").toString(), R.mipmap.ic_pccompiler))
             }
         }
     }

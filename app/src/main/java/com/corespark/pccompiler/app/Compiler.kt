@@ -3,8 +3,10 @@ package com.corespark.pccompiler.app
 import android.app.Application
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.database.Query
+import com.corespark.pccompiler.utility.Attribute
 import com.corespark.pccompiler.utility.Color
 import com.parse.Parse.initialize
+import com.parse.ParseObject
 
 
 /**
@@ -19,6 +21,8 @@ class Compiler : Application() {
     companion object {
         lateinit var preferences: SharedPreferences
         lateinit var colors: Color
+        lateinit var attributes: Attribute
+        lateinit var query: Query
 
         val cpuList = mutableListOf<Any>()
         val coolerList = mutableListOf<Any>()
@@ -53,30 +57,31 @@ class Compiler : Application() {
         val oldPositionsList = arrayOf(
             cpuOldPositionList, optDriveOldPositionList, coolerOldPositionList, graphicCardOldPositionList,
             motherboardOldPositionList, soundCardOldPositionList, memoryOldPositionList, powerSupplyOldPositionList,
-            storageOldPositionList, caseOldPositionList, extStorageOldPositionList, opSystemOldPositionList
-        )
+            storageOldPositionList, caseOldPositionList, extStorageOldPositionList, opSystemOldPositionList)
     }
 
     override fun onCreate() {
         super.onCreate()
 
         initialize(applicationContext)
+        ParseObject.registerSubclass(com.corespark.pccompiler.model.Component::class.java)
 
         preferences = SharedPreferences(applicationContext)
         colors = Color(applicationContext)
+        attributes = Attribute()
+        query = Query()
 
-        val query = Query()
-        query.retrieve(applicationContext, getString(R.string.table_cpu), cpuList)
-        query.retrieve(applicationContext, getString(R.string.table_cooler), coolerList)
-        query.retrieve(applicationContext, getString(R.string.table_motherboard), motherboardList)
-        query.retrieve(applicationContext, getString(R.string.table_memory), memoryList)
-        query.retrieve(applicationContext, getString(R.string.table_storage), storageList)
-        query.retrieve(applicationContext, getString(R.string.table_external_storage), extStorageList)
-        query.retrieve(applicationContext, getString(R.string.table_optical_drive), optDriveList)
-        query.retrieve(applicationContext, getString(R.string.table_graphic_card), graphicCardList)
-        query.retrieve(applicationContext, getString(R.string.table_sound_card), soundCardList)
-        query.retrieve(applicationContext, getString(R.string.table_power_supply), powerSupplyList)
-        query.retrieve(applicationContext, getString(R.string.table_case), caseList)
-        query.retrieve(applicationContext, getString(R.string.table_operating_system), opSystemList)
+        query.retrieveComponents(applicationContext, getString(R.string.table_cpu), cpuList)
+        query.retrieveComponents(applicationContext, getString(R.string.table_cooler), coolerList)
+        query.retrieveComponents(applicationContext, getString(R.string.table_motherboard), motherboardList)
+        query.retrieveComponents(applicationContext, getString(R.string.table_memory), memoryList)
+        query.retrieveComponents(applicationContext, getString(R.string.table_storage), storageList)
+        query.retrieveComponents(applicationContext, getString(R.string.table_external_storage), extStorageList)
+        query.retrieveComponents(applicationContext, getString(R.string.table_optical_drive), optDriveList)
+        query.retrieveComponents(applicationContext, getString(R.string.table_graphic_card), graphicCardList)
+        query.retrieveComponents(applicationContext, getString(R.string.table_sound_card), soundCardList)
+        query.retrieveComponents(applicationContext, getString(R.string.table_power_supply), powerSupplyList)
+        query.retrieveComponents(applicationContext, getString(R.string.table_case), caseList)
+        query.retrieveComponents(applicationContext, getString(R.string.table_operating_system), opSystemList)
     }
 }

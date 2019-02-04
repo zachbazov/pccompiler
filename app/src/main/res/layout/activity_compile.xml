@@ -25,7 +25,7 @@
                                                      app:layout_constraintStart_toStartOf="parent"
                                                      app:layout_constraintBottom_toBottomOf="parent">
 
-            <ImageView android:id="@+id/ivReturn"
+            <ImageView android:id="@+id/ivBackward"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:contentDescription="@string/cd_return"
@@ -40,6 +40,35 @@
                        app:layout_constraintBottom_toBottomOf="parent"
                        app:layout_constraintTop_toTopOf="parent"
                        app:layout_constraintStart_toStartOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout android:id="@+id/clFinish"
+                                                     android:layout_width="wrap_content"
+                                                     android:layout_height="wrap_content"
+                                                     android:layout_marginTop="@dimen/_8dp"
+                                                     android:layout_marginBottom="@dimen/_8dp"
+                                                     android:layout_marginEnd="@dimen/_16dp"
+                                                     app:layout_constraintTop_toTopOf="parent"
+                                                     app:layout_constraintEnd_toEndOf="parent"
+                                                     app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView android:id="@+id/ivForward"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:scaleX="-1"
+                       android:contentDescription="@string/cd_forward"
+                       app:layout_constraintEnd_toStartOf="@+id/ivCart"
+                       app:layout_constraintTop_toTopOf="parent"
+                       app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView android:id="@+id/ivCart"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:contentDescription="@string/cd_cart_bar"
+                       app:layout_constraintTop_toTopOf="parent"
+                       app:layout_constraintEnd_toEndOf="parent"
+                       app:layout_constraintBottom_toBottomOf="parent"/>
 
         </android.support.constraint.ConstraintLayout>
 

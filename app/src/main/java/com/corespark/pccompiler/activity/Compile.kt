@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.corespark.pccompiler.R
-import com.corespark.pccompiler.R.layout.activity_workspace
+import com.corespark.pccompiler.adapter.Dialog
 import com.corespark.pccompiler.adapter.Recycler
 import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.model.Bar
@@ -26,19 +26,17 @@ class Compile : AppCompatActivity() {
     }
 
     private fun customize() {
-        val attr = theme.obtainStyledAttributes(R.style.AppTheme, intArrayOf(R.attr.homeAsUpIndicator))
-        val attrResId = attr.getResourceId(0, 0)
-        val drawable = resources.getDrawable(attrResId, theme)
-        attr.recycle()
+        ivBackward.setImageDrawable(Compiler.attributes.homeIndicator(this))
+        ivForward.setImageDrawable(Compiler.attributes.homeIndicator(this))
         ivWorkspace.setImageResource(R.drawable.ic_workspace_inactive)
-        ivReturn.setImageDrawable(drawable)
+        ivCart.setImageResource(R.drawable.ic_cart_inactive)
 
         tvCompilationTitle.text = Compilation.title
 
         val adapters = arrayOf(rvComponentBar, rvComponent)
         for (adapter in adapters) setAdapter(adapter)
 
-        val clicks = arrayOf(clReturn)
+        val clicks = arrayOf(clReturn, clFinish)
         for (click in clicks) onClick(click)
     }
 
@@ -54,11 +52,21 @@ class Compile : AppCompatActivity() {
     }
 
     private fun onClick(view: View) = when (view.id) {
-        clReturn.id -> view.setOnClickListener {
-            Intent.launch(this, activity_workspace) {}
-            Intent.finish(this)
+        clReturn.id -> {
+            view.setOnClickListener {
+                view.isSelected = true
+                val dialog = Dialog(this)
+                dialog.Compile().Alert().build()
+            }
         }
-        else -> {}
+        else -> {
+            view.setOnClickListener {
+                Intent.launch(this, R.layout.activity_workspace) {
+                    Compilation.isRunning = true
+                }
+                Intent.finish(this)
+            }
+        }
     }
 }
 

@@ -16,7 +16,8 @@ class Color(context: Context) {
 
     val colorAccent = ContextCompat.getColor(context, R.color.colorAccent)
     val colorWhite = ContextCompat.getColor(context, R.color.colorWhite)
+    val colorCloud = ContextCompat.getColor(context, R.color.colorCloud)
     val colorGray = ContextCompat.getColor(context, R.color.colorGray)
     val colorTransparentBlack = ContextCompat.getColor(context, R.color.colorTransparentBlack)
-    val colorCloud = ContextCompat.getColor(context, R.color.colorCloud)
+    val colorTransparentGray = ContextCompat.getColor(context, R.color.colorTransparentGray)
 }

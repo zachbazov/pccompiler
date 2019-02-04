@@ -186,4 +186,6 @@
     <string name="cd_return">Return Button</string>
     <string name="cd_more">More Options Button</string>
     <string name="cd_overview">Component Overview</string>
+    <string name="cd_backward">Go Backward</string>
+    <string name="cd_forward">Go Forward</string>
 </resources>

@@ -58,7 +58,7 @@ object Constraint {
             Constraint.set.connect(clFragControlBar, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
             Constraint.set.applyTo(parentLayout)
         }
-        clFragControlPanel -> if (!applyTo.isSelected) {
+        clActionUser -> if (!applyTo.isSelected) {
             set.clone(parentLayout)
             set.clear(clFragControlPanel, ConstraintSet.END)
             set.connect(clFragControlPanel, ConstraintSet.START, parentLayout.id, ConstraintSet.START, 8)

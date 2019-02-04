@@ -54,17 +54,20 @@ object Auth {
         }
     }
 
-    private fun verify() = ParseUser.logInInBackground(Compiler.preferences.username, Compiler.preferences.password)
+    private fun verify(context: Context) = ParseUser.logInInBackground(Compiler.preferences.username, Compiler.preferences.password)
     { parseUser, _ ->
         try {
-            if (parseUser != null) this.parseUser = parseUser
+            if (parseUser != null) {
+                this.parseUser = parseUser
+                Compiler.query.retrieveCompilations(context)
+            }
             else ParseUser.logOut()
         } catch (ex: ParseException) {}
     }
 
     fun auth(context: Context, complete: (Boolean) -> Unit) {
         if (Compiler.preferences.isAuthenticated) {
-            verify()
+            verify(context)
             Intent.launch(context, R.layout.activity_workspace) {}
             complete(true)
         }
