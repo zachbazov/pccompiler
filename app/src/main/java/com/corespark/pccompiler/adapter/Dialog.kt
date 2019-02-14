@@ -9,14 +9,16 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.corespark.pccompiler.R
-import com.corespark.pccompiler.app.Compiler
+import com.corespark.pccompiler.app.Application
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
+import com.corespark.pccompiler.model.Bar
 import com.corespark.pccompiler.model.Compilation
 import com.corespark.pccompiler.model.Component
 import com.corespark.pccompiler.service.*
+import com.parse.ParseObject
 import kotlinx.android.synthetic.main.activity_workspace.*
 import kotlinx.android.synthetic.main.activity_workspace.view.*
 import kotlinx.android.synthetic.main.activity_compile.*
@@ -68,7 +70,7 @@ class Dialog(val context: Context) {
                 background.id = R.id.bgTransparent
                 background.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
                 background.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-                background.setBackgroundColor(Compiler.colors.colorTransparentBlack)
+                background.setBackgroundColor(Application.attributes.colorTransparentBlack)
 
                 ivPrelim.setImageResource(R.drawable.ic_close_transparent_gray_24dp)
                 tvPrelim.text = context.getString(R.string.text_compilation)
@@ -115,20 +117,19 @@ class Dialog(val context: Context) {
                     val compilationTitle = etPrelim.text.toString()
                     Intent.launch(context, R.layout.activity_compile) {
                         Compilation.title = compilationTitle
-                        //Compilation.isRunning = true
-                        //Bar.Compilation.list.add(Bar.Compilation("", compilationTitle, R.mipmap.ic_pccompiler))
+                        Compilation.isOnGoing = true
+                        Bar.Compilation.onGoingList.add(Bar.Compilation("", compilationTitle, R.mipmap.ic_pccompiler))
+                        createCompilationObject()
                     }
                     Intent.finish(context)
-                    createCompilationObject()
                 }
             }
 
             private fun createCompilationObject() {
-//                compilation = ParseObject.create("Compilation")
-//                compilation.put("user", Auth.parseUser)
-//                println(Auth.parseUser!!.username)
-//                compilation.put("title", Compilation.title)
-//
+                val compilation = ParseObject.create("Compilation")
+                compilation.put("user", Auth.parseUser)
+                compilation.put("title", Compilation.title)
+
 //                if (Compilation.cpu != null) {
 //                    val query = ParseQuery.getQuery<ParseObject>("CPU")
 //                    query.whereEqualTo("objectId", Compilation.cpu!!.id)
@@ -206,7 +207,7 @@ class Dialog(val context: Context) {
                 background.id = R.id.bgTransparent
                 background.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
                 background.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-                background.setBackgroundColor(Compiler.colors.colorTransparentBlack)
+                background.setBackgroundColor(Application.attributes.colorTransparentBlack)
 
                 tvOverview.text = context.getString(R.string.dialog_overview)
                 ivClose.setImageResource(R.drawable.ic_close_transparent_gray_24dp)
@@ -287,7 +288,7 @@ class Dialog(val context: Context) {
                 background.id = R.id.bgTransparent
                 background.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
                 background.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-                background.setBackgroundColor(Compiler.colors.colorTransparentBlack)
+                background.setBackgroundColor(Application.attributes.colorTransparentBlack)
 
                 tvAlertTitle.text = "COMPILATION"
                 ivAlertClose.setImageResource(R.drawable.ic_close_transparent_gray_24dp)

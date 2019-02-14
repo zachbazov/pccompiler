@@ -1,7 +1,7 @@
 package com.corespark.pccompiler.utility
 
 import android.content.Context
-import android.graphics.drawable.Drawable
+import android.support.v4.content.ContextCompat
 import com.corespark.pccompiler.R
 
 
@@ -12,9 +12,16 @@ import com.corespark.pccompiler.R
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
-class Attribute {
+class Attribute(context: Context) {
 
-    fun homeIndicator(context: Context) : Drawable {
+    val colorWhite = ContextCompat.getColor(context, R.color.colorWhite)
+    val colorCloud = ContextCompat.getColor(context, R.color.colorCloud)
+    val colorAccent = ContextCompat.getColor(context, R.color.colorAccent)
+    val colorGray = ContextCompat.getColor(context, R.color.colorGray)
+    val colorTransparentBlack = ContextCompat.getColor(context, R.color.colorTransparentBlack)
+    val colorTransparentGray = ContextCompat.getColor(context, R.color.colorTransparentGray)
+
+    fun arrowIndicator(context: Context) : android.graphics.drawable.Drawable {
         val attr = context.theme.obtainStyledAttributes(R.style.AppTheme, intArrayOf(R.attr.homeAsUpIndicator))
         val attrResId = attr.getResourceId(0, 0)
         val drawable = context.resources.getDrawable(attrResId, context.theme)

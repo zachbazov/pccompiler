@@ -19,7 +19,7 @@ interface View {
 
     fun measure(manager: WindowManager, metrics: DisplayMetrics)
 
-    fun measureMultipleDeviceDensity(width: Int, span: Int) : Int
+    fun measureWidthMultipleDeviceDensity(width: Int, span: Int) : Int
 
-    fun span(context: Context, view: View, manager: WindowManager, orientation: Int?, span: Int, complete: (Boolean) -> Unit)
+    fun width(context: Context, view: View, manager: WindowManager, orientation: Int?, span: Int, complete: (Boolean) -> Unit)
 }

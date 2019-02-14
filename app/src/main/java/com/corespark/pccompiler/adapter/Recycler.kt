@@ -14,15 +14,16 @@ import android.widget.TextView
 import com.corespark.pccompiler.R.layout.*
 import com.corespark.pccompiler.activity.Compile
 import com.corespark.pccompiler.activity.Workspace
-import com.corespark.pccompiler.app.Compiler
 import com.corespark.pccompiler.model.*
 import com.corespark.pccompiler.service.*
 import com.corespark.pccompiler.service.View.orientation
-import com.corespark.pccompiler.service.View.span
+import com.corespark.pccompiler.service.View.width
 import kotlinx.android.synthetic.main.activity_compile.*
 import kotlinx.android.synthetic.main.activity_workspace.*
 import kotlinx.android.synthetic.main.activity_workspace.view.*
 import com.corespark.pccompiler.R
+import com.corespark.pccompiler.app.Application.Companion.attributes
+import com.corespark.pccompiler.utility.Array
 
 
 /**
@@ -51,6 +52,7 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
             5 -> holder = CartBarViewHolder(infalter.inflate(item_cart_bar, container, false))
             6 -> holder = Component().ComponentBarViewHolder(infalter.inflate(item_component_bar, container, false))
             7 -> holder = Component().ComponentViewHolder(infalter.inflate(item_component, container, false))
+            9 -> holder = Compilation().CompilationViewHolder(infalter.inflate(item_compilation_bar, container, false))
             else -> holder = EmptyViewHolder(infalter.inflate(item_empty, container, false))
         }
         return holder
@@ -116,6 +118,11 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
                 holder.customize(item)
                 holder.onClick(holder.more, item)
             }
+            9 -> {
+                holder as Compilation.CompilationViewHolder
+                holder.span()
+                holder.bind(item as Bar.Compilation)
+            }
             else -> {
                 holder as EmptyViewHolder
                 holder.span()
@@ -137,7 +144,7 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
             private val image = itemView.findViewById<ImageView>(R.id.ivTabBarItem)!!
             private val divider = itemView.findViewById<View>(R.id.dvTabBarItem)!!
 
-            fun span() = span(context, layout, (context as Workspace).windowManager, orientation, list.size) {}
+            fun span() = width(context, layout, (context as Workspace).windowManager, orientation, list.size) {}
 
             fun mapId(position: Int) = when (position) {
                 0 -> {
@@ -161,12 +168,12 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
                     1 -> {
                         image.setImageResource(R.drawable.ic_cart_active)
                         layout.removeView(divider)
-                        if (com.corespark.pccompiler.model.Compilation.isRunning) {
-                            Constraint.set(clTabCart!!, clWorkspace.clFragTabBar, clWorkspace.ivTracker)
-                            Constraint.set(clTabCart!!, clWorkspace, clWorkspace.clFragCart)
-                            Constraint.set(clTabCart!!, clWorkspace) {}
-                            Constraint.set(clTabCart!!, clWorkspace.clFragTitle, clWorkspace.tvCartTitle)
-                        } else {}
+//                        if (com.corespark.pccompiler.model.Compilation.isOnGoing) {
+//                            Constraint.set(clTabCart!!, clWorkspace.clFragTabBar, clWorkspace.ivTracker)
+//                            Constraint.set(clTabCart!!, clWorkspace, clWorkspace.clFragCart)
+//                            Constraint.set(clTabCart!!, clWorkspace) {}
+//                            Constraint.set(clTabCart!!, clWorkspace.clFragTitle, clWorkspace.tvCartTitle)
+//                        }
                     }
                 }
             }
@@ -204,7 +211,7 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
             private val title = itemView.findViewById<TextView>(R.id.tvActionBarItem)!!
             private val divider = itemView.findViewById<View>(R.id.dvActionBarItem)!!
 
-            fun span() = span(context, layout, (context as Workspace).windowManager, orientation, list.size) {}
+            fun span() = width(context, layout, (context as Workspace).windowManager, orientation, list.size) {}
 
             fun bind(item: Bar.Action) {
                 image.setImageResource(item.image)
@@ -271,7 +278,7 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
         val image = itemView.findViewById<ImageView>(R.id.ivControlBarItem)!!
         private val title = itemView.findViewById<TextView>(R.id.tvControlBarItem)!!
 
-        fun span() = span(context, layout, (context as Workspace).windowManager, orientation, list.size) {}
+        fun span() = width(context, layout, (context as Workspace).windowManager, orientation, list.size) {}
 
         fun bind(item: Bar.Control) {
             image.setImageResource(item.image)
@@ -306,7 +313,7 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
             private val title = itemView.findViewById<TextView>(R.id.tvControlPanelItem)!!
             private val divider = itemView.findViewById<View>(R.id.dvControlPanelItem)!!
 
-            fun span() = span(context, divider, (context as Workspace).windowManager, orientation, list.size) {}
+            fun span() = width(context, divider, (context as Workspace).windowManager, orientation, list.size) {}
 
             fun bind(item: Panel.ControlPanel) {
                 image.setImageResource(item.image)
@@ -350,10 +357,8 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
         var clCompilationBar00: ConstraintLayout? = null
         var clCompilationBar01: ConstraintLayout? = null
         var clCompilationBar02: ConstraintLayout? = null
-
         var firstCompilationPresented: View? = null
         var secondCompilationPresented: View? = null
-
         val clActionEdit = ActionBar().rvActionBar.layoutManager?.getChildAt(2)
             ?.findViewById<ConstraintLayout>(R.id.clActionEdit)!!
         val ivActionEdit = ActionBar().rvActionBar.layoutManager?.getChildAt(2)
@@ -376,7 +381,9 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
             private val image = itemView.findViewById<ImageView>(R.id.ivCompilationItem)!!
             private val title = itemView.findViewById<TextView>(R.id.tvCompilationItem)!!
 
-            fun span() = span(context, layout, (context as Workspace).windowManager, orientation, 2) {}
+            fun span() {
+                width(context, layout, (context as Workspace).windowManager, orientation, 2) {}
+            }
 
             fun mapId(position: Int) {
                 when (position) {
@@ -413,15 +420,15 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
                         when (parent) {
                             firstCompilationPresented -> when {
                                 !firstCompilationPresented?.isSelected!! -> {
-                                    firstCompilationPresented?.setBackgroundColor(Compiler.colors.colorAccent)
-                                    secondCompilationPresented?.setBackgroundColor(Compiler.colors.colorCloud)
+                                    firstCompilationPresented?.setBackgroundColor(attributes.colorAccent)
+                                    secondCompilationPresented?.setBackgroundColor(attributes.colorCloud)
                                     firstCompilationPresented?.isSelected = true
                                     secondCompilationPresented?.isSelected = false
                                     clActionEdit.isEnabled = true
                                     ivActionEdit.setImageResource(R.drawable.ic_edit_active)
                                 }
                                 else -> {
-                                    firstCompilationPresented?.setBackgroundColor(Compiler.colors.colorCloud)
+                                    firstCompilationPresented?.setBackgroundColor(attributes.colorCloud)
                                     firstCompilationPresented?.isSelected = false
                                     secondCompilationPresented?.isSelected = false
                                     clActionEdit.isEnabled = false
@@ -430,15 +437,15 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
                             }
                             secondCompilationPresented -> when {
                                 !secondCompilationPresented?.isSelected!! -> {
-                                    firstCompilationPresented?.setBackgroundColor(Compiler.colors.colorCloud)
-                                    secondCompilationPresented?.setBackgroundColor(Compiler.colors.colorAccent)
+                                    firstCompilationPresented?.setBackgroundColor(attributes.colorCloud)
+                                    secondCompilationPresented?.setBackgroundColor(attributes.colorAccent)
                                     firstCompilationPresented?.isSelected = false
                                     secondCompilationPresented?.isSelected = true
                                     clActionEdit.isEnabled = true
                                     ivActionEdit.setImageResource(R.drawable.ic_edit_active)
                                 }
                                 else -> {
-                                    secondCompilationPresented?.setBackgroundColor(Compiler.colors.colorCloud)
+                                    secondCompilationPresented?.setBackgroundColor(attributes.colorCloud)
                                     firstCompilationPresented?.isSelected = false
                                     secondCompilationPresented?.isSelected = false
                                     clActionEdit.isEnabled = false
@@ -473,7 +480,7 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
         private val title = itemView.findViewById<TextView>(R.id.tvCartBarItemComponent)!!
         private val price = itemView.findViewById<TextView>(R.id.tvCartBarItemPrice)!!
 
-        fun span() = span(context, layout, (context as Compile).windowManager, orientation, 1) {}
+        fun span() = width(context, layout, (context as Compile).windowManager, orientation, 1) {}
 
         fun bind(item: Bar.Cart) {
             image.setImageResource(item.image)
@@ -493,12 +500,12 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
             val layout = itemView.findViewById<ConstraintLayout>(R.id.clComponentBarItemParent)!!
             private val image = itemView.findViewById<ImageView>(R.id.ivComponentBarItem)!!
 
-            fun span() = span(context, layout, (context as Compile).windowManager, orientation, list.size/2) {}
+            fun span() = width(context, layout, (context as Compile).windowManager, orientation, list.size/2) {}
 
             fun bind(item: Bar.Component) = image.setImageResource(item.image)
 
             fun customize() {
-                rvComponentBar.layoutManager?.getChildAt(0)?.setBackgroundColor(Compiler.colors.colorAccent)
+                rvComponentBar.layoutManager?.getChildAt(0)?.setBackgroundColor(attributes.colorAccent)
                 GlobalFunction.mark(rvComponentBar)
             }
 
@@ -506,7 +513,7 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
                 view.setOnClickListener {
                     TransitionManager.beginDelayedTransition(clCompile)
                     GlobalFunction.focus(rvComponentBar, adapterPosition)
-                    val componentList = Compiler.componentsList[adapterPosition]
+                    val componentList = Array.componentsArray[adapterPosition]
                     rvComponent.adapter = Recycler(context, componentList, 7, adapterPosition)
                 }
             }
@@ -522,8 +529,8 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
             private val price = itemView.findViewById<TextView>(R.id.tvComponentItemPrice)!!
 
             fun span() {
-                span(context, layout, (context as Compile).windowManager, orientation, 1) {}
-                span(context, title, context.windowManager, orientation, 2) {}
+                width(context, layout, (context as Compile).windowManager, orientation, 1) {}
+                width(context, title, context.windowManager, orientation, 2) {}
             }
 
             fun bind(item: com.corespark.pccompiler.model.Component) {
@@ -542,7 +549,7 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
             fun onClick(view: View, item: com.corespark.pccompiler.model.Component) {
                 view.setOnClickListener {
                     rvComponent.scrollToPosition(adapterPosition)
-                    val oldPositionList = Compiler.oldPositionsList[componentType!!]
+                    val oldPositionList = Array.oldPositionsArray[componentType!!]
                     val oldPosition = GlobalFunction.oldPosition(componentType, oldPositionList, adapterPosition)
                     dialog.Compile().Overview().build(componentType, item, adapterPosition, oldPosition)
                 }
@@ -557,7 +564,7 @@ class Recycler(val context: Context, private val list: MutableList<Any>, private
         private val image = itemView.findViewById<ImageView>(R.id.ivItemEmpty)!!
         private val title = itemView.findViewById<TextView>(R.id.tvItemEmpty)!!
 
-        fun span() = span(context, layout, (context as Workspace).windowManager, orientation, list.size) {}
+        fun span() = width(context, layout, (context as Workspace).windowManager, orientation, list.size) {}
 
         fun bind(item: Bar.Empty) {
             image.setImageResource(item.image)

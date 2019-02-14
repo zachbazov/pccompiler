@@ -2,7 +2,7 @@ package com.corespark.pccompiler.service
 
 import android.content.Context
 import com.corespark.pccompiler.R
-import com.corespark.pccompiler.app.Compiler
+import com.corespark.pccompiler.app.Application
 import com.corespark.pccompiler.model.User
 import com.parse.ParseException
 import com.parse.ParseUser
@@ -32,9 +32,9 @@ object Auth {
                 user.isEmailVerified = parseUser.isNew
                 user.isAuthenticated = parseUser.isAuthenticated
                 this.parseUser = parseUser
-                Compiler.preferences.username = user.username
-                Compiler.preferences.password = user.password
-                Compiler.preferences.isAuthenticated = true
+                Application.preferences.username = user.username
+                Application.preferences.password = user.password
+                Application.preferences.isAuthenticated = true
                 complete(true)
             } else {
                 ParseUser.logOut()
@@ -54,20 +54,20 @@ object Auth {
         }
     }
 
-    private fun verify(context: Context) = ParseUser.logInInBackground(Compiler.preferences.username, Compiler.preferences.password)
-    { parseUser, _ ->
+    private fun verify() = ParseUser.logInInBackground(
+        Application.preferences.username, Application.preferences.password) { parseUser, _ ->
         try {
             if (parseUser != null) {
                 this.parseUser = parseUser
-                Compiler.query.retrieveCompilations(context)
+                Application.query.fetchCompilations()
             }
             else ParseUser.logOut()
         } catch (ex: ParseException) {}
     }
 
     fun auth(context: Context, complete: (Boolean) -> Unit) {
-        if (Compiler.preferences.isAuthenticated) {
-            verify(context)
+        if (Application.preferences.isAuthenticated) {
+            verify()
             Intent.launch(context, R.layout.activity_workspace) {}
             complete(true)
         }
@@ -76,8 +76,8 @@ object Auth {
     fun logOut(context: Context, complete: (Boolean) -> Unit) {
         ParseUser.logOutInBackground {
             if (it == null) {
-                Compiler.preferences.username = context.getString(R.string.app_blank)
-                Compiler.preferences.isAuthenticated = false
+                Application.preferences.username = context.getString(R.string.app_blank)
+                Application.preferences.isAuthenticated = false
                 Auth.user = User
                 complete(true)
             }

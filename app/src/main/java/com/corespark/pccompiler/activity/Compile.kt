@@ -6,11 +6,12 @@ import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.adapter.Dialog
 import com.corespark.pccompiler.adapter.Recycler
-import com.corespark.pccompiler.app.Compiler
+import com.corespark.pccompiler.app.Application
 import com.corespark.pccompiler.model.Bar
 import com.corespark.pccompiler.model.Compilation
 import com.corespark.pccompiler.service.Auth
 import com.corespark.pccompiler.service.Intent
+import com.corespark.pccompiler.utility.Array
 import kotlinx.android.synthetic.main.activity_compile.*
 
 
@@ -26,8 +27,8 @@ class Compile : AppCompatActivity() {
     }
 
     private fun customize() {
-        ivBackward.setImageDrawable(Compiler.attributes.homeIndicator(this))
-        ivForward.setImageDrawable(Compiler.attributes.homeIndicator(this))
+        ivBackward.setImageDrawable(Application.attributes.arrowIndicator(this))
+        ivForward.setImageDrawable(Application.attributes.arrowIndicator(this))
         ivWorkspace.setImageResource(R.drawable.ic_workspace_inactive)
         ivCart.setImageResource(R.drawable.ic_cart_inactive)
 
@@ -40,19 +41,19 @@ class Compile : AppCompatActivity() {
         for (click in clicks) onClick(click)
     }
 
-    private fun setAdapter(view: View) = when (view.id) {
-        rvComponentBar.id -> {
+    private fun setAdapter(view: View) = when (view) {
+        rvComponentBar -> {
             Bar.Component.add()
             rvComponentBar.adapter = Recycler(this, Bar.Component.list, 6, null)
         }
         else -> {
-            rvComponent.adapter = Recycler(this, Compiler.cpuList, 7, 0)
+            rvComponent.adapter = Recycler(this, Array.cpuList, 7, 0)
             rvComponent.setHasFixedSize(true)
         }
     }
 
-    private fun onClick(view: View) = when (view.id) {
-        clReturn.id -> {
+    private fun onClick(view: View) = when (view) {
+        clReturn -> {
             view.setOnClickListener {
                 view.isSelected = true
                 val dialog = Dialog(this)
@@ -62,7 +63,7 @@ class Compile : AppCompatActivity() {
         else -> {
             view.setOnClickListener {
                 Intent.launch(this, R.layout.activity_workspace) {
-                    Compilation.isRunning = true
+                    Compilation.isOnGoing = true
                 }
                 Intent.finish(this)
             }

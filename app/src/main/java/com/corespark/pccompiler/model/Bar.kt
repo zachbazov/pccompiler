@@ -61,6 +61,7 @@ object Bar {
 
         companion object {
             val list = mutableListOf<Any>()
+            val onGoingList = mutableListOf<Any>()
             val empty = mutableListOf<Any>()
 
             fun addEmpty(context: Context) {

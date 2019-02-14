@@ -27,6 +27,7 @@ object View : com.corespark.pccompiler.impl.View {
     private var widthDp = 0f
     private var heightDp = 0f
     private var spannedWidthPx = 0
+    private var spannedHeightPx = 0
 
     override fun orientation(context: Context) : Int {
         orientation = context.resources.configuration.orientation
@@ -44,7 +45,7 @@ object View : com.corespark.pccompiler.impl.View {
         heightDp = metrics.ydpi
     }
 
-    override fun measureMultipleDeviceDensity(width: Int, span: Int) : Int {
+    override fun measureWidthMultipleDeviceDensity(width: Int, span: Int) : Int {
         when (View.metrics.density) {
             0.75f -> spannedWidthPx = (width / span)
             1f -> spannedWidthPx = (width / span)
@@ -57,19 +58,49 @@ object View : com.corespark.pccompiler.impl.View {
         return spannedWidthPx
     }
 
-    override fun span(
+    private fun measureHeightMultipleDeviceDensity(height: Int, span: Int) : Int {
+        when (View.metrics.density) {
+            0.75f -> spannedHeightPx = (height / span)
+            1f -> spannedHeightPx = (height / span)
+            1.5f -> spannedHeightPx = (height / span)
+            2f -> spannedHeightPx = (height / span)
+            2.625f -> spannedHeightPx = (height / span)
+            3f -> spannedHeightPx = (height / span)
+            3.5f -> spannedHeightPx = (height / span)
+        }
+        return spannedHeightPx
+    }
+
+    override fun width(
         context: Context, view: android.view.View, manager: WindowManager, orientation: Int?, span: Int, complete: (Boolean) -> Unit
     ) {
         View.orientation(context)
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             View.measure(manager, View.metrics)
             val params = view.layoutParams
-            params.width = View.measureMultipleDeviceDensity(View.widthPx, span)
+            params.width = View.measureWidthMultipleDeviceDensity(View.widthPx, span)
             complete(true)
         } else {
             View.measure(manager, View.metrics)
             val params = view.layoutParams
-            params.width = View.measureMultipleDeviceDensity(View.widthPx, span)
+            params.width = View.measureWidthMultipleDeviceDensity(View.widthPx, span)
+            complete(false)
+        }
+    }
+
+    fun height(
+        context: Context, view: android.view.View, manager: WindowManager, orientation: Int?, span: Int, complete: (Boolean) -> Unit
+    ) {
+        View.orientation(context)
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            View.measure(manager, View.metrics)
+            val params = view.layoutParams
+            params.height = View.measureHeightMultipleDeviceDensity(View.heightPx, span)
+            complete(true)
+        } else {
+            View.measure(manager, View.metrics)
+            val params = view.layoutParams
+            params.height = View.measureHeightMultipleDeviceDensity(View.heightPx, span)
             complete(false)
         }
     }

@@ -27,7 +27,7 @@ object Compilation {
     var powerSupply: Component? = null
     var case: Component? = null
     var opSystem: Component? = null
-    var isRunning = false
+    var isOnGoing = false
 
     fun assignCompilation(user: ParseUser?, title: String?) {
         this.user = user
