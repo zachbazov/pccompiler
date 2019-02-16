@@ -14,7 +14,6 @@ import com.corespark.pccompiler.R
 import com.corespark.pccompiler.adapter.LayoutManager
 import com.corespark.pccompiler.service.*
 import com.corespark.pccompiler.adapter.Recycler
-import com.corespark.pccompiler.app.Application
 import com.corespark.pccompiler.app.Application.Companion.attributes
 import com.corespark.pccompiler.app.Application.Companion.isSignedPresented
 import com.corespark.pccompiler.app.Application.Companion.preferences
@@ -22,7 +21,6 @@ import com.corespark.pccompiler.model.*
 import com.corespark.pccompiler.service.View.orientation
 import com.corespark.pccompiler.service.View.width
 import com.corespark.pccompiler.service.View.height
-import com.corespark.pccompiler.utility.Array
 import kotlinx.android.synthetic.main.activity_workspace.*
 import java.lang.ref.WeakReference
 

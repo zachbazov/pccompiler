@@ -404,7 +404,7 @@ class Recycler(
                 views.forEach { view -> onClick(view) }
             }
 
-            fun onClick(view: View) = when (view) {
+            private fun onClick(view: View) = when (view) {
                 parent -> view.setOnClickListener {
                     firstCompilationPresented = rvCompilationBar.layoutManager!!.getChildAt(0)
                     secondCompilationPresented = rvCompilationBar.layoutManager!!.getChildAt(1)

@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.corespark.pccompiler.R
-import com.corespark.pccompiler.adapter.Dialog
 import com.corespark.pccompiler.adapter.Recycler
 import com.corespark.pccompiler.app.Application
 import com.corespark.pccompiler.model.Bar

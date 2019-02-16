@@ -20,7 +20,7 @@ class Query {
 
     private lateinit var query: ParseQuery<ParseObject>
 
-    lateinit var cpu: ParseObject
+    private lateinit var cpu: ParseObject
 
     fun fetchComponents(table: String, list: MutableList<Any>) {
         query = ParseQuery.getQuery<ParseObject>(table)

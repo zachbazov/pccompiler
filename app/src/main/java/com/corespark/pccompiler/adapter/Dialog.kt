@@ -116,7 +116,7 @@ class Dialog(
                 else -> view.setOnClickListener {
                     it.isEnabled = false
                     Compilation.title = etPrelim.text.toString()
-                    Intent.launch(context, R.layout.activity_compile) { if (it) createCompilationObject() }
+                    Intent.launch(context, R.layout.activity_compile) { complete -> if (complete) createCompilationObject() }
                     Intent.finish(context)
                 }
             }
@@ -144,7 +144,7 @@ class Dialog(
 
     inner class Compile(
         private val clCompile: ConstraintLayout = (context as com.corespark.pccompiler.activity.Compile).clCompileParent,
-        private val ivMore: ImageView = clCompile.rvComponent.findViewById<ImageView>(R.id.ivComponentItemMore)
+        private val ivMore: ImageView = clCompile.rvComponent.findViewById(R.id.ivComponentItemMore)
     ) {
 
         inner class Overview(
