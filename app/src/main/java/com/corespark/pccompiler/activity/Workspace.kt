@@ -15,7 +15,7 @@ import com.corespark.pccompiler.adapter.LayoutManager
 import com.corespark.pccompiler.service.*
 import com.corespark.pccompiler.adapter.Recycler
 import com.corespark.pccompiler.app.Application.Companion.attributes
-import com.corespark.pccompiler.app.Application.Companion.isSignedPresented
+import com.corespark.pccompiler.app.Application.Companion.isSignedMessagePresented
 import com.corespark.pccompiler.app.Application.Companion.preferences
 import com.corespark.pccompiler.model.*
 import com.corespark.pccompiler.service.View.orientation
@@ -104,13 +104,13 @@ class Workspace : AppCompatActivity() {
     ) : AsyncTask<Void, Int, Void>() {
 
         override fun onPreExecute() {
-            if (!isSignedPresented) {
+            if (!isSignedMessagePresented) {
                 Snackbar.make(
                     weakWorkspace.get()!!.clWorkspaceParent,
                     "${weakWorkspace.get()!!.getString(R.string.auth_sign_in_success)} ${preferences.username}",
                     Snackbar.LENGTH_LONG)
                     .show()
-                isSignedPresented = true
+                isSignedMessagePresented = true
             }
             weakWorkspace.get()!!.clFragWorkspace.addView(weakLayout.get())
             width(weakWorkspace.get()!!, weakLayout.get()!!, weakWorkspace.get()!!.windowManager, orientation, 1) {}

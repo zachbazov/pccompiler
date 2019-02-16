@@ -1,7 +1,7 @@
 <resources>
     <!-- Application -->
     <string name="app_name">pccompiler</string>
-    <string name="app_blank"/>
+    <string name="text_blank"/>
 
     <!-- Parse -->
     <string name="parse_server_url">https://parseapi.back4app.com/</string>

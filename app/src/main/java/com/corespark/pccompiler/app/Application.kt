@@ -34,7 +34,7 @@ class Application : Application() {
 
     override fun onTerminate() {
         super.onTerminate()
-        isSignedPresented = false
+        isSignedMessagePresented = false
     }
 
     class Task : AsyncTask<Void, Void, Void>() {
@@ -48,6 +48,6 @@ class Application : Application() {
         lateinit var preferences: SharedPreferences
         lateinit var attributes: Attribute
         val query = Query()
-        var isSignedPresented = false
+        var isSignedMessagePresented = false
     }
 }

@@ -37,7 +37,7 @@ object Bar {
             fun add(context: Context) {
                 when {
                     list.size < 3 -> {
-                        list.add(0, Action(R.drawable.ic_profile_inactive, title = context.getString(R.string.app_blank)))
+                        list.add(0, Action(R.drawable.ic_profile_inactive, title = context.getString(R.string.text_blank)))
                         list.add(1, Action(R.drawable.ic_compile_inactive, context.getString(R.string.text_compile)))
                         list.add(2, Action(R.drawable.ic_edit_inactive, context.getString(R.string.text_edit)))
                     }

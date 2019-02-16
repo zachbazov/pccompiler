@@ -3,7 +3,6 @@ package com.corespark.pccompiler.service
 import android.content.Context
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Application
-import com.corespark.pccompiler.app.Application.Companion.isSignedPresented
 import com.corespark.pccompiler.app.Application.Companion.preferences
 import com.corespark.pccompiler.model.User
 import com.parse.ParseException
@@ -87,10 +86,9 @@ object Auth {
         ParseUser.logOutInBackground {
             when (it) {
                 null -> {
-                    preferences.username = context.getString(R.string.app_blank)
+                    preferences.username = context.getString(R.string.text_blank)
                     preferences.isAuthenticated = false
                     Auth.user = User
-                    isSignedPresented = false
                     complete(true)
                 }
             }
