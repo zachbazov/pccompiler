@@ -22,4 +22,10 @@
               app:layout_constraintEnd_toEndOf="@+id/pbDialog"
               app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <TextView android:id="@+id/tvDialogProgressDot"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              app:layout_constraintTop_toBottomOf="@+id/pbDialog"
+              app:layout_constraintStart_toEndOf="@+id/tvDialogProgress"/>
+
 </android.support.constraint.ConstraintLayout>

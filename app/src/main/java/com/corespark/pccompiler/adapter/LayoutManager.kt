@@ -15,13 +15,13 @@ import android.util.DisplayMetrics
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
-class LayoutManager(context: Context, orientation: Int, reverseLayout: Boolean)
-    : LinearLayoutManager(context, orientation, reverseLayout) {
-
-    companion object {
-        private const val MILLISECONDS_PER_INCH = 300f
-        private var isScrollEnabled = true
-    }
+class LayoutManager(
+    context: Context,
+    orientation: Int,
+    reverseLayout: Boolean,
+    private val MILLISECONDS_PER_INCH: Float = 200f,
+    private var isScrollEnabled: Boolean = true
+) : LinearLayoutManager(context, orientation, reverseLayout) {
 
     init {
         setScrollEnabled(false)
@@ -31,9 +31,7 @@ class LayoutManager(context: Context, orientation: Int, reverseLayout: Boolean)
         isScrollEnabled = flag
     }
 
-    override fun canScrollHorizontally(): Boolean {
-        return isScrollEnabled && super.canScrollHorizontally()
-    }
+    override fun canScrollHorizontally(): Boolean = isScrollEnabled && super.canScrollHorizontally()
 
     override fun smoothScrollToPosition(recyclerView: RecyclerView, state: RecyclerView.State?, position: Int) {
         val smoothScroller = SmoothScroll(recyclerView.context)
@@ -43,16 +41,12 @@ class LayoutManager(context: Context, orientation: Int, reverseLayout: Boolean)
 
     private inner class SmoothScroll(context: Context) : LinearSmoothScroller(context) {
 
-        override fun computeScrollVectorForPosition(targetPosition: Int): PointF? {
-            return this@LayoutManager.computeScrollVectorForPosition(targetPosition)
-        }
+        override fun computeScrollVectorForPosition(targetPosition: Int): PointF? =
+            this@LayoutManager.computeScrollVectorForPosition(targetPosition)
 
-        override fun getHorizontalSnapPreference(): Int {
-            return LinearSmoothScroller.SNAP_TO_START
-        }
+        override fun getHorizontalSnapPreference(): Int = LinearSmoothScroller.SNAP_TO_START
 
-        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-            return MILLISECONDS_PER_INCH / displayMetrics.densityDpi
-        }
+        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float =
+            MILLISECONDS_PER_INCH / displayMetrics.densityDpi
     }
 }

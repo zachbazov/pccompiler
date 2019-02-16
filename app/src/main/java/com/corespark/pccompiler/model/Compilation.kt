@@ -27,44 +27,39 @@ object Compilation {
     var powerSupply: Component? = null
     var case: Component? = null
     var opSystem: Component? = null
-    var isOnGoing = false
 
     fun assignCompilation(user: ParseUser?, title: String?) {
         this.user = user
         this.title = title
     }
 
-    fun assignComponent(componentType: Int, item: Component?) {
-        when (componentType) {
-            0 -> cpu = item
-            1 -> optDrive = item
-            2 -> cooler = item
-            3 -> graphicCard = item
-            4 -> motherboard = item
-            5 -> soundCard = item
-            6 -> memory = item
-            7 -> powerSupply = item
-            8 -> storage = item
-            9 -> case = item
-            10 -> extStorage = item
-            11 -> opSystem = item
-        }
+    fun assignComponent(componentType: Int, item: Component?) = when (componentType) {
+        0 -> cpu = item
+        1 -> optDrive = item
+        2 -> cooler = item
+        3 -> graphicCard = item
+        4 -> motherboard = item
+        5 -> soundCard = item
+        6 -> memory = item
+        7 -> powerSupply = item
+        8 -> storage = item
+        9 -> case = item
+        10 -> extStorage = item
+        else -> opSystem = item
     }
 
-    fun deassignComponent(componentType: Int) {
-        when (componentType) {
-            0 -> cpu = null
-            1 -> optDrive = null
-            2 -> cooler = null
-            3 -> graphicCard = null
-            4 -> motherboard = null
-            5 -> soundCard = null
-            6 -> memory = null
-            7 -> powerSupply = null
-            8 -> storage = null
-            9 -> case = null
-            10 -> extStorage = null
-            11 -> opSystem = null
-        }
+    fun deassignComponent(componentType: Int) = when (componentType) {
+        0 -> cpu = null
+        1 -> optDrive = null
+        2 -> cooler = null
+        3 -> graphicCard = null
+        4 -> motherboard = null
+        5 -> soundCard = null
+        6 -> memory = null
+        7 -> powerSupply = null
+        8 -> storage = null
+        9 -> case = null
+        10 -> extStorage = null
+        else -> opSystem = null
     }
 }

@@ -32,6 +32,11 @@ class Application : Application() {
         Task().execute()
     }
 
+    override fun onTerminate() {
+        super.onTerminate()
+        isSignedPresented = false
+    }
+
     class Task : AsyncTask<Void, Void, Void>() {
         override fun doInBackground(vararg params: Void?): Void? {
             for (i in 0..11) query.fetchComponents(tableArray[i], componentsArray[i])
@@ -43,5 +48,6 @@ class Application : Application() {
         lateinit var preferences: SharedPreferences
         lateinit var attributes: Attribute
         val query = Query()
+        var isSignedPresented = false
     }
 }

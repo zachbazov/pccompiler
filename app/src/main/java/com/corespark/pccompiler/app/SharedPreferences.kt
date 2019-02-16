@@ -1,6 +1,7 @@
 package com.corespark.pccompiler.app
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.utility.KEY_IS_AUTHENTICATED
 import com.corespark.pccompiler.utility.KEY_PASSWORD
@@ -14,10 +15,11 @@ import com.corespark.pccompiler.utility.KEY_USRENAME
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
-class SharedPreferences(context: Context) {
-
-    private val file = context.getString(R.string.key_shared_preferences_file)
-    private val sharedPreferences = context.getSharedPreferences(file, 0)!!
+class SharedPreferences(
+    context: Context,
+    private val file: String? = context.getString(R.string.key_shared_preferences_file),
+    private val sharedPreferences: SharedPreferences = context.getSharedPreferences(file, 0)
+) {
 
     var isAuthenticated
         get() = sharedPreferences.getBoolean(KEY_IS_AUTHENTICATED, false)

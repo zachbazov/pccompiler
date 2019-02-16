@@ -25,16 +25,18 @@ class Component() : ParseObject() {
     var paramF: String? = null
     lateinit var price: String
 
-    constructor(id: String,
-                manufaturer: String,
-                component: String,
-                paramA: String?,
-                paramB: String?,
-                paramC: String?,
-                paramD: String?,
-                paramE: String?,
-                paramF: String?,
-                price: String) : this() {
+    constructor(
+        id: String,
+        manufaturer: String,
+        component: String,
+        paramA: String?,
+        paramB: String?,
+        paramC: String?,
+        paramD: String?,
+        paramE: String?,
+        paramF: String?,
+        price: String
+    ) : this() {
         this.id = id
         this.manufaturer = manufaturer
         this.component = component

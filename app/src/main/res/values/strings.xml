@@ -25,7 +25,8 @@
     <string name="auth_sign_up_ref">New user? Sign up now.</string>
     <string name="auth_sign_in_ref">Already signed? Sign in here.</string>
 
-    <string name="auth_incorrect_credentials">Incorrect credentials</string>
+    <string name="auth_sign_in_success">Signed in as </string>
+    <string name="auth_sign_in_failure">Incorrect credentials</string>
     <string name="auth_sign_up_success">User has been created</string>
     <string name="auth_sign_up_failure">Email must be valid.\nor Username already taken.</string>
 
@@ -47,6 +48,10 @@
     <string name="text_compilation">Compilation</string>
     <string name="text_title">Title…</string>
     <string name="text_create">CREATE</string>
+    <string name="text_loading">Loading</string>
+    <string name="text_dot">.</string>
+    <string name="text_dot_double">..</string>
+    <string name="text_dot_triple">…</string>
 
     <!-- Dialog Types & Keys -->
     <string name="dialog_overview">OVERVIEW</string>
@@ -124,4 +129,5 @@
     <string name="cd_overview">Component Overview</string>
     <string name="cd_backward">Go Backward</string>
     <string name="cd_forward">Go Forward</string>
+
 </resources>

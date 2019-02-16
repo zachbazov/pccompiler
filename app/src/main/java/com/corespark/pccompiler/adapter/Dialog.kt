@@ -4,26 +4,20 @@ import android.content.Context
 import android.support.constraint.ConstraintLayout
 import android.transition.TransitionManager
 import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Application
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
-import com.corespark.pccompiler.model.Bar
+import android.widget.*
 import com.corespark.pccompiler.model.Compilation
 import com.corespark.pccompiler.model.Component
 import com.corespark.pccompiler.service.*
-import com.parse.ParseObject
 import kotlinx.android.synthetic.main.activity_workspace.*
 import kotlinx.android.synthetic.main.activity_workspace.view.*
 import kotlinx.android.synthetic.main.activity_compile.*
 import kotlinx.android.synthetic.main.activity_compile.view.*
-import kotlinx.android.synthetic.main.dialog_alert.view.*
 import kotlinx.android.synthetic.main.dialog_overview.view.*
 
 
@@ -34,23 +28,24 @@ import kotlinx.android.synthetic.main.dialog_overview.view.*
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
-class Dialog(val context: Context) {
+class Dialog(
+    private val context: Context,
+    private val background: ConstraintLayout = ConstraintLayout(context)
+) {
 
-    val background = ConstraintLayout(context)
+    inner class Workspace(
+        private val clWorkspace: ConstraintLayout = (context as com.corespark.pccompiler.activity.Workspace).clWorkspaceParent,
+        private val clActionCompile: ConstraintLayout = clWorkspace.rvActionBar.findViewById(R.id.clActionCompile)
+    ) {
 
-    inner class Workspace {
-
-        val clWorkspace = (context as com.corespark.pccompiler.activity.Workspace).clWorkspaceParent!!
-        val clActionCompile = clWorkspace.rvActionBar.findViewById<ConstraintLayout>(R.id.clActionCompile)!!
-
-        inner class Prelim {
-
-            val layout = LayoutInflater.from(context).inflate(R.layout.dialog_prelim, clWorkspace, false)!!
-            val clPrelim = layout.findViewById<ConstraintLayout>(R.id.clPrelim)!!
-            private val ivPrelim = layout.findViewById<ImageView>(R.id.ivPrelim)!!
-            private val tvPrelim = layout.findViewById<TextView>(R.id.tvPrelim)!!
-            val etPrelim = layout.findViewById<EditText>(R.id.etPrelim)!!
-            val btnPrelim = layout.findViewById<Button>(R.id.btnPrelim)!!
+        inner class Prelim(
+            private val layout: View = LayoutInflater.from(context).inflate(R.layout.dialog_prelim, clWorkspace, false),
+            private val clPrelim: ConstraintLayout = layout.findViewById(R.id.clPrelim),
+            private val ivPrelim: ImageView = layout.findViewById(R.id.ivPrelim),
+            private val tvPrelim: TextView = layout.findViewById(R.id.tvPrelim),
+            private val etPrelim: EditText = layout.findViewById(R.id.etPrelim),
+            private val btnPrelim: Button = layout.findViewById(R.id.btnPrelim)
+        ) {
 
             fun build() {
                 if (!clActionCompile.isSelected) {
@@ -62,15 +57,19 @@ class Dialog(val context: Context) {
 
             private fun instantiate() {
                 TransitionManager.beginDelayedTransition(clWorkspace)
-                clWorkspace.addView(background)
-                clWorkspace.addView(layout)
+                with(clWorkspace) {
+                    addView(this@Dialog.background)
+                    addView(layout)
+                }
             }
 
             private fun customize() {
-                background.id = R.id.bgTransparent
-                background.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-                background.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-                background.setBackgroundColor(Application.attributes.colorTransparentBlack)
+                with(background) {
+                    id = R.id.bgTransparent
+                    layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+                    layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+                    setBackgroundColor(Application.attributes.colorTransparentBlack)
+                }
 
                 ivPrelim.setImageResource(R.drawable.ic_close_transparent_gray_24dp)
                 tvPrelim.text = context.getString(R.string.text_compilation)
@@ -78,23 +77,25 @@ class Dialog(val context: Context) {
                 btnPrelim.text = context.getString(R.string.text_create)
                 btnPrelim.visibility = View.GONE
 
-                Constraint.set(background, clWorkspace, background)
-                Constraint.set(layout, clWorkspace, layout)
-                Constraint.set(etPrelim, clPrelim, etPrelim)
+                with(Constraint) {
+                    set(background, clWorkspace, background)
+                    set(layout, clWorkspace, layout)
+                    set(etPrelim, clPrelim, etPrelim)
+                }
 
                 val views = arrayOf(clWorkspace, ivPrelim, etPrelim, btnPrelim)
-                for (view in views) listener(view)
+                views.forEach { view -> onClick(view) }
             }
 
-            private fun listener(view: View) = when (view.id) {
-                clWorkspace.id, ivPrelim.id -> view.setOnClickListener {
+            private fun onClick(view: View) = when (view) {
+                clWorkspace, ivPrelim -> view.setOnClickListener {
                     TransitionManager.beginDelayedTransition(clWorkspace)
                     clWorkspace.removeView(layout)
                     clWorkspace.removeView(background)
                     clActionCompile.isSelected = false
                     Input.hideKeyboard(context)
                 }
-                etPrelim.id -> (view as EditText).addTextChangedListener(object : TextWatcher {
+                etPrelim -> (view as EditText).addTextChangedListener(object : TextWatcher {
                     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                         if (!etPrelim.isSelected) {
                             etPrelim.isSelected = true
@@ -114,21 +115,16 @@ class Dialog(val context: Context) {
                 })
                 else -> view.setOnClickListener {
                     it.isEnabled = false
-                    val compilationTitle = etPrelim.text.toString()
-                    Intent.launch(context, R.layout.activity_compile) {
-                        Compilation.title = compilationTitle
-                        Compilation.isOnGoing = true
-                        Bar.Compilation.onGoingList.add(Bar.Compilation("", compilationTitle, R.mipmap.ic_pccompiler))
-                        createCompilationObject()
-                    }
+                    Compilation.title = etPrelim.text.toString()
+                    Intent.launch(context, R.layout.activity_compile) { if (it) createCompilationObject() }
                     Intent.finish(context)
                 }
             }
 
             private fun createCompilationObject() {
-                val compilation = ParseObject.create("Compilation")
-                compilation.put("user", Auth.parseUser)
-                compilation.put("title", Compilation.title)
+                //val compilation = ParseObject.create("Compilation")
+                //compilation.put("user", Auth.parseUser)
+                //compilation.put("title", Compilation.title)
 
 //                if (Compilation.cpu != null) {
 //                    val query = ParseQuery.getQuery<ParseObject>("CPU")
@@ -146,48 +142,45 @@ class Dialog(val context: Context) {
         }
     }
 
-    inner class Compile {
+    inner class Compile(
+        private val clCompile: ConstraintLayout = (context as com.corespark.pccompiler.activity.Compile).clCompileParent,
+        private val ivMore: ImageView = clCompile.rvComponent.findViewById<ImageView>(R.id.ivComponentItemMore)
+    ) {
 
-        val clCompile = (context as com.corespark.pccompiler.activity.Compile).clCompileParent!!
-        val ivMore = clCompile.rvComponent.findViewById<ImageView>(R.id.ivComponentItemMore)!!
-
-        inner class Overview {
-
-            val layout = LayoutInflater.from(context).inflate(R.layout.dialog_overview, clCompile, false)!!
-
-            private val tvOverview = layout.tvOverview!!
-            private val ivClose = layout.ivOverviewClose!!
-            private val tvComponentType = layout.tvOverviewComponentType!!
-            private val tvComponent = layout.tvOverviewComponent!!
-            private val ivComponent = layout.ivOverview!!
-            private val llParameter = layout.llOverviewParameter!!
-            private val llDescription = layout.llOverviewDescription!!
-            private val tvParameter = layout.tvOverviewParameter!!
-            private val tvDescription = layout.tvOverviewDescription!!
-            private val tvParamA = layout.tvOverviewParamA!!
-            private val tvParamB = layout.tvOverviewParamB!!
-            private val tvParamC = layout.tvOverviewParamC!!
-            private val tvParamD = layout.tvOverviewParamD!!
-            private val tvParamE = layout.tvOverviewParamE!!
-            private val tvParamF = layout.tvOverviewParamF!!
-            private val tvDescA = layout.tvOverviewDescA!!
-            private val tvDescB = layout.tvOverviewDescB!!
-            private val tvDescC = layout.tvOverviewDescC!!
-            private val tvDescD = layout.tvOverviewDescD!!
-            private val tvDescE = layout.tvOverviewDescE!!
-            private val tvDescF = layout.tvOverviewDescF!!
-            private val tvPrice = layout.tvOverviewPrice!!
-            private val btnAdd = layout.btnAdd!!
-            private val btnRemove = layout.btnRemove!!
-            private val btnReplace = layout.btnReplace!!
-
-            private val params = arrayOf(
+        inner class Overview(
+            private val layout: View = LayoutInflater.from(context).inflate(R.layout.dialog_overview, clCompile, false),
+            private val tvOverview: TextView = layout.tvOverview,
+            private val ivClose: ImageView = layout.ivOverviewClose,
+            private val tvComponentType: TextView = layout.tvOverviewComponentType,
+            private val tvComponent: TextView = layout.tvOverviewComponent,
+            private val ivComponent: ImageView = layout.ivOverview,
+            private val llParameter: LinearLayout = layout.llOverviewParameter,
+            private val llDescription: LinearLayout = layout.llOverviewDescription,
+            private val tvParameter: TextView = layout.tvOverviewParameter,
+            private val tvDescription: TextView = layout.tvOverviewDescription,
+            private val tvParamA: TextView = layout.tvOverviewParamA,
+            private val tvParamB: TextView = layout.tvOverviewParamB,
+            private val tvParamC: TextView = layout.tvOverviewParamC,
+            private val tvParamD: TextView = layout.tvOverviewParamD,
+            private val tvParamE: TextView = layout.tvOverviewParamE,
+            private val tvParamF: TextView = layout.tvOverviewParamF,
+            private val tvDescA: TextView = layout.tvOverviewDescA,
+            private val tvDescB: TextView = layout.tvOverviewDescB,
+            private val tvDescC: TextView = layout.tvOverviewDescC,
+            private val tvDescD: TextView = layout.tvOverviewDescD,
+            private val tvDescE: TextView = layout.tvOverviewDescE,
+            private val tvDescF: TextView = layout.tvOverviewDescF,
+            private val tvPrice: TextView = layout.tvOverviewPrice,
+            private val btnAdd: Button = layout.btnAdd,
+            private val btnRemove: Button = layout.btnRemove,
+            private val btnReplace: Button = layout.btnReplace,
+            private val params: Array<View> = arrayOf(
                 ivComponent, tvComponentType, tvComponent,
                 tvParamA, tvParamB, tvParamC, tvParamD, tvParamE, tvParamF,
                 tvDescA, tvDescB, tvDescC, tvDescD, tvDescE, tvDescF,
-                tvPrice, llParameter, llDescription, tvParameter, tvDescription)
-
-            private val views = arrayOf(btnAdd, btnRemove, btnReplace)
+                tvPrice, llParameter, llDescription, tvParameter, tvDescription),
+            private val views: Array<Button> = arrayOf(btnAdd, btnRemove, btnReplace)
+        ) {
 
             fun build(componentType: Int, item: Component, rowPosition: Int, oldPosition: Int) {
                 if (!ivMore.isSelected) {
@@ -199,15 +192,19 @@ class Dialog(val context: Context) {
 
             private fun instantiate() {
                 TransitionManager.beginDelayedTransition(clCompile)
-                clCompile.addView(background)
-                clCompile.addView(layout)
+                with(clCompile) {
+                    addView(this@Dialog.background)
+                    addView(layout)
+                }
             }
 
             private fun customize(componentType: Int, item: Component, rowPosition: Int, oldPosition: Int) {
-                background.id = R.id.bgTransparent
-                background.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-                background.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-                background.setBackgroundColor(Application.attributes.colorTransparentBlack)
+                with(background) {
+                    id = R.id.bgTransparent
+                    layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+                    layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+                    setBackgroundColor(Application.attributes.colorTransparentBlack)
+                }
 
                 tvOverview.text = context.getString(R.string.dialog_overview)
                 ivClose.setImageResource(R.drawable.ic_close_transparent_gray_24dp)
@@ -220,14 +217,14 @@ class Dialog(val context: Context) {
                 btnReplace.visibility = View.GONE
 
                 Constraint.set(layout, clCompile) {}
-                DataBinding.componentInfo(context, item, componentType, params)
-                GlobalFunction.enableSelection(item, componentType, views)
+                Bind.componentInfo(context, item, componentType, params)
+                Factory.enableSelection(item, componentType, views)
 
                 val listeners = arrayOf(background, ivClose, layout, btnAdd, btnRemove, btnReplace)
-                for (listener in listeners) listener(listener, componentType, item, rowPosition, oldPosition)
+                listeners.forEach { listener -> onClick(listener, componentType, item, rowPosition, oldPosition) }
             }
 
-            private fun listener(
+            private fun onClick(
                 view: View, componentType: Int, item: Component?, rowPosition: Int, oldPosition: Int
             ) = when (view) {
                 background -> view.setOnClickListener {
@@ -244,7 +241,7 @@ class Dialog(val context: Context) {
                 }
                 layout -> layout.setOnClickListener {}
                 btnAdd -> view.setOnClickListener {
-                    GlobalFunction.mark(clCompile, btnAdd, componentType, rowPosition)
+                    Factory.mark(clCompile, btnAdd, componentType, rowPosition)
                     Compilation.assignComponent(componentType, item)
                     btnAdd.isEnabled = false
                     btnRemove.isEnabled = true
@@ -253,67 +250,11 @@ class Dialog(val context: Context) {
                     btnAdd.isEnabled = true
                     btnRemove.isEnabled = false
                     Compilation.deassignComponent(componentType)
-                    GlobalFunction.mark(clCompile, btnRemove, componentType, rowPosition)
+                    Factory.mark(clCompile, btnRemove, componentType, rowPosition)
                 }
                 else -> view.setOnClickListener {
                     Compilation.assignComponent(componentType, item)
-                    GlobalFunction.replacePosition(clCompile, layout, componentType, rowPosition, oldPosition, views)
-                }
-            }
-        }
-
-        inner class Alert {
-
-            val layout = LayoutInflater.from(context).inflate(R.layout.dialog_alert, clCompile, false)!!
-
-            private val tvAlertTitle = layout.tvAlertTitle!!
-            private val ivAlertClose = layout.ivAlertClose!!
-            private val tvAlert = layout.tvAlert!!
-            private val btnAlert = layout.btnAlert!!
-
-            fun build() {
-                if (clCompile.clReturn.isSelected) {
-                    instantiate()
-                    customize()
-                }
-            }
-
-            private fun instantiate() {
-                TransitionManager.beginDelayedTransition(clCompile)
-                clCompile.addView(background)
-                clCompile.addView(layout)
-            }
-
-            private fun customize() {
-                background.id = R.id.bgTransparent
-                background.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-                background.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-                background.setBackgroundColor(Application.attributes.colorTransparentBlack)
-
-                tvAlertTitle.text = "COMPILATION"
-                ivAlertClose.setImageResource(R.drawable.ic_close_transparent_gray_24dp)
-                tvAlert.text = "${Compilation.title} is running.\nYou can manage your compilation\nat any time."
-                btnAlert.text = "RETURN TO WORKSPACE"
-
-                Constraint.set(layout, clCompile) {}
-
-                val listeners = arrayOf(background, ivAlertClose, layout, btnAlert)
-                for (listener in listeners) listener(listener)
-            }
-
-            private fun listener(view: View) {
-                when (view) {
-                    background, ivAlertClose -> view.setOnClickListener {
-                        TransitionManager.beginDelayedTransition(clCompile)
-                        clCompile.removeView(layout)
-                        clCompile.removeView(background)
-                        clCompile.clReturn.isSelected = false
-                    }
-                    layout -> view.setOnClickListener {}
-                    btnAlert -> view.setOnClickListener {
-                        Intent.launch(context, R.layout.activity_workspace) {}
-                        Intent.finish(context)
-                    }
+                    Factory.replacePosition(clCompile, layout, componentType, rowPosition, oldPosition, views)
                 }
             }
         }

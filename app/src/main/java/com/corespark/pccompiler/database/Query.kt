@@ -199,66 +199,68 @@ class Query {
     }
 
     fun fetchCompilations() {
-        query = ParseQuery.getQuery<ParseObject>("Compilation")
-        query.whereEqualTo("user", Auth.parseUser)
-        query.include("Compilation")
+        query = ParseQuery.getQuery<ParseObject>(TABLE_COMPILATION)
+        query.whereEqualTo(KEY_USER, Auth.parseUser)
+        query.include(TABLE_COMPILATION)
         val list: MutableList<ParseObject> = query.find()
         val size = list.size - 1
 
-        for (i in 0..size) when (i) {
-            0 -> {
-                myCompilation00 = list[i].fetchIfNeeded<ParseObject>()
-                cpu = list[i].getParseObject("cpu").fetchIfNeeded()
-                val cpu = Component(
-                    id = cpu.objectId,
-                    manufaturer = cpu.get(KEY_MANUFACTURER) as String,
-                    component = cpu.get(KEY_CPU) as String,
-                    paramA = cpu.get(KEY_CORE) as String,
-                    paramB = cpu.get(KEY_SPEED) as String,
-                    paramC = cpu.get(KEY_TDP) as String,
-                    paramD = null,
-                    paramE = null,
-                    paramF = null,
-                    price = cpu.get(KEY_PRICE) as String
-                )
-                Bar.Compilation.list.add(i, Bar.Compilation(
-                    myCompilation00.objectId, myCompilation00.get("title").toString(), R.mipmap.ic_pccompiler))
-            }
-            1 -> {
-                myCompilation01 = list[i].fetchIfNeeded<ParseObject>()
-                cpu = list[i].getParseObject("cpu").fetchIfNeeded()
-                val cpu = Component(
-                    id = cpu.objectId,
-                    manufaturer = cpu.get(KEY_MANUFACTURER) as String,
-                    component = cpu.get(KEY_CPU) as String,
-                    paramA = cpu.get(KEY_CORE) as String,
-                    paramB = cpu.get(KEY_SPEED) as String,
-                    paramC = cpu.get(KEY_TDP) as String,
-                    paramD = null,
-                    paramE = null,
-                    paramF = null,
-                    price = cpu.get(KEY_PRICE) as String
-                )
-                Bar.Compilation.list.add(i, Bar.Compilation(
-                    myCompilation01.objectId, myCompilation01.get("title").toString(), R.mipmap.ic_pccompiler))
-            }
-            2 -> {
-                myCompilation02 = list[i].fetchIfNeeded<ParseObject>()
-                cpu = list[i].getParseObject("cpu").fetchIfNeeded()
-                val cpu = Component(
-                    id = cpu.objectId,
-                    manufaturer = cpu.get(KEY_MANUFACTURER) as String,
-                    component = cpu.get(KEY_CPU) as String,
-                    paramA = cpu.get(KEY_CORE) as String,
-                    paramB = cpu.get(KEY_SPEED) as String,
-                    paramC = cpu.get(KEY_TDP) as String,
-                    paramD = null,
-                    paramE = null,
-                    paramF = null,
-                    price = cpu.get(KEY_PRICE) as String
-                )
-                Bar.Compilation.list.add(i, Bar.Compilation(
-                    myCompilation02.objectId, myCompilation02.get("title").toString(), R.mipmap.ic_pccompiler))
+        (0..size).forEach { i ->
+            when (i) {
+                0 -> {
+                    myCompilation00 = list[i].fetchIfNeeded<ParseObject>()
+                    cpu = list[i].getParseObject("cpu").fetchIfNeeded()
+                    val cpu = Component(
+                        id = cpu.objectId,
+                        manufaturer = cpu.get(KEY_MANUFACTURER) as String,
+                        component = cpu.get(KEY_CPU) as String,
+                        paramA = cpu.get(KEY_CORE) as String,
+                        paramB = cpu.get(KEY_SPEED) as String,
+                        paramC = cpu.get(KEY_TDP) as String,
+                        paramD = null,
+                        paramE = null,
+                        paramF = null,
+                        price = cpu.get(KEY_PRICE) as String
+                    )
+                    Bar.Compilation.list.add(i, Bar.Compilation(
+                        myCompilation00.objectId, myCompilation00.get("title").toString(), R.mipmap.ic_pccompiler))
+                }
+                1 -> {
+                    myCompilation01 = list[i].fetchIfNeeded<ParseObject>()
+                    cpu = list[i].getParseObject("cpu").fetchIfNeeded()
+                    val cpu = Component(
+                        id = cpu.objectId,
+                        manufaturer = cpu.get(KEY_MANUFACTURER) as String,
+                        component = cpu.get(KEY_CPU) as String,
+                        paramA = cpu.get(KEY_CORE) as String,
+                        paramB = cpu.get(KEY_SPEED) as String,
+                        paramC = cpu.get(KEY_TDP) as String,
+                        paramD = null,
+                        paramE = null,
+                        paramF = null,
+                        price = cpu.get(KEY_PRICE) as String
+                    )
+                    Bar.Compilation.list.add(i, Bar.Compilation(
+                        myCompilation01.objectId, myCompilation01.get("title").toString(), R.mipmap.ic_pccompiler))
+                }
+                2 -> {
+                    myCompilation02 = list[i].fetchIfNeeded<ParseObject>()
+                    cpu = list[i].getParseObject("cpu").fetchIfNeeded()
+                    val cpu = Component(
+                        id = cpu.objectId,
+                        manufaturer = cpu.get(KEY_MANUFACTURER) as String,
+                        component = cpu.get(KEY_CPU) as String,
+                        paramA = cpu.get(KEY_CORE) as String,
+                        paramB = cpu.get(KEY_SPEED) as String,
+                        paramC = cpu.get(KEY_TDP) as String,
+                        paramD = null,
+                        paramE = null,
+                        paramF = null,
+                        price = cpu.get(KEY_PRICE) as String
+                    )
+                    Bar.Compilation.list.add(i, Bar.Compilation(
+                        myCompilation02.objectId, myCompilation02.get("title").toString(), R.mipmap.ic_pccompiler))
+                }
             }
         }
     }

@@ -3,6 +3,8 @@ package com.corespark.pccompiler.service
 import android.content.Context
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.app.Application
+import com.corespark.pccompiler.app.Application.Companion.isSignedPresented
+import com.corespark.pccompiler.app.Application.Companion.preferences
 import com.corespark.pccompiler.model.User
 import com.parse.ParseException
 import com.parse.ParseUser
@@ -22,23 +24,26 @@ object Auth {
 
     fun signIn(username: String, password: String, complete: (Boolean) -> Unit) {
         ParseUser.logInInBackground(username, password) { parseUser, _ ->
-            if (parseUser != null) {
-                user.id = parseUser.objectId
-                user.username = parseUser.username
-                user.email = parseUser.email
-                user.password = password
-                user.createdAt = parseUser.createdAt
-                user.updatedAt = parseUser.updatedAt
-                user.isEmailVerified = parseUser.isNew
-                user.isAuthenticated = parseUser.isAuthenticated
-                this.parseUser = parseUser
-                Application.preferences.username = user.username
-                Application.preferences.password = user.password
-                Application.preferences.isAuthenticated = true
-                complete(true)
-            } else {
-                ParseUser.logOut()
-                complete(false)
+            when {
+                parseUser != null -> {
+                    user.id = parseUser.objectId
+                    user.username = parseUser.username
+                    user.email = parseUser.email
+                    user.password = password
+                    user.createdAt = parseUser.createdAt
+                    user.updatedAt = parseUser.updatedAt
+                    user.isEmailVerified = parseUser.isNew
+                    user.isAuthenticated = parseUser.isAuthenticated
+                    this.parseUser = parseUser
+                    preferences.username = user.username
+                    preferences.password = user.password
+                    preferences.isAuthenticated = true
+                    complete(true)
+                }
+                else -> {
+                    ParseUser.logOut()
+                    complete(false)
+                }
             }
         }
     }
@@ -49,37 +54,45 @@ object Auth {
         user.email = email
         user.setPassword(password)
         user.signUpInBackground {
-            if (it == null) complete(true)
-            else complete(false)
+            when (it) {
+                null -> complete(true)
+                else -> complete(false)
+            }
         }
     }
 
-    private fun verify() = ParseUser.logInInBackground(
-        Application.preferences.username, Application.preferences.password) { parseUser, _ ->
+    private fun verify() = ParseUser.logInInBackground(preferences.username, preferences.password) { parseUser, _ ->
         try {
-            if (parseUser != null) {
-                this.parseUser = parseUser
-                Application.query.fetchCompilations()
+            when {
+                parseUser != null -> {
+                    this.parseUser = parseUser
+                    Application.query.fetchCompilations()
+                }
+                else -> ParseUser.logOut()
             }
-            else ParseUser.logOut()
         } catch (ex: ParseException) {}
     }
 
     fun auth(context: Context, complete: (Boolean) -> Unit) {
-        if (Application.preferences.isAuthenticated) {
-            verify()
-            Intent.launch(context, R.layout.activity_workspace) {}
-            complete(true)
+        when {
+            preferences.isAuthenticated -> {
+                verify()
+                Intent.launch(context, R.layout.activity_workspace) {}
+                complete(true)
+            }
         }
     }
 
     fun logOut(context: Context, complete: (Boolean) -> Unit) {
         ParseUser.logOutInBackground {
-            if (it == null) {
-                Application.preferences.username = context.getString(R.string.app_blank)
-                Application.preferences.isAuthenticated = false
-                Auth.user = User
-                complete(true)
+            when (it) {
+                null -> {
+                    preferences.username = context.getString(R.string.app_blank)
+                    preferences.isAuthenticated = false
+                    Auth.user = User
+                    isSignedPresented = false
+                    complete(true)
+                }
             }
         }
     }

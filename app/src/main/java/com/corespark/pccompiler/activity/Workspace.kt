@@ -5,19 +5,24 @@ import android.content.Context
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.transition.TransitionManager
 import android.view.View
 import android.widget.TextView
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.adapter.LayoutManager
-import com.corespark.pccompiler.app.Application
 import com.corespark.pccompiler.service.*
 import com.corespark.pccompiler.adapter.Recycler
+import com.corespark.pccompiler.app.Application
+import com.corespark.pccompiler.app.Application.Companion.attributes
+import com.corespark.pccompiler.app.Application.Companion.isSignedPresented
+import com.corespark.pccompiler.app.Application.Companion.preferences
 import com.corespark.pccompiler.model.*
 import com.corespark.pccompiler.service.View.orientation
 import com.corespark.pccompiler.service.View.width
 import com.corespark.pccompiler.service.View.height
+import com.corespark.pccompiler.utility.Array
 import kotlinx.android.synthetic.main.activity_workspace.*
 import java.lang.ref.WeakReference
 
@@ -51,13 +56,13 @@ class Workspace : AppCompatActivity() {
         width(this, ivTracker, windowManager, orientation, 2) {}
         height(this, clFragWorkspace, windowManager, orientation, 5) {}
 
-        clBackward.setBackgroundColor(Application.attributes.colorTransparentGray)
-        clForward.setBackgroundColor(Application.attributes.colorTransparentGray)
-        ivBackward.setImageDrawable(Application.attributes.arrowIndicator(this))
-        ivForward.setImageDrawable(Application.attributes.arrowIndicator(this))
+        clBackward.setBackgroundColor(attributes.colorTransparentGray)
+        clForward.setBackgroundColor(attributes.colorTransparentGray)
+        ivBackward.setImageDrawable(attributes.arrowIndicator(this))
+        ivForward.setImageDrawable(attributes.arrowIndicator(this))
 
         val adapters = arrayOf(rvTabBar, rvActionBar, rvControlBar, rvCartBar, rvControlPanel)
-        for (adapter in adapters) setAdapter(adapter)
+        adapters.forEach { adapter -> setAdapter(adapter) }
     }
 
     private fun setAdapter(view: View) = when (view) {
@@ -86,57 +91,66 @@ class Workspace : AppCompatActivity() {
 
     private val onChannelAuth = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: android.content.Intent?) {
-            if (Application.preferences.isAuthenticated) {
-                User.username = Application.preferences.username
-                User.password = Application.preferences.password
+            if (preferences.isAuthenticated) {
+                User.username = preferences.username
+                User.password = preferences.password
             }
         }
     }
 
-    class Task internal constructor(activity: Workspace, view: View) : AsyncTask<Void, Int, Void>() {
-
-        private val weakWorkspace: WeakReference<Workspace> = WeakReference(activity)
+    class Task internal constructor(
+        activity: Workspace,
+        view: View,
+        private val weakWorkspace: WeakReference<Workspace> = WeakReference(activity),
         private val weakLayout: WeakReference<View> = WeakReference(view)
+    ) : AsyncTask<Void, Int, Void>() {
 
         override fun onPreExecute() {
-            weakWorkspace.get()?.clFragWorkspace?.addView(weakLayout.get())
+            if (!isSignedPresented) {
+                Snackbar.make(
+                    weakWorkspace.get()!!.clWorkspaceParent,
+                    "${weakWorkspace.get()!!.getString(R.string.auth_sign_in_success)} ${preferences.username}",
+                    Snackbar.LENGTH_LONG)
+                    .show()
+                isSignedPresented = true
+            }
+            weakWorkspace.get()!!.clFragWorkspace.addView(weakLayout.get())
             width(weakWorkspace.get()!!, weakLayout.get()!!, weakWorkspace.get()!!.windowManager, orientation, 1) {}
             height(weakWorkspace.get()!!, weakLayout.get()!!, weakWorkspace.get()!!.windowManager, orientation, 5) {}
         }
 
         override fun onProgressUpdate(vararg values: Int?) {
-            val tv = weakLayout.get()?.findViewById<TextView>(R.id.tvDialogProgress)
-            tv!!.text = when(values.iterator().next()) {
-                0 -> "Loading."
-                1 -> "Loading.."
-                2 -> "Loading..."
-                else -> "Loading...."
+            val tvProgress = weakLayout.get()!!.findViewById<TextView>(R.id.tvDialogProgress)
+            val tvDot = weakLayout.get()!!.findViewById<TextView>(R.id.tvDialogProgressDot)
+            tvProgress!!.text = weakWorkspace.get()!!.getString(R.string.text_loading)
+            tvDot!!.text = when(values.iterator().next()) {
+                0 -> weakWorkspace.get()!!.getString(R.string.text_dot)
+                1 -> weakWorkspace.get()!!.getString(R.string.text_dot_double)
+                else -> weakWorkspace.get()!!.getString(R.string.text_dot_triple)
             }
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            for (i in 0..3) {
+            for (i in 0..2) {
                 publishProgress(i)
-                try { Thread.sleep(1000) }
-                catch (e: InterruptedException) {}
+                try { Thread.sleep(1000) } catch (e: InterruptedException) {}
             }
             return null
         }
 
         override fun onPostExecute(result: Void?) {
-            val context = weakWorkspace.get()!!
             TransitionManager.beginDelayedTransition(weakWorkspace.get()!!.clFragWorkspace)
-            weakWorkspace.get()?.clFragWorkspace?.removeView(weakLayout.get())
+            weakWorkspace.get()!!.clFragWorkspace.removeView(weakLayout.get())
             if (Bar.Compilation.list.isNotEmpty()) {
-                weakWorkspace.get()?.rvCompilationBar?.setHasFixedSize(true)
-                weakWorkspace.get()?.rvCompilationBar?.layoutManager = LayoutManager(
-                    context, LinearLayoutManager.HORIZONTAL, false)
-                weakWorkspace.get()?.rvCompilationBar?.adapter =
-                    Recycler(context, Bar.Compilation.list, 4, null)
+                weakWorkspace.get()!!.rvCompilationBar!!.setHasFixedSize(true)
+                weakWorkspace.get()!!.rvCompilationBar!!.layoutManager = LayoutManager(
+                    weakWorkspace.get()!!, LinearLayoutManager.HORIZONTAL, false)
+                weakWorkspace.get()?.rvCompilationBar?.adapter = Recycler(
+                    weakWorkspace.get()!!, Bar.Compilation.list, 4, null)
             } else {
-                Bar.Compilation.addEmpty(context)
-                weakWorkspace.get()?.rvCompilationBar?.adapter =
-                    Recycler(context, Bar.Compilation.empty, 8, null)
+                Bar.Compilation.addEmpty(weakWorkspace.get()!!)
+                weakWorkspace.get()?.rvCompilationBar?.adapter = Recycler(
+                    weakWorkspace.get()!!, Bar.Compilation.empty, 8, null)
             }
         }
     }

@@ -19,9 +19,11 @@ object Panel {
             val list = mutableListOf<Any>()
 
             fun add(context: Context) {
-                if (list.size < 2) {
-                    list.add(0, ControlPanel(R.drawable.ic_settings_inactive, context.getString(R.string.text_settings)))
-                    list.add(1, ControlPanel(R.drawable.ic_logout_inactive, context.getString(R.string.text_logout)))
+                when {
+                    list.size < 2 -> {
+                        list.add(0, ControlPanel(R.drawable.ic_settings_inactive, context.getString(R.string.text_settings)))
+                        list.add(1, ControlPanel(R.drawable.ic_logout_inactive, context.getString(R.string.text_logout)))
+                    }
                 }
             }
         }

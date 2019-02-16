@@ -16,7 +16,7 @@ import com.corespark.pccompiler.model.Component
  * PCCompiler.
  * All Rights Reserved. Copyright (c) 2018.
  */
-object DataBinding {
+object Bind {
 
     fun componentImage(view: ImageView, componentType: Int) = when (componentType) {
         0 -> view.setImageResource(R.mipmap.ic_cpu)

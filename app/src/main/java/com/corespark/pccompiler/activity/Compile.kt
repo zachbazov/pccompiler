@@ -14,7 +14,13 @@ import com.corespark.pccompiler.service.Intent
 import com.corespark.pccompiler.utility.Array
 import kotlinx.android.synthetic.main.activity_compile.*
 
-
+/**
+ * @author Zachy Bazov.
+ * @since 18/12/2018.
+ * CoreSpark Ltd.
+ * PCCompiler.
+ * All Rights Reserved. Copyright (c) 2018.
+ */
 class Compile : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,10 +41,10 @@ class Compile : AppCompatActivity() {
         tvCompilationTitle.text = Compilation.title
 
         val adapters = arrayOf(rvComponentBar, rvComponent)
-        for (adapter in adapters) setAdapter(adapter)
+        adapters.forEach { adapter -> setAdapter(adapter) }
 
         val clicks = arrayOf(clReturn, clFinish)
-        for (click in clicks) onClick(click)
+        clicks.forEach { click -> onClick(click) }
     }
 
     private fun setAdapter(view: View) = when (view) {
@@ -47,28 +53,20 @@ class Compile : AppCompatActivity() {
             rvComponentBar.adapter = Recycler(this, Bar.Component.list, 6, null)
         }
         else -> {
-            rvComponent.adapter = Recycler(this, Array.cpuList, 7, 0)
             rvComponent.setHasFixedSize(true)
+            rvComponent.adapter = Recycler(this, Array.cpuList, 7, 0)
         }
     }
 
     private fun onClick(view: View) = when (view) {
-        clReturn -> {
-            view.setOnClickListener {
-                view.isSelected = true
-                val dialog = Dialog(this)
-                dialog.Compile().Alert().build()
-            }
+        clReturn -> view.setOnClickListener {
+            view.isSelected = true
+            Intent.launch(this, R.layout.activity_workspace) {}
+            Intent.finish(this)
         }
-        else -> {
-            view.setOnClickListener {
-                Intent.launch(this, R.layout.activity_workspace) {
-                    Compilation.isOnGoing = true
-                }
-                Intent.finish(this)
-            }
+        else -> view.setOnClickListener {
+//            Intent.launch(this, R.layout.activity_workspace) {}
+//            Intent.finish(this)
         }
     }
 }
-
-
