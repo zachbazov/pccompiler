@@ -17,8 +17,7 @@ object Input : Input {
 
     override fun hideKeyboard(context: Context) {
         val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        when { inputManager.isActive ->
+        if (inputManager.isActive)
             inputManager.hideSoftInputFromWindow((context as Activity).currentFocus?.applicationWindowToken, 0)
-        }
     }
 }

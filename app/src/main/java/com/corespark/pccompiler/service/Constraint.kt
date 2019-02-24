@@ -99,6 +99,8 @@ object Constraint {
                 Constraint.set.clone(parentLayout)
                 Constraint.set.clear(clFragWorkspace, ConstraintSet.END)
                 Constraint.set.clear(clFragCart, ConstraintSet.START)
+                Constraint.set.clear(clFragCart, ConstraintSet.END)
+                Constraint.set.clear(clFragCart, ConstraintSet.BOTTOM)
                 Constraint.set.connect(clFragWorkspace, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
                 Constraint.set.connect(clFragCart, ConstraintSet.START, parentLayout.id, ConstraintSet.END)
                 Constraint.set.applyTo(parentLayout)
@@ -126,6 +128,8 @@ object Constraint {
                 Constraint.set.clear(clFragCart, ConstraintSet.START)
                 Constraint.set.connect(clFragWorkspace, ConstraintSet.END, parentLayout.id, ConstraintSet.START)
                 Constraint.set.connect(clFragCart, ConstraintSet.START, parentLayout.id, ConstraintSet.START)
+                Constraint.set.connect(clFragCart, ConstraintSet.END, parentLayout.id, ConstraintSet.END)
+                Constraint.set.connect(clFragCart, ConstraintSet.BOTTOM, parentLayout.id, ConstraintSet.BOTTOM)
                 Constraint.set.applyTo(parentLayout)
             }
             else -> {

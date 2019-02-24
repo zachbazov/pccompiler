@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.adapter.Recycler
-import com.corespark.pccompiler.app.Application
+import com.corespark.pccompiler.app.Application.Companion.attributes
 import com.corespark.pccompiler.model.Bar
 import com.corespark.pccompiler.model.Compilation
 import com.corespark.pccompiler.service.Auth
@@ -32,8 +32,8 @@ class Compile : AppCompatActivity() {
     }
 
     private fun customize() {
-        ivBackward.setImageDrawable(Application.attributes.arrowIndicator(this))
-        ivForward.setImageDrawable(Application.attributes.arrowIndicator(this))
+        ivBackward.setImageDrawable(attributes.arrowIndicator(this))
+        ivForward.setImageDrawable(attributes.arrowIndicator(this))
         ivWorkspace.setImageResource(R.drawable.ic_workspace_inactive)
         ivCart.setImageResource(R.drawable.ic_cart_inactive)
 
@@ -49,6 +49,7 @@ class Compile : AppCompatActivity() {
     private fun setAdapter(view: View) = when (view) {
         rvComponentBar -> {
             Bar.Component.add()
+            rvComponentBar.setHasFixedSize(true)
             rvComponentBar.adapter = Recycler(this, Bar.Component.list, 6, null)
         }
         else -> {
@@ -64,8 +65,9 @@ class Compile : AppCompatActivity() {
             Intent.finish(this)
         }
         else -> view.setOnClickListener {
-//            Intent.launch(this, R.layout.activity_workspace) {}
-//            Intent.finish(this)
+            Intent.launch(this, R.layout.activity_workspace) {}
+            Intent.finish(this)
+            Compilation.isCompiling = true
         }
     }
 }

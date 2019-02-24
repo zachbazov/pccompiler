@@ -8,8 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.corespark.pccompiler.R
-import com.corespark.pccompiler.app.Application
-import com.corespark.pccompiler.model.Compilation
+import com.corespark.pccompiler.app.Application.Companion.attributes
 import com.corespark.pccompiler.model.Compilation.case
 import com.corespark.pccompiler.model.Compilation.cooler
 import com.corespark.pccompiler.model.Compilation.cpu
@@ -35,250 +34,166 @@ import kotlinx.android.synthetic.main.activity_compile.view.*
  */
 object Factory {
 
-    fun styleAsTable(view: View, rowPosition: Int) = when {
-        rowPosition % 2 == 0 -> view.setBackgroundColor(Application.attributes.colorGray)
-        else -> view.setBackgroundColor(Application.attributes.colorWhite)
+    fun style(view: View, rowPosition: Int) = when (rowPosition % 2 == 0) {
+        true -> view.setBackgroundColor(attributes.colorCloud)
+        else -> view.setBackgroundColor(attributes.colorWhite)
     }
 
     fun focus(recycler: RecyclerView, currentPosition: Int) = (0..12).forEach { position ->
-        recycler.layoutManager?.getChildAt(currentPosition)?.setBackgroundColor(Application.attributes.colorAccent)
-        recycler.layoutManager?.getChildAt(position)?.setBackgroundColor(Application.attributes.colorCloud)
+        recycler.layoutManager!!.getChildAt(currentPosition)?.setBackgroundColor(attributes.colorAccent)
+        recycler.layoutManager!!.getChildAt(position)?.setBackgroundColor(attributes.colorCloud)
     }
 
-    fun mark(parent: ViewGroup, view: Button, componentType: Int, rowPosition: Int) {
-        val card = parent.rvComponentBar.layoutManager?.getChildAt(componentType)?.findViewById<CardView>(R.id.cvComponentBarItem)!!
-        val row = parent.rvComponent.layoutManager?.getChildAt(rowPosition)?.findViewById<ConstraintLayout>(R.id.clComponentItem)!!
-        when {
-            view.isEnabled -> {
-                card.setCardBackgroundColor(Application.attributes.colorAccent)
-                row.setBackgroundColor(Application.attributes.colorAccent)
-            }
-            else -> {
-                card.setCardBackgroundColor(Application.attributes.colorWhite)
-                styleAsTable(row, rowPosition)
-            }
+    fun mark(card: CardView, position: Int) {
+        when (position) {
+            0 -> if (cpu != null) card.setCardBackgroundColor(attributes.colorAccent)
+            1 -> if (optDrive != null) card.setCardBackgroundColor(attributes.colorAccent)
+            2 -> if (cooler != null) card.setCardBackgroundColor(attributes.colorAccent)
+            3 -> if (graphicCard != null) card.setCardBackgroundColor(attributes.colorAccent)
+            4 -> if (motherboard != null) card.setCardBackgroundColor(attributes.colorAccent)
+            5 -> if (soundCard != null) card.setCardBackgroundColor(attributes.colorAccent)
+            6 -> if (memory != null) card.setCardBackgroundColor(attributes.colorAccent)
+            7 -> if (powerSupply != null) card.setCardBackgroundColor(attributes.colorAccent)
+            8 -> if (storage != null) card.setCardBackgroundColor(attributes.colorAccent)
+            9 -> if (case != null) card.setCardBackgroundColor(attributes.colorAccent)
+            10 -> if (extStorage != null) card.setCardBackgroundColor(attributes.colorAccent)
+            11 -> if (opSystem != null) card.setCardBackgroundColor(attributes.colorAccent)
         }
     }
 
     fun mark(parent: ViewGroup, item: Component, view: View, componentType: Int, rowPosition: Int) {
         val card: CardView
         when (componentType) {
-            0 -> when {
-                com.corespark.pccompiler.model.Compilation.cpu?.component.equals(item.component) -> {
-                    card = parent.rvComponentBar.layoutManager?.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
-                    card.setCardBackgroundColor(Application.attributes.colorAccent)
-                    view.setBackgroundColor(Application.attributes.colorAccent)
-                }
-                else -> Factory.styleAsTable(view, rowPosition)
-            }
-            1 -> when {
-                com.corespark.pccompiler.model.Compilation.optDrive?.component.equals(item.component) -> {
-                    card = parent.rvComponentBar.layoutManager?.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
-                    card.setCardBackgroundColor(Application.attributes.colorAccent)
-                    view.setBackgroundColor(Application.attributes.colorAccent)
-                }
-                else -> Factory.styleAsTable(view, rowPosition)
-            }
-            2 -> when {
-                com.corespark.pccompiler.model.Compilation.cooler?.component.equals(item.component) -> {
-                    card = parent.rvComponentBar.layoutManager?.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
-                    card.setCardBackgroundColor(Application.attributes.colorAccent)
-                    view.setBackgroundColor(Application.attributes.colorAccent)
-                }
-                else -> Factory.styleAsTable(view, rowPosition)
-            }
-            3 -> when {
-                com.corespark.pccompiler.model.Compilation.graphicCard?.component.equals(item.component) -> {
-                    card = parent.rvComponentBar.layoutManager?.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
-                    card.setCardBackgroundColor(Application.attributes.colorAccent)
-                    view.setBackgroundColor(Application.attributes.colorAccent)
-                }
-                else -> Factory.styleAsTable(view, rowPosition)
-            }
-            4 -> when {
-                com.corespark.pccompiler.model.Compilation.motherboard?.component.equals(item.component) -> {
-                    card = parent.rvComponentBar.layoutManager?.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
-                    card.setCardBackgroundColor(Application.attributes.colorAccent)
-                    view.setBackgroundColor(Application.attributes.colorAccent)
-                }
-                else -> Factory.styleAsTable(view, rowPosition)
-            }
-            5 -> when {
-                com.corespark.pccompiler.model.Compilation.soundCard?.component.equals(item.component) -> {
-                    card = parent.rvComponentBar.layoutManager?.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
-                    card.setCardBackgroundColor(Application.attributes.colorAccent)
-                    view.setBackgroundColor(Application.attributes.colorAccent)
-                }
-                else -> Factory.styleAsTable(view, rowPosition)
-            }
-            6 -> when {
-                com.corespark.pccompiler.model.Compilation.memory?.component.equals(item.component) -> {
-                    card = parent.rvComponentBar.layoutManager?.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
-                    card.setCardBackgroundColor(Application.attributes.colorAccent)
-                    view.setBackgroundColor(Application.attributes.colorAccent)
-                }
-                else -> Factory.styleAsTable(view, rowPosition)
-            }
-            7 -> when {
-                com.corespark.pccompiler.model.Compilation.powerSupply?.component.equals(item.component) -> {
-                    card = parent.rvComponentBar.layoutManager?.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
-                    card.setCardBackgroundColor(Application.attributes.colorAccent)
-                    view.setBackgroundColor(Application.attributes.colorAccent)
-                }
-                else -> Factory.styleAsTable(view, rowPosition)
-            }
-            8 -> when {
-                com.corespark.pccompiler.model.Compilation.storage?.component.equals(item.component) -> {
-                    card = parent.rvComponentBar.layoutManager?.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
-                    card.setCardBackgroundColor(Application.attributes.colorAccent)
-                    view.setBackgroundColor(Application.attributes.colorAccent)
-                }
-                else -> Factory.styleAsTable(view, rowPosition)
-            }
-            9 -> when {
-                com.corespark.pccompiler.model.Compilation.case?.component.equals(item.component) -> {
-                    card = parent.rvComponentBar.layoutManager?.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
-                    card.setCardBackgroundColor(Application.attributes.colorAccent)
-                    view.setBackgroundColor(Application.attributes.colorAccent)
-                }
-                else -> Factory.styleAsTable(view, rowPosition)
-            }
-            10 -> when {
-                com.corespark.pccompiler.model.Compilation.extStorage?.component.equals(item.component) -> {
-                    card = parent.rvComponentBar.layoutManager?.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
-                    card.setCardBackgroundColor(Application.attributes.colorAccent)
-                    view.setBackgroundColor(Application.attributes.colorAccent)
-                }
-                else -> Factory.styleAsTable(view, rowPosition)
-            }
-            else -> when {
-                com.corespark.pccompiler.model.Compilation.opSystem?.component.equals(item.component) -> {
-                    card = parent.rvComponentBar.layoutManager?.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
-                    card.setCardBackgroundColor(Application.attributes.colorAccent)
-                    view.setBackgroundColor(Application.attributes.colorAccent)
-                }
-                else -> Factory.styleAsTable(view, rowPosition)
-            }
+            0 -> if (cpu?.component.equals(item.component)) {
+                card = parent.rvComponentBar.layoutManager!!.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
+                card.setCardBackgroundColor(attributes.colorAccent)
+                view.setBackgroundColor(attributes.colorAccent)
+            } else style(view, rowPosition)
+            1 -> if (optDrive?.component.equals(item.component)) {
+                card = parent.rvComponentBar.layoutManager!!.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
+                card.setCardBackgroundColor(attributes.colorAccent)
+                view.setBackgroundColor(attributes.colorAccent)
+            } else style(view, rowPosition)
+            2 -> if (cooler?.component.equals(item.component)) {
+                card = parent.rvComponentBar.layoutManager!!.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
+                card.setCardBackgroundColor(attributes.colorAccent)
+                view.setBackgroundColor(attributes.colorAccent)
+            } else style(view, rowPosition)
+            3 -> if (graphicCard?.component.equals(item.component)) {
+                card = parent.rvComponentBar.layoutManager!!.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
+                card.setCardBackgroundColor(attributes.colorAccent)
+                view.setBackgroundColor(attributes.colorAccent)
+            } else style(view, rowPosition)
+            4 -> if (motherboard?.component.equals(item.component)) {
+                card = parent.rvComponentBar.layoutManager!!.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
+                card.setCardBackgroundColor(attributes.colorAccent)
+                view.setBackgroundColor(attributes.colorAccent)
+            } else style(view, rowPosition)
+            5 -> if (soundCard?.component.equals(item.component)) {
+                card = parent.rvComponentBar.layoutManager!!.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
+                card.setCardBackgroundColor(attributes.colorAccent)
+                view.setBackgroundColor(attributes.colorAccent)
+            } else style(view, rowPosition)
+            6 -> if (memory?.component.equals(item.component)) {
+                card = parent.rvComponentBar.layoutManager!!.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
+                card.setCardBackgroundColor(attributes.colorAccent)
+                view.setBackgroundColor(attributes.colorAccent)
+            } else style(view, rowPosition)
+            7 -> if (powerSupply?.component.equals(item.component)) {
+                card = parent.rvComponentBar.layoutManager!!.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
+                card.setCardBackgroundColor(attributes.colorAccent)
+                view.setBackgroundColor(attributes.colorAccent)
+            } else style(view, rowPosition)
+            8 -> if (storage?.component.equals(item.component)) {
+                card = parent.rvComponentBar.layoutManager!!.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
+                card.setCardBackgroundColor(attributes.colorAccent)
+                view.setBackgroundColor(attributes.colorAccent)
+            } else style(view, rowPosition)
+            9 -> if (case?.component.equals(item.component)) {
+                card = parent.rvComponentBar.layoutManager!!.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
+                card.setCardBackgroundColor(attributes.colorAccent)
+                view.setBackgroundColor(attributes.colorAccent)
+            } else style(view, rowPosition)
+            10 -> if (extStorage?.component.equals(item.component)) {
+                card = parent.rvComponentBar.layoutManager!!.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
+                card.setCardBackgroundColor(attributes.colorAccent)
+                view.setBackgroundColor(attributes.colorAccent)
+            } else style(view, rowPosition)
+            11 -> if (opSystem?.component.equals(item.component)) {
+                card = parent.rvComponentBar.layoutManager!!.getChildAt(componentType)?.findViewById(R.id.cvComponentBarItem)!!
+                card.setCardBackgroundColor(attributes.colorAccent)
+                view.setBackgroundColor(attributes.colorAccent)
+            } else style(view, rowPosition)
         }
     }
 
-    fun mark(recycler: RecyclerView) = (0..12).forEach { i ->
-        when (i) {
-            0 -> when {
-                com.corespark.pccompiler.model.Compilation.cpu != null -> recycler.layoutManager?.getChildAt(0)
-                    ?.findViewById<CardView>(R.id.cvComponentBarItem)
-                    ?.setCardBackgroundColor(Application.attributes.colorAccent)
-            }
-            1 -> when {
-                com.corespark.pccompiler.model.Compilation.optDrive != null -> recycler.layoutManager?.getChildAt(1)
-                    ?.findViewById<CardView>(R.id.cvComponentBarItem)
-                    ?.setCardBackgroundColor(Application.attributes.colorAccent)
-            }
-            2 -> when {
-                com.corespark.pccompiler.model.Compilation.cooler != null -> recycler.layoutManager?.getChildAt(2)
-                    ?.findViewById<CardView>(R.id.cvComponentBarItem)
-                    ?.setCardBackgroundColor(Application.attributes.colorAccent)
-            }
-            3 -> when {
-                com.corespark.pccompiler.model.Compilation.graphicCard != null -> recycler.layoutManager?.getChildAt(3)
-                    ?.findViewById<CardView>(R.id.cvComponentBarItem)
-                    ?.setCardBackgroundColor(Application.attributes.colorAccent)
-            }
-            4 -> when {
-                com.corespark.pccompiler.model.Compilation.motherboard != null -> recycler.layoutManager?.getChildAt(4)
-                    ?.findViewById<CardView>(R.id.cvComponentBarItem)
-                    ?.setCardBackgroundColor(Application.attributes.colorAccent)
-            }
-            5 -> when {
-                com.corespark.pccompiler.model.Compilation.soundCard != null -> recycler.layoutManager?.getChildAt(5)
-                    ?.findViewById<CardView>(R.id.cvComponentBarItem)
-                    ?.setCardBackgroundColor(Application.attributes.colorAccent)
-            }
-            6 -> when {
-                com.corespark.pccompiler.model.Compilation.memory != null -> recycler.layoutManager?.getChildAt(6)
-                    ?.findViewById<CardView>(R.id.cvComponentBarItem)
-                    ?.setCardBackgroundColor(Application.attributes.colorAccent)
-            }
-            7 -> when {
-                com.corespark.pccompiler.model.Compilation.powerSupply != null -> recycler.layoutManager?.getChildAt(7)
-                    ?.findViewById<CardView>(R.id.cvComponentBarItem)
-                    ?.setCardBackgroundColor(Application.attributes.colorAccent)
-            }
-            8 -> when {
-                com.corespark.pccompiler.model.Compilation.storage != null -> recycler.layoutManager?.getChildAt(8)
-                    ?.findViewById<CardView>(R.id.cvComponentBarItem)
-                    ?.setCardBackgroundColor(Application.attributes.colorAccent)
-            }
-            9 -> when {
-                com.corespark.pccompiler.model.Compilation.case != null -> recycler.layoutManager?.getChildAt(9)
-                    ?.findViewById<CardView>(R.id.cvComponentBarItem)
-                    ?.setCardBackgroundColor(Application.attributes.colorAccent)
-            }
-            10 -> when {
-                com.corespark.pccompiler.model.Compilation.extStorage != null -> recycler.layoutManager?.getChildAt(10)
-                    ?.findViewById<CardView>(R.id.cvComponentBarItem)
-                    ?.setCardBackgroundColor(Application.attributes.colorAccent)
-            }
-            11 -> when {
-                com.corespark.pccompiler.model.Compilation.opSystem != null -> recycler.layoutManager?.getChildAt(11)
-                    ?.findViewById<CardView>(R.id.cvComponentBarItem)
-                    ?.setCardBackgroundColor(Application.attributes.colorAccent)
-            }
+    fun mark(parent: ViewGroup, view: Button, componentType: Int, rowPosition: Int) {
+        val card = parent.rvComponentBar.layoutManager!!.getChildAt(componentType)?.findViewById<CardView>(R.id.cvComponentBarItem)!!
+        val row = parent.rvComponent.layoutManager!!.getChildAt(rowPosition)?.findViewById<ConstraintLayout>(R.id.clComponentItem)!!
+        if (view.isEnabled) {
+            card.setCardBackgroundColor(attributes.colorAccent)
+            row.setBackgroundColor(attributes.colorAccent)
+        } else {
+            card.setCardBackgroundColor(attributes.colorWhite)
+            style(row, rowPosition)
         }
     }
 
-    private fun handleSelection(boolean: Boolean, views: Array<Button>) = when {
-        boolean -> {
-            views[0].isEnabled = false
-            views[1].isEnabled = true
-        }
-        else -> {
-            views[0].visibility = View.GONE
-            views[1].visibility = View.GONE
-            views[2].visibility = View.VISIBLE
+    private fun enable(boolean: Boolean, views: Array<Button>) = if (boolean) {
+        views[0].isEnabled = false
+        views[1].isEnabled = true
+    } else {
+        views[0].visibility = View.GONE
+        views[1].visibility = View.GONE
+        views[2].visibility = View.VISIBLE
+    }
+
+    fun utilize(item: Component, componentType: Int, views: Array<Button>) {
+        when (componentType) {
+            0 -> if (cpu != null) enable(cpu?.component.equals(item.component), views)
+            1 -> if (optDrive != null) enable(optDrive?.component.equals(item.component), views)
+            2 -> if (cooler != null) enable(cooler?.component.equals(item.component), views)
+            3 -> if (graphicCard != null) enable(graphicCard?.component.equals(item.component), views)
+            4 -> if (motherboard != null) enable(motherboard?.component.equals(item.component), views)
+            5 -> if (soundCard != null) enable(soundCard?.component.equals(item.component), views)
+            6 -> if (memory != null) enable(memory?.component.equals(item.component), views)
+            7 -> if (powerSupply != null) enable(powerSupply?.component.equals(item.component), views)
+            8 -> if (storage != null) enable(storage?.component.equals(item.component), views)
+            9 -> if (case != null) enable(case?.component.equals(item.component), views)
+            10 -> if (extStorage != null) enable(extStorage?.component.equals(item.component), views)
+            11 -> if (opSystem != null) enable(opSystem?.component.equals(item.component), views)
         }
     }
 
-    fun enableSelection(item: Component, componentType: Int, views: Array<Button>) = when (componentType) {
-        0 -> when { cpu != null -> handleSelection(Compilation.cpu?.component.equals(item.component), views) else -> {} }
-        1 -> when { optDrive != null -> handleSelection(Compilation.optDrive?.component.equals(item.component), views) else -> {} }
-        2 -> when { cooler != null -> handleSelection(Compilation.cooler?.component.equals(item.component), views) else -> {} }
-        3 -> when { graphicCard != null -> handleSelection(Compilation.graphicCard?.component.equals(item.component), views) else -> {} }
-        4 -> when { motherboard != null -> handleSelection(Compilation.motherboard?.component.equals(item.component), views) else -> {} }
-        5 -> when { soundCard != null -> handleSelection(Compilation.soundCard?.component.equals(item.component), views) else -> {} }
-        6 -> when { memory != null -> handleSelection(Compilation.memory?.component.equals(item.component), views) else -> {} }
-        7 -> when { powerSupply != null -> handleSelection(Compilation.powerSupply?.component.equals(item.component), views) else -> {} }
-        8 -> when { storage != null -> handleSelection(Compilation.storage?.component.equals(item.component), views) else -> {} }
-        9 -> when { case != null -> handleSelection(Compilation.case?.component.equals(item.component), views) else -> {} }
-        10 -> when { extStorage != null -> handleSelection(Compilation.extStorage?.component.equals(item.component), views) else -> {} }
-        else -> when { opSystem != null -> handleSelection(Compilation.opSystem?.component.equals(item.component), views) else -> {} }
-    }
-
-    fun oldPosition(componentType: Int, oldPositionList: MutableList<Int>, rowPosition: Int) : Int {
+    fun position(componentType: Int, oldPositionList: MutableList<Int>, rowPosition: Int) : Int {
         var position = -1
         oldPositionList.add(rowPosition)
-        when (componentType) { componentType -> when {oldPositionList.size > 1 -> position = oldPositionList[oldPositionList.size - 2] } }
+        when (componentType) {
+            componentType -> if (oldPositionList.size > 1) position = oldPositionList[oldPositionList.size - 2]
+        }
         return position
     }
 
-    fun replacePosition(
+    fun replace(
         parent: ViewGroup, layout: View, componentType: Int, rowPosition: Int, oldPosition: Int, views: Array<Button>
-    ) = when (componentType) {
-        componentType -> (0..12).forEach { i ->
-            when (i) {
-                i -> {
-                    val oldRow = parent.rvComponent.layoutManager?.getChildAt(oldPosition)
-                        ?.findViewById<ConstraintLayout>(R.id.clComponentItem)!!
-                    Factory.styleAsTable(oldRow, oldPosition)
-                    Factory.mark(parent, views[2], componentType, rowPosition)
-                    views[0].isEnabled = false
-                    views[1].isEnabled = true
-                    TransitionManager.beginDelayedTransition(layout as ViewGroup?)
-                    views[0].visibility = View.VISIBLE
-                    views[1].visibility = View.VISIBLE
-                    views[2].visibility = View.GONE
+    ) {
+        when (componentType) {
+            componentType -> (0..12).forEach { position ->
+                when (position) {
+                    position -> {
+                        val oldRow = parent.rvComponent.layoutManager!!
+                            .getChildAt(oldPosition)?.findViewById<ConstraintLayout>(R.id.clComponentItem)!!
+                        style(oldRow, oldPosition)
+                        mark(parent, views[2], componentType, rowPosition)
+                        views[0].isEnabled = false
+                        views[1].isEnabled = true
+                        TransitionManager.beginDelayedTransition(layout as ViewGroup?)
+                        views[0].visibility = View.VISIBLE
+                        views[1].visibility = View.VISIBLE
+                        views[2].visibility = View.GONE
+                    }
                 }
             }
-        } else -> {}
+        }
     }
 }

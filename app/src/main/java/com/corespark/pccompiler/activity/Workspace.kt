@@ -59,7 +59,7 @@ class Workspace : AppCompatActivity() {
         ivBackward.setImageDrawable(attributes.arrowIndicator(this))
         ivForward.setImageDrawable(attributes.arrowIndicator(this))
 
-        val adapters = arrayOf(rvTabBar, rvActionBar, rvControlBar, rvCartBar, rvControlPanel)
+        val adapters = arrayOf(rvTabBar, rvActionBar, rvControlBar, rvControlPanel, rvCartBar)
         adapters.forEach { adapter -> setAdapter(adapter) }
     }
 
@@ -82,7 +82,7 @@ class Workspace : AppCompatActivity() {
         }
         else -> {
             Bar.Cart.addEmpty(this)
-            if (Bar.Cart.list.size > 0) rvCartBar.adapter = Recycler(this, Bar.Cart.list, 5, null)
+            if (Bar.Cart.list.isNotEmpty()) rvCartBar.adapter = Recycler(this, Bar.Cart.list, 5, null)
             else rvCartBar.adapter = Recycler(this, Bar.Cart.empty, 8, null)
         }
     }
@@ -123,13 +123,13 @@ class Workspace : AppCompatActivity() {
             tvProgress!!.text = weakWorkspace.get()!!.getString(R.string.text_loading)
             tvDot!!.text = when(values.iterator().next()) {
                 0 -> weakWorkspace.get()!!.getString(R.string.text_dot)
-                1 -> weakWorkspace.get()!!.getString(R.string.text_dot_double)
+                1,2 -> weakWorkspace.get()!!.getString(R.string.text_dot_double)
                 else -> weakWorkspace.get()!!.getString(R.string.text_dot_triple)
             }
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            for (i in 0..2) {
+            for (i in 0..3) {
                 publishProgress(i)
                 try { Thread.sleep(1000) } catch (e: InterruptedException) {}
             }
@@ -143,11 +143,11 @@ class Workspace : AppCompatActivity() {
                 weakWorkspace.get()!!.rvCompilationBar!!.setHasFixedSize(true)
                 weakWorkspace.get()!!.rvCompilationBar!!.layoutManager = LayoutManager(
                     weakWorkspace.get()!!, LinearLayoutManager.HORIZONTAL, false)
-                weakWorkspace.get()?.rvCompilationBar?.adapter = Recycler(
+                weakWorkspace.get()!!.rvCompilationBar!!.adapter = Recycler(
                     weakWorkspace.get()!!, Bar.Compilation.list, 4, null)
             } else {
                 Bar.Compilation.addEmpty(weakWorkspace.get()!!)
-                weakWorkspace.get()?.rvCompilationBar?.adapter = Recycler(
+                weakWorkspace.get()!!.rvCompilationBar!!.adapter = Recycler(
                     weakWorkspace.get()!!, Bar.Compilation.empty, 8, null)
             }
         }

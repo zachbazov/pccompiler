@@ -66,51 +66,53 @@ class Recycler(
             0 -> {
                 holder as TabBar.TabBarViewHolder
                 holder.span()
-                holder.mapId(position)
+                holder.mapId()
                 holder.bind(item as Bar.Tab)
-                holder.customize(position)
+                holder.customize()
                 holder.onClick(holder.layout)
             }
             1 -> {
                 holder as ActionBar.ActionBarViewHolder
                 holder.span()
                 holder.bind(item as Bar.Action)
-                holder.mapId(position)
-                holder.customize(position)
-                holder.activate(holder.image, position)
+                holder.mapId()
+                holder.customize()
+                holder.activate(holder.image)
                 holder.onClick(holder.layout)
             }
             2 -> {
                 holder as ControlBarViewHolder
                 holder.span()
                 holder.bind(item as Bar.Control)
-                holder.activate(holder.image, position)
+                holder.activate(holder.image)
+                holder.onClick(holder.layout)
             }
             3 -> {
                 holder as ControlPanel.ControlPanelViewHolder
                 holder.span()
                 holder.bind(item as Panel.ControlPanel)
-                holder.mapId(position)
-                holder.customize(position)
+                holder.mapId()
+                holder.customize()
                 holder.onClick(holder.layout)
             }
             4 -> {
                 holder as Compilation.CompilationViewHolder
                 holder.span()
-                holder.mapId(position)
+                holder.mapId()
                 holder.bind(item as Bar.Compilation)
                 holder.customize()
             }
             5 -> {
                 holder as CartBarViewHolder
                 holder.span()
-                holder.bind(item as Bar.Cart)
+                holder.bind(item as com.corespark.pccompiler.model.Component)
+                holder.customize()
             }
             6 -> {
                 holder as Component.ComponentBarViewHolder
                 holder.span()
                 holder.bind(item as Bar.Component)
-                holder.customize()
+                holder.customize(holder.layout)
                 holder.onClick(holder.layout)
             }
             7 -> {
@@ -148,7 +150,7 @@ class Recycler(
 
             fun span() = width(context, layout, (context as Workspace).windowManager, orientation, list.size) {}
 
-            fun mapId(position: Int) = when (position) {
+            fun mapId() = when (adapterPosition) {
                 0 -> {
                     clTabWorkspace = layout
                     layout.id = R.id.clTabWorkspace
@@ -161,23 +163,25 @@ class Recycler(
 
             fun bind(item: Bar.Tab) = image.setImageResource(item.image)
 
-            fun customize(position: Int) {
+            fun customize() {
                 with(clWorkspace) {
                     tvWorkspaceTitle.text = context.getString(R.string.text_my_compilations)
                     tvCartTitle.text = context.getString(R.string.text_my_cart)
                 }
                 Parameter.set(image, 64)
-                when (position) {
+                when (adapterPosition) {
                     0 -> image.setImageResource(R.drawable.ic_workspace_active)
                     1 -> {
                         image.setImageResource(R.drawable.ic_cart_active)
                         layout.removeView(divider)
-//                        if (com.corespark.pccompiler.model.Compilation.isOnGoing) {
-//                            Constraint.set(clTabCart!!, clWorkspace.clFragTabBar, clWorkspace.ivTracker)
-//                            Constraint.set(clTabCart!!, clWorkspace, clWorkspace.clFragCart)
-//                            Constraint.set(clTabCart!!, clWorkspace) {}
-//                            Constraint.set(clTabCart!!, clWorkspace.clFragTitle, clWorkspace.tvCartTitle)
-//                        }
+                        when {
+                            com.corespark.pccompiler.model.Compilation.isCompiling -> with(Constraint) {
+                                set(clTabCart!!, clWorkspace.clFragTabBar, clWorkspace.ivTracker)
+                                set(clTabCart!!, clWorkspace, clWorkspace.clFragCart)
+                                set(clTabCart!!, clWorkspace) {}
+                                set(clTabCart!!, clWorkspace.clFragTitle, clWorkspace.tvCartTitle)
+                            }
+                        }
                     }
                 }
             }
@@ -185,14 +189,15 @@ class Recycler(
             fun onClick(view: View) {
                 view.setOnClickListener {
                     TransitionManager.beginDelayedTransition(clWorkspace)
-                    when (view.id) {
-                        clTabWorkspace?.id -> with(Constraint) {
+                    when (view) {
+                        clTabWorkspace -> with(Constraint) {
                             set(clTabWorkspace!!, clWorkspace.clFragTabBar, clWorkspace.ivTracker)
                             set(clTabWorkspace!!, clWorkspace, clWorkspace.clFragWorkspace)
                             set(clTabWorkspace!!, clWorkspace) {}
                             set(clTabWorkspace!!, clWorkspace.clFragTitle, clWorkspace.tvWorkspaceTitle)
                         }
-                        clTabCart?.id -> with(Constraint) {
+                        clTabCart -> with(Constraint) {
+                            clTabCart!!.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
                             set(clTabCart!!, clWorkspace.clFragTabBar, clWorkspace.ivTracker)
                             set(clTabCart!!, clWorkspace, clWorkspace.clFragCart)
                             set(clTabCart!!, clWorkspace) {}
@@ -221,7 +226,7 @@ class Recycler(
                 title.text = item.title
             }
 
-            fun mapId(position: Int) = when (position) {
+            fun mapId() = when (adapterPosition) {
                 0 -> {
                     layout.id = R.id.clActionUser
                     image.id = R.id.ivActionUser
@@ -234,19 +239,22 @@ class Recycler(
                 else -> layout.id = R.id.clActionEdit
             }
 
-            fun customize(position: Int) = when (position) {
+            fun customize() = when (adapterPosition) {
                 0 -> title.text = User.username
                 1 -> {}
                 else -> layout.removeView(divider)
             }
 
-            fun activate(view: View, position: Int) = when (position) {
-                0 -> if (!view.isSelected) {
-                    (view as ImageView).setImageResource(R.drawable.ic_profile_inactive)
-                    view.isSelected = !view.isSelected
-                } else {
-                    (view as ImageView).setImageResource(R.drawable.ic_profile_active)
-                    view.isSelected = !view.isSelected
+            fun activate(view: View) = when (adapterPosition) {
+                0 -> when {
+                    !view.isSelected -> {
+                        (view as ImageView).setImageResource(R.drawable.ic_profile_inactive)
+                        view.isSelected = !view.isSelected
+                    }
+                    else -> {
+                        (view as ImageView).setImageResource(R.drawable.ic_profile_active)
+                        view.isSelected = !view.isSelected
+                    }
                 }
                 1 -> (view as ImageView).setImageResource(R.drawable.ic_compile_active)
                 else -> layout.isEnabled = false
@@ -256,7 +264,7 @@ class Recycler(
                 R.id.clActionUser -> {
                     view.setOnClickListener {
                         ControlPanel().constraint(view)
-                        activate(image, 0)
+                        activate(image)
                     }
                 }
                 R.id.clActionCompile -> view.setOnClickListener {
@@ -281,13 +289,27 @@ class Recycler(
             title.text = item.title
         }
 
-        fun activate(view: View, position: Int) = when (position) {
-            0 -> {
-                if (Bar.Cart.list.size == 0) (view as ImageView).setImageResource(R.drawable.ic_explore_active)
-                else {}
+        fun activate(view: View) = when (adapterPosition) {
+            0 -> when {
+                Bar.Cart.list.isEmpty() -> (view as ImageView).setImageResource(R.drawable.ic_explore_active)
+                else -> {}
             }
-            1 -> {}
+            1 -> when {
+                Bar.Cart.list.isNotEmpty() -> (view as ImageView).setImageResource(R.drawable.ic_change_active)
+                else -> (view as ImageView).setImageResource(R.drawable.ic_change_inactive)
+            }
             else -> {}
+        }
+
+        fun onClick(view: View) {
+            view.setOnClickListener {
+                when (adapterPosition) {
+                    1 -> {
+                        Intent.launch(context, R.layout.activity_compile) {}
+                        Intent.finish(context)
+                    }
+                }
+            }
         }
     }
 
@@ -295,7 +317,9 @@ class Recycler(
 
         fun constraint(view: View) {
             TransitionManager.beginDelayedTransition(clWorkspace)
-            Constraint.set(view, clWorkspace) { if (it) Compilation().activate(view, it) else Compilation().activate(view, it) }
+            Constraint.set(view, clWorkspace) {
+                when { it -> Compilation().activate(view, it) else -> Compilation().activate(view, it) }
+            }
         }
 
         inner class ControlPanelViewHolder(
@@ -313,12 +337,12 @@ class Recycler(
                 title.text = item.title
             }
 
-            fun mapId(position: Int) = when (position) {
+            fun mapId() = when (adapterPosition) {
                 0 -> {}
                 else -> layout.id = R.id.clControlPanelLogout
             }
 
-            fun customize(position: Int) = when (position) {
+            fun customize() = when (adapterPosition) {
                 0 -> {}
                 else -> {
                     divider.visibility = View.INVISIBLE
@@ -328,8 +352,8 @@ class Recycler(
 
             fun onClick(view: View) = when (view.id) {
                 R.id.clControlPanelLogout -> view.setOnClickListener {
-                    com.corespark.pccompiler.service.Auth.logOut(context) { complete ->
-                        if (complete) Intent.launch(context, activity_auth) {}
+                    Auth.logOut(context) { complete ->
+                        when { complete -> Intent.launch(context, activity_auth) {} }
                         Intent.finish(context)
                     }
                 }
@@ -373,24 +397,27 @@ class Recycler(
 
             fun span() = width(context, layout, (context as Workspace).windowManager, orientation, 2) {}
 
-            fun mapId(position: Int) = when (position) {
-                0 -> {
-                    if (clCompilationBar00 == null) {
+            fun mapId() = when (adapterPosition) {
+                0 -> when (clCompilationBar00) {
+                    null -> {
                         clCompilationBar00 = parent
                         clCompilationBar00?.id = R.id.cvCompilation0
-                    } else {}
+                    }
+                    else -> {}
                 }
-                1 -> {
-                    if (clCompilationBar01 == null) {
+                1 -> when (clCompilationBar01) {
+                    null -> {
                         clCompilationBar01 = parent
                         clCompilationBar01?.id = R.id.cvCompilation1
-                    } else {}
+                    }
+                    else -> {}
                 }
-                else -> {
-                    if (clCompilationBar02 == null) {
+                else -> when (clCompilationBar02) {
+                    null -> {
                         clCompilationBar02 = parent
                         clCompilationBar02?.id = R.id.cvCompilation2
-                    } else {}
+                    }
+                    else -> {}
                 }
             }
 
@@ -400,7 +427,7 @@ class Recycler(
             }
 
             fun customize() {
-                val views = arrayOf(parent, clWorkspace, clWorkspace.clForward, clWorkspace.clBackward)
+                val views = arrayOf(parent, clWorkspace.clForward, clWorkspace.clBackward)
                 views.forEach { view -> onClick(view) }
             }
 
@@ -467,16 +494,26 @@ class Recycler(
         itemView: View,
         private val layout: ConstraintLayout = itemView.findViewById(R.id.clCartBarItemParent),
         private val image: ImageView = itemView.findViewById(R.id.ivCartBarItem),
-        private val title: TextView = itemView.findViewById(R.id.tvCartBarItemComponent),
+        private val title: TextView = itemView.findViewById(R.id.tvCartBarItem),
+        val more: ImageView = itemView.findViewById(R.id.ivCartBarItemMore),
         private val price: TextView = itemView.findViewById(R.id.tvCartBarItemPrice)
     ) : RecyclerView.ViewHolder(itemView) {
 
-        fun span() = width(context, layout, (context as Compile).windowManager, orientation, 1) {}
+        fun span() {
+            width(context, layout, (context as Workspace).windowManager, orientation, 1) {}
+            width(context, title, context.windowManager, orientation, 2) {}
+        }
 
-        fun bind(item: Bar.Cart) {
-            image.setImageResource(item.image)
-            title.text = item.component
+        fun bind(item: com.corespark.pccompiler.model.Component) {
+            image.setImageResource(item.image!!)
+            title.text = String.format("%s %s", item.manufaturer, item.component)
             price.text = item.price
+            more.setImageResource(R.drawable.ic_more_active)
+        }
+
+        fun customize() {
+            Parameter.set(image, 48)
+            Factory.style(layout, adapterPosition)
         }
     }
 
@@ -489,6 +526,7 @@ class Recycler(
         inner class ComponentBarViewHolder(
             itemView: View,
             val layout: ConstraintLayout = itemView.findViewById(R.id.clComponentBarItemParent),
+            private val card: CardView = itemView.findViewById(R.id.cvComponentBarItem),
             private val image: ImageView = itemView.findViewById(R.id.ivComponentBarItem)
         ) : RecyclerView.ViewHolder(itemView) {
 
@@ -496,9 +534,9 @@ class Recycler(
 
             fun bind(item: Bar.Component) = image.setImageResource(item.image)
 
-            fun customize() {
-                rvComponentBar.layoutManager?.getChildAt(0)?.setBackgroundColor(attributes.colorAccent)
-                Factory.mark(rvComponentBar)
+            fun customize(view: View) {
+                when (adapterPosition) {0 -> view.setBackgroundColor(attributes.colorAccent) }
+                Factory.mark(card, adapterPosition)
             }
 
             fun onClick(view: View) = view.setOnClickListener {
@@ -532,14 +570,14 @@ class Recycler(
 
             fun customize(item: com.corespark.pccompiler.model.Component) {
                 Parameter.set(image, 48)
-                Factory.styleAsTable(layout, adapterPosition)
+                Factory.style(layout, adapterPosition)
                 Factory.mark(clCompile, item, layout, componentType!!, adapterPosition)
             }
 
             fun onClick(view: View, item: com.corespark.pccompiler.model.Component) = view.setOnClickListener {
                 rvComponent.scrollToPosition(adapterPosition)
                 val oldPositionList = Array.oldPositionsArray[componentType!!]
-                val oldPosition = Factory.oldPosition(componentType, oldPositionList, adapterPosition)
+                val oldPosition = Factory.position(componentType, oldPositionList, adapterPosition)
                 Dialog(context).Compile().Overview().build(componentType, item, adapterPosition, oldPosition)
             }
         }

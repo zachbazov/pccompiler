@@ -46,7 +46,7 @@ object View : com.corespark.pccompiler.impl.View {
     }
 
     override fun measureWidthMultipleDeviceDensity(width: Int, span: Int) : Int {
-        when (View.metrics.density) {
+        when (metrics.density) {
             0.75f -> spannedWidthPx = (width / span)
             1f -> spannedWidthPx = (width / span)
             1.5f -> spannedWidthPx = (width / span)
@@ -59,7 +59,7 @@ object View : com.corespark.pccompiler.impl.View {
     }
 
     private fun measureHeightMultipleDeviceDensity(height: Int, span: Int) : Int {
-        when (View.metrics.density) {
+        when (metrics.density) {
             0.75f -> spannedHeightPx = (height / span)
             1f -> spannedHeightPx = (height / span)
             1.5f -> spannedHeightPx = (height / span)

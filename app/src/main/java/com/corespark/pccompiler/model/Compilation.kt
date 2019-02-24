@@ -27,39 +27,134 @@ object Compilation {
     var powerSupply: Component? = null
     var case: Component? = null
     var opSystem: Component? = null
+    var isCompiling = false
 
     fun assignCompilation(user: ParseUser?, title: String?) {
         this.user = user
         this.title = title
     }
 
-    fun assignComponent(componentType: Int, item: Component?) = when (componentType) {
-        0 -> cpu = item
-        1 -> optDrive = item
-        2 -> cooler = item
-        3 -> graphicCard = item
-        4 -> motherboard = item
-        5 -> soundCard = item
-        6 -> memory = item
-        7 -> powerSupply = item
-        8 -> storage = item
-        9 -> case = item
-        10 -> extStorage = item
-        else -> opSystem = item
+    fun assignComponent(componentType: Int, item: Component?) {
+        when (componentType) {
+            0 -> {
+                cpu = item
+                Bar.Cart.list.add(cpu!!)
+            }
+            1 -> {
+                optDrive = item
+                Bar.Cart.list.add(optDrive!!)
+            }
+            2 -> {
+                cooler = item
+                Bar.Cart.list.add(cooler!!)
+            }
+            3 -> {
+                graphicCard = item
+                Bar.Cart.list.add(graphicCard!!)
+            }
+            4 -> {
+                motherboard = item
+                Bar.Cart.list.add(motherboard!!)
+            }
+            5 -> {
+                soundCard = item
+                Bar.Cart.list.add(soundCard!!)
+            }
+            6 -> {
+                memory = item
+                Bar.Cart.list.add(memory!!)
+            }
+            7 -> {
+                powerSupply = item
+                Bar.Cart.list.add(powerSupply!!)
+            }
+            8 -> {
+                storage = item
+                Bar.Cart.list.add(storage!!)
+            }
+            9 -> {
+                case = item
+                Bar.Cart.list.add(case!!)
+            }
+            10 -> {
+                extStorage = item
+                Bar.Cart.list.add(extStorage!!)
+            }
+            11 -> {
+                opSystem = item
+                Bar.Cart.list.add(opSystem!!)
+            }
+        }
     }
 
-    fun deassignComponent(componentType: Int) = when (componentType) {
-        0 -> cpu = null
-        1 -> optDrive = null
-        2 -> cooler = null
-        3 -> graphicCard = null
-        4 -> motherboard = null
-        5 -> soundCard = null
-        6 -> memory = null
-        7 -> powerSupply = null
-        8 -> storage = null
-        9 -> case = null
-        10 -> extStorage = null
-        else -> opSystem = null
+    fun deassignComponent(componentType: Int, item: Component?) {
+        Bar.Cart.list.removeIf { (it as Component) == item }
+        when (componentType) {
+            0 -> cpu = null
+            1 -> optDrive = null
+            2 -> cooler = null
+            3 -> graphicCard = null
+            4 -> motherboard = null
+            5 -> soundCard = null
+            6 -> memory = null
+            7 -> powerSupply = null
+            8 -> storage = null
+            9 -> case = null
+            10 -> extStorage = null
+            11 -> opSystem = null
+        }
+    }
+
+    fun replaceComponent(componentType: Int, item: Component?) {
+        when (componentType) {
+            0 -> {
+                deassignComponent(componentType, cpu)
+                assignComponent(componentType, item)
+            }
+            1 -> {
+                deassignComponent(componentType, optDrive)
+                assignComponent(componentType, item)
+            }
+            2 -> {
+                deassignComponent(componentType, cooler)
+                assignComponent(componentType, item)
+            }
+            3 -> {
+                deassignComponent(componentType, graphicCard)
+                assignComponent(componentType, item)
+            }
+            4 -> {
+                deassignComponent(componentType, motherboard)
+                assignComponent(componentType, item)
+            }
+            5 -> {
+                deassignComponent(componentType, soundCard)
+                assignComponent(componentType, item)
+            }
+            6 -> {
+                deassignComponent(componentType, memory)
+                assignComponent(componentType, item)
+            }
+            7 -> {
+                deassignComponent(componentType, powerSupply)
+                assignComponent(componentType, item)
+            }
+            8 -> {
+                deassignComponent(componentType, storage)
+                assignComponent(componentType, item)
+            }
+            9 -> {
+                deassignComponent(componentType, case)
+                assignComponent(componentType, item)
+            }
+            10 -> {
+                deassignComponent(componentType, extStorage)
+                assignComponent(componentType, item)
+            }
+            11 -> {
+                deassignComponent(componentType, opSystem)
+                assignComponent(componentType, item)
+            }
+        }
     }
 }

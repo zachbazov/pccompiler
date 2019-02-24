@@ -12,7 +12,7 @@ import com.parse.ParseObject
  * All Rights Reserved. Copyright (c) 2018.
  */
 @ParseClassName("Component")
-class Component() : ParseObject() {
+open class Component() : ParseObject() {
 
     lateinit var id: String
     lateinit var manufaturer: String
@@ -24,6 +24,7 @@ class Component() : ParseObject() {
     var paramE: String? = null
     var paramF: String? = null
     lateinit var price: String
+    var image: Int? = null
 
     constructor(
         id: String,
@@ -35,7 +36,8 @@ class Component() : ParseObject() {
         paramD: String?,
         paramE: String?,
         paramF: String?,
-        price: String
+        price: String,
+        image: Int?
     ) : this() {
         this.id = id
         this.manufaturer = manufaturer
@@ -47,5 +49,6 @@ class Component() : ParseObject() {
         this.paramE = paramE
         this.paramF = paramF
         this.price = price
+        this.image = image
     }
 }

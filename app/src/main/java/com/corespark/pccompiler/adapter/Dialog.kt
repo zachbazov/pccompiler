@@ -218,7 +218,7 @@ class Dialog(
 
                 Constraint.set(layout, clCompile) {}
                 Bind.componentInfo(context, item, componentType, params)
-                Factory.enableSelection(item, componentType, views)
+                Factory.utilize(item, componentType, views)
 
                 val listeners = arrayOf(background, ivClose, layout, btnAdd, btnRemove, btnReplace)
                 listeners.forEach { listener -> onClick(listener, componentType, item, rowPosition, oldPosition) }
@@ -249,12 +249,12 @@ class Dialog(
                 btnRemove -> view.setOnClickListener {
                     btnAdd.isEnabled = true
                     btnRemove.isEnabled = false
-                    Compilation.deassignComponent(componentType)
+                    Compilation.deassignComponent(componentType, item)
                     Factory.mark(clCompile, btnRemove, componentType, rowPosition)
                 }
                 else -> view.setOnClickListener {
-                    Compilation.assignComponent(componentType, item)
-                    Factory.replacePosition(clCompile, layout, componentType, rowPosition, oldPosition, views)
+                    Compilation.replaceComponent(componentType, item)
+                    Factory.replace(clCompile, layout, componentType, rowPosition, oldPosition, views)
                 }
             }
         }

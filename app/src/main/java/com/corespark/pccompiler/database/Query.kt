@@ -37,7 +37,8 @@ class Query {
                         paramD = null,
                         paramE = null,
                         paramF = null,
-                        price = obj.get(KEY_PRICE) as String
+                        price = obj.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_cpu
                     )
                 )
                 TABLE_COOLER -> if (list.size < 10) list.add(
@@ -51,7 +52,8 @@ class Query {
                         paramD = null,
                         paramE = null,
                         paramF = null,
-                        price = obj.get(KEY_PRICE) as String
+                        price = obj.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_cooler
                     )
                 )
                 TABLE_MOTHERBOARD -> if (list.size < 10) list.add(
@@ -65,7 +67,8 @@ class Query {
                         paramD = obj.get(KEY_MAX_RAM) as String,
                         paramE = null,
                         paramF = null,
-                        price = obj.get(KEY_PRICE) as String
+                        price = obj.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_motherboard
                     )
                 )
                 TABLE_MEMORY -> if (list.size < 10) list.add(
@@ -79,7 +82,8 @@ class Query {
                         paramD = obj.get(KEY_CAS) as String,
                         paramE = obj.get(KEY_SIZE) as String,
                         paramF = obj.get(KEY_GB_PRICE) as String,
-                        price = obj.get(KEY_PRICE) as String
+                        price = obj.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_memory
                     )
                 )
                 TABLE_STORAGE -> if (list.size < 10) list.add(
@@ -93,7 +97,8 @@ class Query {
                         paramD = obj.get(KEY_CACHE) as String,
                         paramE = obj.get(KEY_CAPACITY) as String,
                         paramF = obj.get(KEY_GB_PRICE) as String,
-                        price = obj.get(KEY_PRICE) as String
+                        price = obj.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_storage
                     )
                 )
                 TABLE_EXT_STORAGE -> if (list.size < 10) list.add(
@@ -107,7 +112,8 @@ class Query {
                         paramD = null,
                         paramE = null,
                         paramF = null,
-                        price = obj.get(KEY_PRICE) as String
+                        price = obj.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_extstorage
                     )
                 )
                 TABLE_OPT_DRIVE -> if (list.size < 10) list.add(
@@ -121,7 +127,8 @@ class Query {
                         paramD = obj.get(KEY_BD_WRITE) as String,
                         paramE = obj.get(KEY_CD_WRITE) as String,
                         paramF = obj.get(KEY_DVD_WRITE) as String,
-                        price = obj.get(KEY_PRICE) as String
+                        price = obj.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_optdrive
                     )
                 )
                 TABLE_GRAPHIC_CARD -> if (list.size < 10) list.add(
@@ -135,7 +142,8 @@ class Query {
                         paramD = obj.get(KEY_CORE_CLOCK) as String,
                         paramE = null,
                         paramF = null,
-                        price = obj.get(KEY_PRICE) as String
+                        price = obj.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_graphiccard
                     )
                 )
                 TABLE_SOUND_CARD -> if (list.size < 10) list.add(
@@ -149,7 +157,8 @@ class Query {
                         paramD = obj.get(KEY_CHANNELS) as String,
                         paramE = obj.get(KEY_RATE) as String,
                         paramF = null,
-                        price = obj.get(KEY_PRICE) as String
+                        price = obj.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_soundcard
                     )
                 )
                 TABLE_POWER_SUPPLY -> if (list.size < 10) list.add(
@@ -163,7 +172,8 @@ class Query {
                         paramD = obj.get(KEY_MODULAR) as String,
                         paramE = obj.get(KEY_WATTS) as String,
                         paramF = null,
-                        price = obj.get(KEY_PRICE) as String
+                        price = obj.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_powersupply
                     )
                 )
                 TABLE_CASE -> if (list.size < 10) list.add(
@@ -177,7 +187,8 @@ class Query {
                         paramD = obj.get(KEY_POWER_SUPPLY) as String,
                         paramE = null,
                         paramF = null,
-                        price = obj.get(KEY_PRICE) as String
+                        price = obj.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_case
                     )
                 )
                 TABLE_OP_SYSTEM -> if (list.size < 10) list.add(
@@ -191,7 +202,8 @@ class Query {
                         paramD = null,
                         paramE = null,
                         paramF = null,
-                        price = obj.get(KEY_PRICE) as String
+                        price = obj.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_opsystem
                     )
                 )
             }
@@ -220,7 +232,8 @@ class Query {
                         paramD = null,
                         paramE = null,
                         paramF = null,
-                        price = cpu.get(KEY_PRICE) as String
+                        price = cpu.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_cpu
                     )
                     Bar.Compilation.list.add(i, Bar.Compilation(
                         myCompilation00.objectId, myCompilation00.get("title").toString(), R.mipmap.ic_pccompiler))
@@ -238,7 +251,8 @@ class Query {
                         paramD = null,
                         paramE = null,
                         paramF = null,
-                        price = cpu.get(KEY_PRICE) as String
+                        price = cpu.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_cpu
                     )
                     Bar.Compilation.list.add(i, Bar.Compilation(
                         myCompilation01.objectId, myCompilation01.get("title").toString(), R.mipmap.ic_pccompiler))
@@ -256,7 +270,8 @@ class Query {
                         paramD = null,
                         paramE = null,
                         paramF = null,
-                        price = cpu.get(KEY_PRICE) as String
+                        price = cpu.get(KEY_PRICE) as String,
+                        image = R.mipmap.ic_cpu
                     )
                     Bar.Compilation.list.add(i, Bar.Compilation(
                         myCompilation02.objectId, myCompilation02.get("title").toString(), R.mipmap.ic_pccompiler))
