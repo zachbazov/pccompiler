@@ -7,21 +7,31 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
-import android.transition.TransitionManager
+import android.transition.TransitionManager.beginDelayedTransition
 import android.view.View
 import android.widget.TextView
 import com.corespark.pccompiler.R
 import com.corespark.pccompiler.adapter.LayoutManager
-import com.corespark.pccompiler.service.*
 import com.corespark.pccompiler.adapter.Recycler
 import com.corespark.pccompiler.app.Application.Companion.attributes
 import com.corespark.pccompiler.app.Application.Companion.isSignedMessagePresented
 import com.corespark.pccompiler.app.Application.Companion.preferences
 import com.corespark.pccompiler.model.*
+import com.corespark.pccompiler.model.Compilation.isCompilationFetched
+import com.corespark.pccompiler.model.User.password
+import com.corespark.pccompiler.model.User.username
+import com.corespark.pccompiler.service.Broadcast.abort
+import com.corespark.pccompiler.service.Broadcast.emit
+import com.corespark.pccompiler.service.Layout.fetchLayout
+import com.corespark.pccompiler.service.Parameter.decreaseHeightBy
+import com.corespark.pccompiler.service.Parameter.margin
 import com.corespark.pccompiler.service.View.orientation
-import com.corespark.pccompiler.service.View.width
-import com.corespark.pccompiler.service.View.height
+import com.corespark.pccompiler.service.View.widthSpan
+import com.corespark.pccompiler.service.View.heightSpan
+import com.corespark.pccompiler.service.View.density
+import com.corespark.pccompiler.service.View.spannedHeightPx
 import kotlinx.android.synthetic.main.activity_workspace.*
+import java.lang.Thread.sleep
 import java.lang.ref.WeakReference
 
 
@@ -38,22 +48,35 @@ class Workspace : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workspace)
 
-        Broadcast.emit(this, onChannelAuth)
+        emit(this, onChannelAuth)
 
         customize()
 
-        Task(this, layoutInflater.inflate(R.layout.dialog_progress, clFragWorkspace, false)).execute()
+//        if (!isCompilationFetched) Task(this, fetchLayout(this, 10)!!).execute()
+//        else {
+//            clBackward.visibility = View.VISIBLE
+//            clForward.visibility = View.VISIBLE
+//            rvCompilationBar.setHasFixedSize(true)
+//            rvCompilationBar.layoutManager = LayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//            rvCompilationBar.adapter = Recycler(this, Bar.Compilation.list, 4, null)
+//        }
     }
 
     override fun onDestroy() {
-        Broadcast.abort(this, onChannelAuth)
+        abort(this, onChannelAuth)
         super.onDestroy()
     }
 
     private fun customize() {
-        width(this, ivTracker, windowManager, orientation, 2) {}
-        height(this, clFragWorkspace, windowManager, orientation, 5) {}
+        widthSpan(this, ivTracker, windowManager, orientation, 2) {}
+        heightSpan(this, clFragWorkspace, windowManager, orientation, 5) {}
 
+        margin(cvFragActionBar, density, 3, 1)
+
+        clBackward.visibility = View.GONE
+        clForward.visibility = View.GONE
+        decreaseHeightBy(clBackward, spannedHeightPx, 8)
+        decreaseHeightBy(clForward, spannedHeightPx, 8)
         clBackward.setBackgroundColor(attributes.colorTransparentGray)
         clForward.setBackgroundColor(attributes.colorTransparentGray)
         ivBackward.setImageDrawable(attributes.arrowIndicator(this))
@@ -90,8 +113,8 @@ class Workspace : AppCompatActivity() {
     private val onChannelAuth = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: android.content.Intent?) {
             if (preferences.isAuthenticated) {
-                User.username = preferences.username
-                User.password = preferences.password
+                username = preferences.username
+                password = preferences.password
             }
         }
     }
@@ -105,16 +128,13 @@ class Workspace : AppCompatActivity() {
 
         override fun onPreExecute() {
             if (!isSignedMessagePresented) {
-                Snackbar.make(
-                    weakWorkspace.get()!!.clWorkspaceParent,
-                    "${weakWorkspace.get()!!.getString(R.string.auth_sign_in_success)} ${preferences.username}",
-                    Snackbar.LENGTH_LONG)
-                    .show()
+                Snackbar.make(weakWorkspace.get()!!.clWorkspaceParent, "${weakWorkspace.get()!!.getString(R.string.auth_sign_in_success)} ${preferences.username}",
+                    Snackbar.LENGTH_LONG).show()
                 isSignedMessagePresented = true
             }
             weakWorkspace.get()!!.clFragWorkspace.addView(weakLayout.get())
-            width(weakWorkspace.get()!!, weakLayout.get()!!, weakWorkspace.get()!!.windowManager, orientation, 1) {}
-            height(weakWorkspace.get()!!, weakLayout.get()!!, weakWorkspace.get()!!.windowManager, orientation, 5) {}
+            widthSpan(weakWorkspace.get()!!, weakLayout.get()!!, weakWorkspace.get()!!.windowManager, orientation, 1) {}
+            heightSpan(weakWorkspace.get()!!, weakLayout.get()!!, weakWorkspace.get()!!.windowManager, orientation, 5) {}
         }
 
         override fun onProgressUpdate(vararg values: Int?) {
@@ -131,13 +151,13 @@ class Workspace : AppCompatActivity() {
         override fun doInBackground(vararg params: Void?): Void? {
             for (i in 0..3) {
                 publishProgress(i)
-                try { Thread.sleep(1000) } catch (e: InterruptedException) {}
+                try { sleep(1000) } catch (e: InterruptedException) {}
             }
             return null
         }
 
         override fun onPostExecute(result: Void?) {
-            TransitionManager.beginDelayedTransition(weakWorkspace.get()!!.clFragWorkspace)
+            beginDelayedTransition(weakWorkspace.get()!!.clFragWorkspace)
             weakWorkspace.get()!!.clFragWorkspace.removeView(weakLayout.get())
             if (Bar.Compilation.list.isNotEmpty()) {
                 weakWorkspace.get()!!.rvCompilationBar!!.setHasFixedSize(true)
@@ -145,10 +165,16 @@ class Workspace : AppCompatActivity() {
                     weakWorkspace.get()!!, LinearLayoutManager.HORIZONTAL, false)
                 weakWorkspace.get()!!.rvCompilationBar!!.adapter = Recycler(
                     weakWorkspace.get()!!, Bar.Compilation.list, 4, null)
+                weakWorkspace.get()!!.clBackward.visibility = View.VISIBLE
+                weakWorkspace.get()!!.clForward.visibility = View.VISIBLE
+                isCompilationFetched = true
             } else {
                 Bar.Compilation.addEmpty(weakWorkspace.get()!!)
                 weakWorkspace.get()!!.rvCompilationBar!!.adapter = Recycler(
                     weakWorkspace.get()!!, Bar.Compilation.empty, 8, null)
+                weakWorkspace.get()!!.clBackward.visibility = View.GONE
+                weakWorkspace.get()!!.clForward.visibility = View.GONE
+                isCompilationFetched = false
             }
         }
     }

@@ -18,8 +18,7 @@ import com.corespark.pccompiler.R
 object Broadcast {
 
     fun emit(context: Context, channel: BroadcastReceiver) {
-        LocalBroadcastManager.getInstance(context)
-            .registerReceiver(channel, IntentFilter(context.getString(R.string.broadcast_channel_auth)))
+        LocalBroadcastManager.getInstance(context).registerReceiver(channel, IntentFilter(context.getString(R.string.broadcast_channel_auth)))
 
         val broadcast = Intent(context.getString(R.string.broadcast_channel_auth))
         LocalBroadcastManager.getInstance(context).sendBroadcast(broadcast)

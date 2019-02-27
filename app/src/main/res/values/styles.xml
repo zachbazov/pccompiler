@@ -1,9 +1,18 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="App" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="color">@color/colorVectorDark</item>
+    </style>
+
+    <style name="Vector">
+        <item name="color">@color/colorPrimary</item>
+    </style>
+
+    <style name="VectorHighlight">
+        <item name="color">@color/colorHighlight</item>
     </style>
 
 </resources>

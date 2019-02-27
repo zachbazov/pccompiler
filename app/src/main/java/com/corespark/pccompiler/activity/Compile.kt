@@ -4,12 +4,15 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.corespark.pccompiler.R
+import com.corespark.pccompiler.R.layout.*
 import com.corespark.pccompiler.adapter.Recycler
 import com.corespark.pccompiler.app.Application.Companion.attributes
 import com.corespark.pccompiler.model.Bar
-import com.corespark.pccompiler.model.Compilation
-import com.corespark.pccompiler.service.Auth
-import com.corespark.pccompiler.service.Intent
+import com.corespark.pccompiler.model.Compilation.assignCompilation
+import com.corespark.pccompiler.model.Compilation.compilationTitle
+import com.corespark.pccompiler.model.Compilation.isCompiling
+import com.corespark.pccompiler.service.Auth.parseUser
+import com.corespark.pccompiler.service.Intent.launch
 import com.corespark.pccompiler.utility.Array
 import kotlinx.android.synthetic.main.activity_compile.*
 
@@ -24,9 +27,9 @@ class Compile : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_compile)
+        setContentView(activity_compile)
 
-        Compilation.assignCompilation(Auth.parseUser, Compilation.title)
+        assignCompilation(parseUser, compilationTitle)
 
         customize()
     }
@@ -34,10 +37,10 @@ class Compile : AppCompatActivity() {
     private fun customize() {
         ivBackward.setImageDrawable(attributes.arrowIndicator(this))
         ivForward.setImageDrawable(attributes.arrowIndicator(this))
-        ivWorkspace.setImageResource(R.drawable.ic_workspace_inactive)
-        ivCart.setImageResource(R.drawable.ic_cart_inactive)
+        ivWorkspace.setImageResource(R.drawable.ic_workspace)
+        ivCart.setImageResource(R.drawable.ic_cart)
 
-        tvCompilationTitle.text = Compilation.title
+        tvCompilationTitle.text = compilationTitle
 
         val adapters = arrayOf(rvComponentBar, rvComponent)
         adapters.forEach { adapter -> setAdapter(adapter) }
@@ -58,16 +61,19 @@ class Compile : AppCompatActivity() {
         }
     }
 
-    private fun onClick(view: View) = when (view) {
-        clReturn -> view.setOnClickListener {
-            view.isSelected = true
-            Intent.launch(this, R.layout.activity_workspace) {}
-            Intent.finish(this)
-        }
-        else -> view.setOnClickListener {
-            Intent.launch(this, R.layout.activity_workspace) {}
-            Intent.finish(this)
-            Compilation.isCompiling = true
+    private fun onClick(view: View) = view.setOnClickListener {
+        when (it) {
+            clReturn -> {
+                it.isSelected = true
+                isCompiling = false
+                launch(this, activity_workspace) {}
+                finish()
+            }
+            else -> {
+                isCompiling = true
+                launch(this, activity_workspace) {}
+                finish()
+            }
         }
     }
 }

@@ -2,11 +2,15 @@ package com.corespark.pccompiler.service
 
 import android.content.Context
 import com.corespark.pccompiler.R
+import com.corespark.pccompiler.R.layout.activity_workspace
 import com.corespark.pccompiler.app.Application.Companion.preferences
 import com.corespark.pccompiler.app.Application.Companion.query
 import com.corespark.pccompiler.model.User
+import com.corespark.pccompiler.service.Intent.launch
 import com.parse.ParseException
 import com.parse.ParseUser
+import com.parse.ParseUser.logInInBackground
+import com.parse.ParseUser.logOutInBackground
 
 
 /**
@@ -22,7 +26,7 @@ object Auth {
     var parseUser: ParseUser? = null
 
     fun signIn(username: String, password: String, complete: (Boolean) -> Unit) {
-        ParseUser.logInInBackground(username, password) { parseUser, _ ->
+        logInInBackground(username, password) { parseUser, _ ->
             if (parseUser != null) {
                 user.id = parseUser.objectId
                 user.username = parseUser.username
@@ -55,7 +59,7 @@ object Auth {
         }
     }
 
-    private fun verify() = ParseUser.logInInBackground(preferences.username, preferences.password) { parseUser, _ ->
+    private fun verify() = logInInBackground(preferences.username, preferences.password) { parseUser, _ ->
         try {
             if (parseUser != null) {
                 this.parseUser = parseUser
@@ -67,17 +71,17 @@ object Auth {
     fun auth(context: Context, complete: (Boolean) -> Unit) {
         if (preferences.isAuthenticated) {
             verify()
-            Intent.launch(context, R.layout.activity_workspace) {}
+            launch(context, activity_workspace) {}
             complete(true)
         }
     }
 
     fun logOut(context: Context, complete: (Boolean) -> Unit) {
-        ParseUser.logOutInBackground {
+        logOutInBackground {
             if (it == null) {
                 preferences.username = context.getString(R.string.text_blank)
                 preferences.isAuthenticated = false
-                Auth.user = User
+                user = User
                 complete(true)
             }
         }

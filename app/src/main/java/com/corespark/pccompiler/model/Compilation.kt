@@ -13,7 +13,7 @@ import com.parse.ParseUser
 object Compilation {
 
     var id: String? = null
-    var title: String? = null
+    var compilationTitle: String? = null
     private var user: ParseUser? = null
     var cpu: Component? = null
     var cooler: Component? = null
@@ -27,11 +27,12 @@ object Compilation {
     var powerSupply: Component? = null
     var case: Component? = null
     var opSystem: Component? = null
+    var isCompilationFetched = false
     var isCompiling = false
 
     fun assignCompilation(user: ParseUser?, title: String?) {
         this.user = user
-        this.title = title
+        this.compilationTitle = title
     }
 
     fun assignComponent(componentType: Int, item: Component?) {
@@ -156,5 +157,21 @@ object Compilation {
                 assignComponent(componentType, item)
             }
         }
+    }
+
+    fun clearAll() {
+        Bar.Cart.list.clear()
+        cpu = null
+        optDrive = null
+        cooler = null
+        graphicCard = null
+        motherboard = null
+        soundCard = null
+        memory = null
+        powerSupply = null
+        storage = null
+        case = null
+        extStorage = null
+        opSystem = null
     }
 }

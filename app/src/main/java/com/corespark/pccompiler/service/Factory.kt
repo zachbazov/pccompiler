@@ -3,7 +3,7 @@ package com.corespark.pccompiler.service
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
-import android.transition.TransitionManager
+import android.transition.TransitionManager.beginDelayedTransition
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -187,7 +187,7 @@ object Factory {
                         mark(parent, views[2], componentType, rowPosition)
                         views[0].isEnabled = false
                         views[1].isEnabled = true
-                        TransitionManager.beginDelayedTransition(layout as ViewGroup?)
+                        beginDelayedTransition(layout as ViewGroup?)
                         views[0].visibility = View.VISIBLE
                         views[1].visibility = View.VISIBLE
                         views[2].visibility = View.GONE

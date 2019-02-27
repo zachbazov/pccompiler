@@ -36,8 +36,9 @@
     <string name="text_settings">Settings</string>
     <string name="text_logout">Logout</string>
     <string name="text_explore">Explore</string>
-    <string name="text_change">Change</string>
+    <string name="text_clear_all">Clear All</string>
     <string name="text_trash">Trash</string>
+    <string name="text_checkout">Checkout</string>
 
     <string name="text_my_compilations">My Compilations</string>
     <string name="text_my_cart">My Cart</string>

@@ -19,23 +19,23 @@ import com.corespark.pccompiler.model.Component
 object Bind {
 
     fun componentImage(view: ImageView, componentType: Int) = when (componentType) {
-        0 -> view.setImageResource(R.mipmap.ic_cpu)
-        1 -> view.setImageResource(R.mipmap.ic_optdrive)
-        2 -> view.setImageResource(R.mipmap.ic_cooler)
-        3 -> view.setImageResource(R.mipmap.ic_graphiccard)
-        4 -> view.setImageResource(R.mipmap.ic_motherboard)
-        5 -> view.setImageResource(R.mipmap.ic_soundcard)
-        6 -> view.setImageResource(R.mipmap.ic_memory)
-        7 -> view.setImageResource(R.mipmap.ic_powersupply)
-        8 -> view.setImageResource(R.mipmap.ic_storage)
-        9 -> view.setImageResource(R.mipmap.ic_case)
-        10 -> view.setImageResource(R.mipmap.ic_extstorage)
-        else -> view.setImageResource(R.mipmap.ic_opsystem)
+        0 -> view.setImageResource(R.drawable.ic_cpu)
+        1 -> view.setImageResource(R.drawable.ic_opt_drive)
+        2 -> view.setImageResource(R.drawable.ic_cooler)
+        3 -> view.setImageResource(R.drawable.ic_graphic_card)
+        4 -> view.setImageResource(R.drawable.ic_motherboard)
+        5 -> view.setImageResource(R.drawable.ic_sound_card)
+        6 -> view.setImageResource(R.drawable.ic_memory)
+        7 -> view.setImageResource(R.drawable.ic_power_supply)
+        8 -> view.setImageResource(R.drawable.ic_storage)
+        9 -> view.setImageResource(R.drawable.ic_case)
+        10 -> view.setImageResource(R.drawable.ic_ext_storage)
+        else -> view.setImageResource(R.drawable.ic_os)
     }
 
     fun componentInfo(context: Context, item: Component, componentType: Int, params: Array<View>) = when (componentType) {
         0 -> {
-            (params[0] as ImageView).setImageResource(R.mipmap.ic_cpu)
+            (params[0] as ImageView).setImageResource(R.drawable.ic_cpu)
             (params[1] as TextView).text = context.getString(R.string.type_cpu)
             (params[2] as TextView).text = String.format("%s %s", item.manufaturer, item.component)
             (params[3] as TextView).text = context.getString(R.string.dialog_core)
@@ -53,7 +53,7 @@ object Bind {
             (params[17] as LinearLayout).removeView((params[14] as TextView))
         }
         1 -> {
-            (params[0] as ImageView).setImageResource(R.mipmap.ic_optdrive)
+            (params[0] as ImageView).setImageResource(R.drawable.ic_opt_drive)
             (params[1] as TextView).text = context.getString(R.string.type_optical_drive)
             (params[2] as TextView).text = String.format("%s %s", item.manufaturer, item.component)
             (params[3] as TextView).text = context.getString(R.string.dialog_bd)
@@ -71,7 +71,7 @@ object Bind {
             (params[15] as TextView).text = String.format("$%s", item.price)
         }
         2 -> {
-            (params[0] as ImageView).setImageResource(R.mipmap.ic_cooler)
+            (params[0] as ImageView).setImageResource(R.drawable.ic_cooler)
             (params[1] as TextView).text = context.getString(R.string.type_cooler)
             (params[2] as TextView).text = String.format("%s %s", item.manufaturer, item.component)
             (params[3] as TextView).text = context.getString(R.string.dialog_rpm)
@@ -89,7 +89,7 @@ object Bind {
             (params[17] as LinearLayout).removeView((params[14] as TextView))
         }
         3 -> {
-            (params[0] as ImageView).setImageResource(R.mipmap.ic_graphiccard)
+            (params[0] as ImageView).setImageResource(R.drawable.ic_graphic_card)
             (params[1] as TextView).text = context.getString(R.string.type_graphic_card)
             (params[2] as TextView).text = String.format("%s %s", item.manufaturer, item.component)
             (params[3] as TextView).text = context.getString(R.string.dialog_series)
@@ -107,7 +107,7 @@ object Bind {
             (params[17] as LinearLayout).removeView((params[14] as TextView))
         }
         4 -> {
-            (params[0] as ImageView).setImageResource(R.mipmap.ic_motherboard)
+            (params[0] as ImageView).setImageResource(R.drawable.ic_motherboard)
             (params[1] as TextView).text = context.getString(R.string.type_motherboard)
             (params[2] as TextView).text = String.format("%s %s", item.manufaturer, item.component)
             (params[3] as TextView).text = context.getString(R.string.dialog_socket_cpu)
@@ -125,7 +125,7 @@ object Bind {
             (params[17] as LinearLayout).removeView((params[14] as TextView))
         }
         5 -> {
-            (params[0] as ImageView).setImageResource(R.mipmap.ic_soundcard)
+            (params[0] as ImageView).setImageResource(R.drawable.ic_sound_card)
             (params[1] as TextView).text = context.getString(R.string.type_sound_card)
             (params[2] as TextView).text = String.format("%s %s", item.manufaturer, item.component)
             (params[3] as TextView).text = context.getString(R.string.dialog_chipset)
@@ -143,7 +143,7 @@ object Bind {
             (params[17] as LinearLayout).removeView((params[14] as TextView))
         }
         6 -> {
-            (params[0] as ImageView).setImageResource(R.mipmap.ic_memory)
+            (params[0] as ImageView).setImageResource(R.drawable.ic_memory)
             (params[1] as TextView).text = context.getString(R.string.type_memory)
             (params[2] as TextView).text = String.format("%s %s", item.manufaturer, item.component)
             (params[3] as TextView).text = context.getString(R.string.dialog_type)
@@ -161,7 +161,7 @@ object Bind {
             (params[15] as TextView).text = String.format("$%s", item.price)
         }
         7 -> {
-            (params[0] as ImageView).setImageResource(R.mipmap.ic_powersupply)
+            (params[0] as ImageView).setImageResource(R.drawable.ic_power_supply)
             (params[1] as TextView).text = context.getString(R.string.type_power_supply)
             (params[2] as TextView).text = String.format("%s %s", item.manufaturer, item.component)
             (params[3] as TextView).text = context.getString(R.string.dialog_series)
@@ -179,7 +179,7 @@ object Bind {
             (params[17] as LinearLayout).removeView((params[14] as TextView))
         }
         8 -> {
-            (params[0] as ImageView).setImageResource(R.mipmap.ic_storage)
+            (params[0] as ImageView).setImageResource(R.drawable.ic_storage)
             (params[1] as TextView).text = context.getString(R.string.type_storage)
             (params[2] as TextView).text = String.format("%s %s", item.manufaturer, item.component)
             (params[3] as TextView).text = context.getString(R.string.dialog_series)
@@ -197,7 +197,7 @@ object Bind {
             (params[15] as TextView).text = String.format("$%s", item.price)
         }
         9 -> {
-            (params[0] as ImageView).setImageResource(R.mipmap.ic_case)
+            (params[0] as ImageView).setImageResource(R.drawable.ic_case)
             (params[1] as TextView).text = context.getString(R.string.type_case)
             (params[2] as TextView).text = String.format("%s %s", item.manufaturer, item.component)
             (params[3] as TextView).text = context.getString(R.string.dialog_type)
@@ -215,7 +215,7 @@ object Bind {
             (params[17] as LinearLayout).removeView((params[14] as TextView))
         }
         10 -> {
-            (params[0] as ImageView).setImageResource(R.mipmap.ic_extstorage)
+            (params[0] as ImageView).setImageResource(R.drawable.ic_ext_storage)
             (params[1] as TextView).text = context.getString(R.string.type_external_storage)
             (params[2] as TextView).text = String.format("%s %s", item.manufaturer, item.component)
             (params[3] as TextView).text = context.getString(R.string.dialog_type)
@@ -233,7 +233,7 @@ object Bind {
             (params[17] as LinearLayout).removeView((params[14] as TextView))
         }
         else -> {
-            (params[0] as ImageView).setImageResource(R.mipmap.ic_opsystem)
+            (params[0] as ImageView).setImageResource(R.drawable.ic_os)
             (params[1] as TextView).text = context.getString(R.string.type_os)
             (params[2] as TextView).text = String.format("%s %s", item.manufaturer, item.component)
             (params[15] as TextView).text = String.format("$%s", item.price)

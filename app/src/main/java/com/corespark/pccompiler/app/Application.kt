@@ -7,8 +7,8 @@ import com.corespark.pccompiler.model.Component
 import com.corespark.pccompiler.utility.Array.Companion.componentsArray
 import com.corespark.pccompiler.utility.Array.Companion.tableArray
 import com.corespark.pccompiler.utility.Attribute
-import com.parse.Parse
-import com.parse.ParseObject
+import com.parse.Parse.initialize
+import com.parse.ParseObject.*
 
 
 /**
@@ -23,8 +23,8 @@ class Application : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Parse.initialize(applicationContext)
-        ParseObject.registerSubclass(Component::class.java)
+        initialize(applicationContext)
+        registerSubclass(Component::class.java)
 
         preferences = SharedPreferences(applicationContext)
         attributes = Attribute(applicationContext)

@@ -4,20 +4,32 @@ import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.transition.TransitionManager
+import android.transition.TransitionManager.beginDelayedTransition
 import android.view.View
 import android.widget.TextView
 import com.corespark.pccompiler.R
+import com.corespark.pccompiler.R.layout.activity_workspace
 import com.corespark.pccompiler.app.Application.Companion.query
-import com.corespark.pccompiler.model.User
+import com.corespark.pccompiler.model.User.email
+import com.corespark.pccompiler.model.User.password
+import com.corespark.pccompiler.model.User.username
 import com.corespark.pccompiler.service.*
 import com.corespark.pccompiler.service.Auth
-import com.corespark.pccompiler.service.View.height
+import com.corespark.pccompiler.service.Auth.auth
+import com.corespark.pccompiler.service.Auth.signIn
+import com.corespark.pccompiler.service.Input.hideKeyboard
+import com.corespark.pccompiler.service.Intent.finish
+import com.corespark.pccompiler.service.Intent.launch
+import com.corespark.pccompiler.service.Layout.fetchLayout
+import com.corespark.pccompiler.service.Parameter.layoutParams
+import com.corespark.pccompiler.service.View.density
+import com.corespark.pccompiler.service.View.heightSpan
 import com.corespark.pccompiler.service.View.measure
 import com.corespark.pccompiler.service.View.metrics
 import com.corespark.pccompiler.service.View.orientation
-import com.corespark.pccompiler.service.View.width
+import com.corespark.pccompiler.service.View.widthSpan
 import kotlinx.android.synthetic.main.activity_auth.*
+import java.lang.Thread.sleep
 import java.lang.ref.WeakReference
 
 
@@ -36,14 +48,15 @@ class Auth : AppCompatActivity() {
 
         measure(windowManager, metrics)
 
-        Auth.auth(this) { if (it) finish() }
+        auth(this) { if (it) finish() }
 
         customize()
     }
 
     private fun customize() {
-        ivAuthLogo.setImageResource(R.mipmap.ic_pccompiler)
-        ivAuthLogoTitle.setImageResource(R.drawable.ic_pccompiler_title)
+        ivAuthLogo.setImageResource(R.drawable.ic_logo)
+
+        layoutParams(ivAuthLogo, density, 288)
 
         etAuthSignInUsername.hint = getString(R.string.auth_hint_username)
         etAuthSignInPassword.hint = getString(R.string.auth_hint_password)
@@ -63,46 +76,44 @@ class Auth : AppCompatActivity() {
         clicks.forEach { click -> onClick(click) }
     }
 
-    private fun onClick(view: View) = when (view) {
-        tvAuthSignIn -> view.setOnClickListener {
-            TransitionManager.beginDelayedTransition(clAuthParent)
-            Constraint.set(view, clAuthParent) {}
-        }
-        tvAuthSignUp -> view.setOnClickListener {
-            TransitionManager.beginDelayedTransition(clAuthParent)
-            Constraint.set(view, clAuthParent) {}
-        }
-        btnAuthSignIn -> view.setOnClickListener {
-            User.username = etAuthSignInUsername.text.trim().toString()
-            User.password = etAuthSignInPassword.text.trim().toString()
-            Auth.signIn(User.username, User.password) { complete ->
-                Input.hideKeyboard(this)
-                clearInput(view)
-                if (complete) {
-                    TransitionManager.beginDelayedTransition(clAuthParent)
-                    cvFragAuthSignIn.removeView(clFragAuthSignIn)
-                    Task(this, layoutInflater.inflate(R.layout.dialog_progress, cvFragAuthSignIn, false)
-                        ,0).execute()
-                    view.isEnabled = false
-                }
-                else Snackbar.make(view, getString(R.string.auth_sign_in_failure), Snackbar.LENGTH_SHORT).show()
+    private fun onClick(view: View) = view.setOnClickListener {
+        when (it) {
+            tvAuthSignIn -> {
+                beginDelayedTransition(clAuthParent)
+                Constraint.Auth().constraint(it, clAuthParent)
             }
-        }
-        else -> view.setOnClickListener {
-            User.username = etAuthSignUpUsername.text.toString()
-            User.email = etAuthSignUpEmail.text.toString()
-            User.password = etAuthSignUpPassword.text.toString()
-            Auth.signUp(User.username, User.email, User.password) { complete ->
-                Input.hideKeyboard(this)
-                clearInput(view)
-                if (complete) {
-                    TransitionManager.beginDelayedTransition(clAuthParent)
-                    cvFragAuthSignUp.removeView(clFragAuthSignUp)
-                    Task(this, layoutInflater.inflate(R.layout.dialog_progress, cvFragAuthSignUp, false)
-                        ,1).execute()
-                    view.isEnabled = false
+            tvAuthSignUp -> {
+                beginDelayedTransition(clAuthParent)
+                Constraint.Auth().constraint(it, clAuthParent)
+            }
+            btnAuthSignIn -> {
+                username = etAuthSignInUsername.text.trim().toString()
+                password = etAuthSignInPassword.text.trim().toString()
+                signIn(username, password) { complete ->
+                    hideKeyboard(this)
+                    clearInput(it)
+                    if (complete) {
+                        beginDelayedTransition(clAuthParent)
+                        cvFragAuthSignIn.removeView(clFragAuthSignIn)
+                        it.isEnabled = false
+                        Task(this, fetchLayout(this, 9)!!, 0).execute()
+                    } else Snackbar.make(it, getString(R.string.auth_sign_in_failure), Snackbar.LENGTH_LONG).show()
                 }
-                else Snackbar.make(view, getString(R.string.auth_sign_up_failure), Snackbar.LENGTH_LONG).show()
+            }
+            else -> {
+                username = etAuthSignUpUsername.text.toString()
+                email = etAuthSignUpEmail.text.toString()
+                password = etAuthSignUpPassword.text.toString()
+                Auth.signUp(username, email, password) { complete ->
+                    hideKeyboard(this)
+                    clearInput(it)
+                    if (complete) {
+                        beginDelayedTransition(clAuthParent)
+                        cvFragAuthSignUp.removeView(clFragAuthSignUp)
+                        it.isEnabled = false
+                        Task(this, fetchLayout(this, 9)!!, 1).execute()
+                    } else Snackbar.make(it, getString(R.string.auth_sign_up_failure), Snackbar.LENGTH_LONG).show()
+                }
             }
         }
     }
@@ -120,7 +131,8 @@ class Auth : AppCompatActivity() {
     }
 
     class Task internal constructor(
-        activity: com.corespark.pccompiler.activity.Auth, view: View,
+        activity: com.corespark.pccompiler.activity.Auth,
+        view: View,
         param: Int,
         private val weakAuth: WeakReference<com.corespark.pccompiler.activity.Auth> = WeakReference(activity),
         private val weakLayout: WeakReference<View> = WeakReference(view),
@@ -132,8 +144,8 @@ class Auth : AppCompatActivity() {
                 0 -> weakAuth.get()!!.cvFragAuthSignIn?.addView(weakLayout.get())
                 else -> weakAuth.get()!!.cvFragAuthSignUp?.addView(weakLayout.get())
             }
-            width(weakAuth.get()!!, weakLayout.get()!!, weakAuth.get()!!.windowManager, orientation, 2) {}
-            height(weakAuth.get()!!, weakLayout.get()!!, weakAuth.get()!!.windowManager, orientation, 5) {}
+            widthSpan(weakAuth.get()!!, weakLayout.get()!!, weakAuth.get()!!.windowManager, orientation, 2) {}
+            heightSpan(weakAuth.get()!!, weakLayout.get()!!, weakAuth.get()!!.windowManager, orientation, 5) {}
         }
 
         override fun onProgressUpdate(vararg values: Int?) {
@@ -150,21 +162,20 @@ class Auth : AppCompatActivity() {
         override fun doInBackground(vararg params: Void?): Void? {
             for (i in 0..2) {
                 publishProgress(i)
-                try { Thread.sleep(1000) } catch (e: InterruptedException) {}
+                try { sleep(1000) } catch (e: InterruptedException) {}
             }
             return null
         }
 
         override fun onPostExecute(result: Void?) = when (weakParam.get()) {
             0 -> {
-                Intent.launch(weakAuth.get()!!, R.layout.activity_workspace) { if (it) query.fetchCompilations() }
-                Intent.finish(weakAuth.get()!!)
+                launch(weakAuth.get()!!, activity_workspace) { if (it) query.fetchCompilations() }
+                finish(weakAuth.get()!!)
             }
             else -> {
-                TransitionManager.beginDelayedTransition(weakAuth.get()!!.clAuthParent)
-                Snackbar.make(weakAuth.get()!!.cvFragAuthSignUp, weakAuth.get()!!.getString(R.string.auth_sign_up_success),
-                    Snackbar.LENGTH_LONG).show()
-                Constraint.set(weakAuth.get()!!.tvAuthSignIn, weakAuth.get()!!.clAuthParent) {}
+                beginDelayedTransition(weakAuth.get()!!.clAuthParent)
+                Snackbar.make(weakAuth.get()!!.cvFragAuthSignUp, weakAuth.get()!!.getString(R.string.auth_sign_up_success), Snackbar.LENGTH_LONG).show()
+                Constraint.Auth().constraint(weakAuth.get()!!.tvAuthSignIn, weakAuth.get()!!.clAuthParent)
                 weakAuth.get()!!.cvFragAuthSignUp.removeView(weakLayout.get())
                 weakAuth.get()!!.cvFragAuthSignUp.addView(weakAuth.get()!!.clFragAuthSignUp)
                 weakAuth.get()!!.btnAuthSignUp.isEnabled = true

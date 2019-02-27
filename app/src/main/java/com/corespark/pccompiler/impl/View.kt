@@ -21,5 +21,13 @@ interface View {
 
     fun measureWidthMultipleDeviceDensity(width: Int, span: Int) : Int
 
-    fun width(context: Context, view: View, manager: WindowManager, orientation: Int?, span: Int, complete: (Boolean) -> Unit)
+    fun measureHeightMultipleDeviceDensity(height: Int, span: Int) : Int
+
+    fun widthSpan(
+        context: Context, view: View, manager: WindowManager, orientation: Int?, span: Int, complete: (Boolean) -> Unit
+    )
+
+    fun heightSpan(
+        context: Context, view: android.view.View, manager: WindowManager, orientation: Int?, span: Int, complete: (Boolean) -> Unit
+    )
 }

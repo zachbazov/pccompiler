@@ -7,6 +7,7 @@ import com.corespark.pccompiler.service.Auth
 import com.corespark.pccompiler.utility.*
 import com.parse.ParseObject
 import com.parse.ParseQuery
+import com.parse.ParseQuery.getQuery
 
 
 /**
@@ -23,7 +24,7 @@ class Query {
     private lateinit var cpu: ParseObject
 
     fun fetchComponents(table: String, list: MutableList<Any>) {
-        query = ParseQuery.getQuery<ParseObject>(table)
+        query = getQuery<ParseObject>(table)
         query.findInBackground { objects, e ->
             if (e == null) for (obj in objects!!) when (table) {
                 TABLE_CPU -> if (list.size < 10) list.add(
@@ -38,7 +39,7 @@ class Query {
                         paramE = null,
                         paramF = null,
                         price = obj.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_cpu
+                        image = R.drawable.ic_cpu
                     )
                 )
                 TABLE_COOLER -> if (list.size < 10) list.add(
@@ -53,7 +54,7 @@ class Query {
                         paramE = null,
                         paramF = null,
                         price = obj.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_cooler
+                        image = R.drawable.ic_cooler
                     )
                 )
                 TABLE_MOTHERBOARD -> if (list.size < 10) list.add(
@@ -68,7 +69,7 @@ class Query {
                         paramE = null,
                         paramF = null,
                         price = obj.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_motherboard
+                        image = R.drawable.ic_motherboard
                     )
                 )
                 TABLE_MEMORY -> if (list.size < 10) list.add(
@@ -83,7 +84,7 @@ class Query {
                         paramE = obj.get(KEY_SIZE) as String,
                         paramF = obj.get(KEY_GB_PRICE) as String,
                         price = obj.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_memory
+                        image = R.drawable.ic_memory
                     )
                 )
                 TABLE_STORAGE -> if (list.size < 10) list.add(
@@ -98,7 +99,7 @@ class Query {
                         paramE = obj.get(KEY_CAPACITY) as String,
                         paramF = obj.get(KEY_GB_PRICE) as String,
                         price = obj.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_storage
+                        image = R.drawable.ic_storage
                     )
                 )
                 TABLE_EXT_STORAGE -> if (list.size < 10) list.add(
@@ -113,7 +114,7 @@ class Query {
                         paramE = null,
                         paramF = null,
                         price = obj.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_extstorage
+                        image = R.drawable.ic_ext_storage
                     )
                 )
                 TABLE_OPT_DRIVE -> if (list.size < 10) list.add(
@@ -128,7 +129,7 @@ class Query {
                         paramE = obj.get(KEY_CD_WRITE) as String,
                         paramF = obj.get(KEY_DVD_WRITE) as String,
                         price = obj.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_optdrive
+                        image = R.drawable.ic_opt_drive
                     )
                 )
                 TABLE_GRAPHIC_CARD -> if (list.size < 10) list.add(
@@ -143,7 +144,7 @@ class Query {
                         paramE = null,
                         paramF = null,
                         price = obj.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_graphiccard
+                        image = R.drawable.ic_graphic_card
                     )
                 )
                 TABLE_SOUND_CARD -> if (list.size < 10) list.add(
@@ -158,7 +159,7 @@ class Query {
                         paramE = obj.get(KEY_RATE) as String,
                         paramF = null,
                         price = obj.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_soundcard
+                        image = R.drawable.ic_sound_card
                     )
                 )
                 TABLE_POWER_SUPPLY -> if (list.size < 10) list.add(
@@ -173,7 +174,7 @@ class Query {
                         paramE = obj.get(KEY_WATTS) as String,
                         paramF = null,
                         price = obj.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_powersupply
+                        image = R.drawable.ic_power_supply
                     )
                 )
                 TABLE_CASE -> if (list.size < 10) list.add(
@@ -188,7 +189,7 @@ class Query {
                         paramE = null,
                         paramF = null,
                         price = obj.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_case
+                        image = R.drawable.ic_case
                     )
                 )
                 TABLE_OP_SYSTEM -> if (list.size < 10) list.add(
@@ -203,7 +204,7 @@ class Query {
                         paramE = null,
                         paramF = null,
                         price = obj.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_opsystem
+                        image = R.drawable.ic_os
                     )
                 )
             }
@@ -211,7 +212,7 @@ class Query {
     }
 
     fun fetchCompilations() {
-        query = ParseQuery.getQuery<ParseObject>(TABLE_COMPILATION)
+        query = getQuery<ParseObject>(TABLE_COMPILATION)
         query.whereEqualTo(KEY_USER, Auth.parseUser)
         query.include(TABLE_COMPILATION)
         val list: MutableList<ParseObject> = query.find()
@@ -233,10 +234,10 @@ class Query {
                         paramE = null,
                         paramF = null,
                         price = cpu.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_cpu
+                        image = R.drawable.ic_cpu
                     )
                     Bar.Compilation.list.add(i, Bar.Compilation(
-                        myCompilation00.objectId, myCompilation00.get("title").toString(), R.mipmap.ic_pccompiler))
+                        myCompilation00.objectId, myCompilation00.get("title").toString(), R.drawable.ic_logo))
                 }
                 1 -> {
                     myCompilation01 = list[i].fetchIfNeeded<ParseObject>()
@@ -252,10 +253,10 @@ class Query {
                         paramE = null,
                         paramF = null,
                         price = cpu.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_cpu
+                        image = R.drawable.ic_cpu
                     )
                     Bar.Compilation.list.add(i, Bar.Compilation(
-                        myCompilation01.objectId, myCompilation01.get("title").toString(), R.mipmap.ic_pccompiler))
+                        myCompilation01.objectId, myCompilation01.get("title").toString(), R.drawable.ic_logo))
                 }
                 2 -> {
                     myCompilation02 = list[i].fetchIfNeeded<ParseObject>()
@@ -271,10 +272,10 @@ class Query {
                         paramE = null,
                         paramF = null,
                         price = cpu.get(KEY_PRICE) as String,
-                        image = R.mipmap.ic_cpu
+                        image = R.drawable.ic_cpu
                     )
                     Bar.Compilation.list.add(i, Bar.Compilation(
-                        myCompilation02.objectId, myCompilation02.get("title").toString(), R.mipmap.ic_pccompiler))
+                        myCompilation02.objectId, myCompilation02.get("title").toString(), R.drawable.ic_logo))
                 }
             }
         }

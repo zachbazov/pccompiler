@@ -20,8 +20,8 @@ object Bar {
 
             fun add() {
                 if (list.size < 2) {
-                    list.add(0, Tab(R.drawable.ic_workspace_inactive))
-                    list.add(1, Tab(R.drawable.ic_cart_inactive))
+                    list.add(0, Tab(R.drawable.ic_workspace))
+                    list.add(1, Tab(R.drawable.ic_cart))
                 }
             }
         }
@@ -34,9 +34,9 @@ object Bar {
 
             fun add(context: Context) {
                 if (list.size < 3) {
-                    list.add(0, Action(R.drawable.ic_profile_inactive, title = context.getString(R.string.text_blank)))
-                    list.add(1, Action(R.drawable.ic_compile_inactive, context.getString(R.string.text_compile)))
-                    list.add(2, Action(R.drawable.ic_edit_inactive, context.getString(R.string.text_edit)))
+                    list.add(0, Action(R.drawable.ic_explore, title = context.getString(R.string.text_blank)))
+                    list.add(1, Action(R.drawable.ic_compile, context.getString(R.string.text_compile)))
+                    list.add(2, Action(R.drawable.ic_edit, context.getString(R.string.text_edit)))
                 }
             }
         }
@@ -49,9 +49,9 @@ object Bar {
 
             fun add(context: Context) {
                 if (list.size < 3) {
-                    list.add(0, Control(R.drawable.ic_explore_inactive, context.getString(R.string.text_explore)))
-                    list.add(1, Control(R.drawable.ic_change_inactive, context.getString(R.string.text_change)))
-                    list.add(2, Control(R.drawable.ic_trash_inactive, context.getString(R.string.text_trash)))
+                    list.add(0, Control(R.drawable.ic_explore, context.getString(R.string.text_explore)))
+                    list.add(1, Control(R.drawable.ic_clear, context.getString(R.string.text_clear_all)))
+                    list.add(2, Control(R.drawable.ic_checkout, context.getString(R.string.text_checkout)))
                 }
             }
         }
@@ -65,7 +65,7 @@ object Bar {
 
             fun addEmpty(context: Context) {
                 if (empty.size < 1)
-                    empty.add(0, Empty(R.drawable.ic_pccompiler_inactive, context.getString(R.string.text_no_compilations)))
+                    empty.add(0, Empty(R.drawable.ic_logo, context.getString(R.string.text_no_compilations)))
             }
         }
     }
@@ -78,7 +78,7 @@ object Bar {
 
             fun addEmpty(context: Context) {
                 if (empty.size < 1)
-                    empty.add(0, Empty(R.drawable.ic_pccompiler_inactive, context.getString(R.string.text_no_components)))
+                    empty.add(0, Empty(R.drawable.ic_logo, context.getString(R.string.text_no_components)))
             }
         }
     }
@@ -90,18 +90,18 @@ object Bar {
 
             fun add() {
                 if (list.size < 11) {
-                    list.add(Component(R.mipmap.ic_cpu))
-                    list.add(Component(R.mipmap.ic_optdrive))
-                    list.add(Component(R.mipmap.ic_cooler))
-                    list.add(Component(R.mipmap.ic_graphiccard))
-                    list.add(Component(R.mipmap.ic_motherboard))
-                    list.add(Component(R.mipmap.ic_soundcard))
-                    list.add(Component(R.mipmap.ic_memory))
-                    list.add(Component(R.mipmap.ic_powersupply))
-                    list.add(Component(R.mipmap.ic_storage))
-                    list.add(Component(R.mipmap.ic_case))
-                    list.add(Component(R.mipmap.ic_extstorage))
-                    list.add(Component(R.mipmap.ic_opsystem))
+                    list.add(Component(R.drawable.ic_cpu))
+                    list.add(Component(R.drawable.ic_opt_drive))
+                    list.add(Component(R.drawable.ic_cooler))
+                    list.add(Component(R.drawable.ic_graphic_card))
+                    list.add(Component(R.drawable.ic_motherboard))
+                    list.add(Component(R.drawable.ic_sound_card))
+                    list.add(Component(R.drawable.ic_memory))
+                    list.add(Component(R.drawable.ic_power_supply))
+                    list.add(Component(R.drawable.ic_storage))
+                    list.add(Component(R.drawable.ic_case))
+                    list.add(Component(R.drawable.ic_ext_storage))
+                    list.add(Component(R.drawable.ic_os))
                 }
             }
         }
